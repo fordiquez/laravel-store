@@ -1,0 +1,60 @@
+name: Build project
+
+env:
+  "DB_DATABASE": "laravel_store"
+  "DB_USERNAME": "root"
+  "DB_PASSWORD": "root"
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone the repository
+        uses: actions/checkout@v3
+
+      - name: Setup php
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, ctype, fileinfo, openssl, PDO, bcmath, json, tokenizer, xml
+
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Setup mysql
+        uses: mirromutth/mysql-action@v1.1
+        with:
+          mysql database: ${{ env.DB_DATABASE }}
+          mysql root password: ${{ env.DB_USERNAME }}
+
+      - name: Copy .env
+        run: cp .env.example .env
+
+      - name: Install composer dependencies
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
+      - name: Install npm dependencies
+        run: npm ci
+
+      - name: Run artisan commands & build npm assets
+        run: |
+          php artisan optimize:clear
+          php artisan key:generate
+          php artisan migrate:fresh --seed
+          npm run build
+      - name: Setup directory permissions
+        run: chmod -R 755 storage bootstrap/cache
+
+      - name: Run Unit tests
+        env:
+          APP_ENV: testing
+          DB_CONNECTION: mysql
+          DB_DATABASE: ${{ env.DB_DATABASE }}
+          DB_USERNAME: ${{ env.DB_USERNAME }}
+          DB_PASSWORD: ${{ env.DB_PASSWORD }}
+        run: php artisan test
