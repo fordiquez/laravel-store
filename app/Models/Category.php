@@ -2,12 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Category extends Model
@@ -17,9 +16,10 @@ class Category extends Model
     protected $fillable = [
         'title',
         'slug',
-        'src',
         'parent_id'
     ];
+
+    protected $with = ['image'];
 
     public function parent(): BelongsTo
     {
@@ -46,8 +46,8 @@ class Category extends Model
         return 'slug';
     }
 
-    public function getSrcAttribute($value): string|UrlGenerator|Application
+    public function image(): MorphOne
     {
-        return url("/storage/$value");
+        return $this->morphOne(Image::class, 'imageable');
     }
 }

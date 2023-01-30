@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\Good;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,11 +12,10 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('good_images', function (Blueprint $table) {
+        Schema::create('images', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Good::class)->constrained()->cascadeOnUpdate()->cascadeOnDelete();
-            $table->string('src');
-            $table->boolean('is_preview')->default(false);
+            $table->string('url');
+            $table->morphs('imageable');
             $table->timestamps();
         });
     }
@@ -29,6 +27,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('good_images');
+        Schema::dropIfExists('images');
     }
 };

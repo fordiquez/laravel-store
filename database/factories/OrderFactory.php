@@ -24,9 +24,7 @@ class OrderFactory extends Factory
             'delivery_method' => Order::$deliveryMethods[fake()->numberBetween(0, count(Order::$deliveryMethods) - 1)],
             'goods_cost' => fake()->numberBetween(100, 10000),
             'delivery_cost' => fake()->numberBetween(0, 100),
-            'total_cost' => function (array $attributes) {
-                return $attributes['goods_cost'] + $attributes['delivery_cost'];
-            }
+            'total_cost' => fn (array $attributes) => $attributes['goods_cost'] + $attributes['delivery_cost']
         ];
     }
 }

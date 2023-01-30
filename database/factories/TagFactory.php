@@ -19,9 +19,7 @@ class TagFactory extends Factory
     {
         return [
             'title' => fake()->unique()->colorName(),
-            'slug' => function (array $attributes) {
-                return Str::slug($attributes['title']);
-            }
+            'slug' => fn (array $attributes) => Str::slug($attributes['title'])
         ];
     }
 }

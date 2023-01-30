@@ -1,5 +1,5 @@
 <script setup>
-import { computed, reactive, ref } from 'vue';
+import { computed, ref } from 'vue';
 import { Link } from '@inertiajs/vue3';
 import { Popover, PopoverButton, PopoverGroup, PopoverPanel } from "@headlessui/vue";
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
@@ -9,263 +9,17 @@ import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import ResponsiveCategories from "@/Components/ResponsiveCategories.vue";
 
+const props = defineProps({
+    categories: Array
+})
+
 const showingNavigationDropdown = ref(false);
 const open = ref(false)
 const showingResponsiveCategories = ref(false)
 
-const categories = reactive([
-        {
-            "id": 1,
-            "title": "Laptops and Computers",
-            "slug": "laptops-and-computers",
-            "photo": "http://localhost:8000/storage/categories/December2022/laptops-and-computers.jpg",
-            "parent_id": null,
-            "subcategories": [
-                {
-                    "id": 2,
-                    "title": "Laptops",
-                    "slug": "laptops",
-                    "photo": "http://localhost:8000/storage/categories/December2022/laptops.jpg",
-                    "parent_id": 1,
-                    "created_at": "2022-12-05T05:38:22.000000Z",
-                    "updated_at": "2022-12-05T05:38:22.000000Z",
-                    "deleted_at": null
-                },
-                {
-                    "id": 3,
-                    "title": "Computers",
-                    "slug": "computers",
-                    "photo": "http://localhost:8000/storage/categories/December2022/computers.jpg",
-                    "parent_id": 1,
-                    "created_at": "2022-12-05T05:38:23.000000Z",
-                    "updated_at": "2022-12-05T05:38:23.000000Z",
-                    "deleted_at": null
-                },
-                {
-                    "id": 4,
-                    "title": "Monitors",
-                    "slug": "monitors",
-                    "photo": "http://localhost:8000/storage/categories/December2022/monitors.jpg",
-                    "parent_id": 1,
-                    "created_at": "2022-12-05T05:38:24.000000Z",
-                    "updated_at": "2022-12-05T05:38:24.000000Z",
-                    "deleted_at": null
-                },
-                {
-                    "id": 5,
-                    "title": "Tablets",
-                    "slug": "tablets",
-                    "photo": "http://localhost:8000/storage/categories/December2022/tablets.jpg",
-                    "parent_id": 1,
-                    "created_at": "2022-12-05T05:38:26.000000Z",
-                    "updated_at": "2022-12-05T05:38:26.000000Z",
-                    "deleted_at": null
-                },
-                {
-                    "id": 6,
-                    "title": "Computer components",
-                    "slug": "computer-components",
-                    "photo": "http://localhost:8000/storage/categories/December2022/computer-components.jpg",
-                    "parent_id": 1,
-                    "created_at": "2022-12-05T05:38:26.000000Z",
-                    "updated_at": "2022-12-05T05:38:26.000000Z",
-                    "deleted_at": null,
-                    "subcategories": [
-                        {
-                            "id": 7,
-                            "title": "SSD",
-                            "slug": "ssd",
-                            "photo": "http://localhost:8000/storage/categories/December2022/ssd.jpg",
-                            "parent_id": 6,
-                            "created_at": "2022-12-05T05:38:27.000000Z",
-                            "updated_at": "2022-12-05T05:38:27.000000Z",
-                            "deleted_at": null
-                        },
-                        {
-                            "id": 8,
-                            "title": "Cooling systems",
-                            "slug": "cooling-systems",
-                            "photo": "http://localhost:8000/storage/categories/December2022/cooling-systems.jpg",
-                            "parent_id": 6,
-                            "created_at": "2022-12-05T05:38:29.000000Z",
-                            "updated_at": "2022-12-05T05:38:29.000000Z",
-                            "deleted_at": null
-                        },
-                        {
-                            "id": 9,
-                            "title": "Video cards",
-                            "slug": "video-cards",
-                            "photo": "http://localhost:8000/storage/categories/December2022/video-cards.jpg",
-                            "parent_id": 6,
-                            "created_at": "2022-12-05T05:38:30.000000Z",
-                            "updated_at": "2022-12-05T05:38:30.000000Z",
-                            "deleted_at": null
-                        },
-                        {
-                            "id": 10,
-                            "title": "RAM",
-                            "slug": "ram",
-                            "photo": "http://localhost:8000/storage/categories/December2022/ram.jpg",
-                            "parent_id": 6,
-                            "created_at": "2022-12-05T05:38:31.000000Z",
-                            "updated_at": "2022-12-05T05:38:31.000000Z",
-                            "deleted_at": null
-                        },
-                        {
-                            "id": 11,
-                            "title": "Processors",
-                            "slug": "processors",
-                            "photo": "http://localhost:8000/storage/categories/December2022/processors.jpg",
-                            "parent_id": 6,
-                            "created_at": "2022-12-05T05:38:32.000000Z",
-                            "updated_at": "2022-12-05T05:38:32.000000Z",
-                            "deleted_at": null
-                        },
-                        {
-                            "id": 12,
-                            "title": "Motherboards",
-                            "slug": "motherboards",
-                            "photo": "http://localhost:8000/storage/categories/December2022/motherboards.jpg",
-                            "parent_id": 6,
-                            "created_at": "2022-12-05T05:38:34.000000Z",
-                            "updated_at": "2022-12-05T05:38:34.000000Z",
-                            "deleted_at": null
-                        },
-                        {
-                            "id": 13,
-                            "title": "Hard drives",
-                            "slug": "hard-drives",
-                            "photo": "http://localhost:8000/storage/categories/December2022/hard-drives.jpg",
-                            "parent_id": 6,
-                            "created_at": "2022-12-05T05:38:34.000000Z",
-                            "updated_at": "2022-12-05T05:38:34.000000Z",
-                            "deleted_at": null
-                        },
-                        {
-                            "id": 14,
-                            "title": "Power supply units",
-                            "slug": "power-supply-units",
-                            "photo": "http://localhost:8000/storage/categories/December2022/power-supply-units.jpg",
-                            "parent_id": 6,
-                            "created_at": "2022-12-05T05:38:35.000000Z",
-                            "updated_at": "2022-12-05T05:38:35.000000Z",
-                            "deleted_at": null
-                        }
-                    ]
-                },
-                {
-                    "id": 15,
-                    "title": "Headphones and accessories",
-                    "slug": "headphones-and-accessories",
-                    "photo": "http://localhost:8000/storage/categories/December2022/headphones-and-accessories.jpg",
-                    "parent_id": 1,
-                    "created_at": "2022-12-05T05:38:36.000000Z",
-                    "updated_at": "2022-12-05T05:38:36.000000Z",
-                    "deleted_at": null
-                },
-                {
-                    "id": 16,
-                    "title": "Keyboards and mouses",
-                    "slug": "keyboards-and-mouses",
-                    "photo": "http://localhost:8000/storage/categories/December2022/keyboards-and-mouses.jpg",
-                    "parent_id": 1,
-                    "created_at": "2022-12-05T05:38:37.000000Z",
-                    "updated_at": "2022-12-05T05:38:37.000000Z",
-                    "deleted_at": null,
-                    "subcategories": [
-                        {
-                            "id": 17,
-                            "title": "Computer mouses",
-                            "slug": "computer-mouses",
-                            "photo": "http://localhost:8000/storage/categories/December2022/computer-mouses.jpg",
-                            "parent_id": 16,
-                            "created_at": "2022-12-05T05:38:38.000000Z",
-                            "updated_at": "2022-12-05T05:38:38.000000Z",
-                            "deleted_at": null
-                        },
-                        {
-                            "id": 18,
-                            "title": "Mouse mats",
-                            "slug": "mouse-mats",
-                            "photo": "http://localhost:8000/storage/categories/December2022/mouse-mats.jpg",
-                            "parent_id": 16,
-                            "created_at": "2022-12-05T05:38:39.000000Z",
-                            "updated_at": "2022-12-05T05:38:39.000000Z",
-                            "deleted_at": null
-                        },
-                        {
-                            "id": 19,
-                            "title": "Keyboards",
-                            "slug": "keyboards",
-                            "photo": "http://localhost:8000/storage/categories/December2022/keyboards.jpg",
-                            "parent_id": 16,
-                            "created_at": "2022-12-05T05:38:40.000000Z",
-                            "updated_at": "2022-12-05T05:38:40.000000Z",
-                            "deleted_at": null
-                        }
-                    ]
-                },
-                {
-                    "id": 20,
-                    "title": "Accessories for electronics",
-                    "slug": "accessories-for-electronics",
-                    "photo": "http://localhost:8000/storage/categories/December2022/accessories-for-electronics.jpg",
-                    "parent_id": 1,
-                    "created_at": "2022-12-05T05:38:40.000000Z",
-                    "updated_at": "2022-12-05T05:38:40.000000Z",
-                    "deleted_at": null,
-                    "subcategories": [
-                        {
-                            "id": 21,
-                            "title": "USB flash drives",
-                            "slug": "usb-flash-drives",
-                            "photo": "http://localhost:8000/storage/categories/December2022/usb-flash-drives.jpg",
-                            "parent_id": 20,
-                            "created_at": "2022-12-05T05:38:41.000000Z",
-                            "updated_at": "2022-12-05T05:38:41.000000Z",
-                            "deleted_at": null
-                        },
-                        {
-                            "id": 22,
-                            "title": "Bags, backpacks and laptop cases",
-                            "slug": "bags-backpacks-and-laptop-cases",
-                            "photo": "http://localhost:8000/storage/categories/December2022/bags-backpacks-and-laptop-cases.jpg",
-                            "parent_id": 20,
-                            "created_at": "2022-12-05T05:38:42.000000Z",
-                            "updated_at": "2022-12-05T05:38:42.000000Z",
-                            "deleted_at": null
-                        }
-                    ]
-                }
-            ],
-            "created_at": "2022-12-05T05:38:21.000000Z",
-            "updated_at": "2022-12-05T05:38:21.000000Z"
-        },
-        {
-            "id": 23,
-            "title": "Smartphones, TV and Electronics",
-            "slug": "smartphones-tv-and-electronics",
-            "photo": "http://localhost:8000/storage/categories/December2022/smartphones-tv-and-electronics.jpg",
-            "parent_id": null,
-            "subcategories": null,
-            "created_at": "2022-12-05T05:38:43.000000Z",
-            "updated_at": "2022-12-05T05:38:43.000000Z"
-        },
-        {
-            "id": 24,
-            "title": "Goods for gamers",
-            "slug": "goods-for-gamers",
-            "photo": "http://localhost:8000/storage/categories/December2022/goods-for-gamers.jpg",
-            "parent_id": null,
-            "subcategories": null,
-            "created_at": "2022-12-05T05:38:44.000000Z",
-            "updated_at": "2022-12-05T05:38:44.000000Z"
-        }
-    ])
+let hoveredCategoryId = ref(props.categories[0].id)
 
-let hoveredCategoryId = ref(1)
-
-let hoveredCategory = computed(() => categories.find(category => category.id === hoveredCategoryId.value))
+let hoveredCategory = computed(() => props.categories.find(category => category.id === hoveredCategoryId.value))
 
 const onCategory = (category) => hoveredCategoryId.value = category.id
 const closeResponsiveCategories = () => showingResponsiveCategories.value = false
@@ -359,21 +113,21 @@ const closeResponsiveCategories = () => showingResponsiveCategories.value = fals
                                                             </div>
                                                             <div class="basis-1/5 xl:block hidden">
                                                                 <div class="group relative text-base sm:text-sm">
-                                                                    <div v-if="hoveredCategory.photo"
-                                                                         class="aspect-w-1 aspect-h-1 overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75">
-                                                                        <img :src="hoveredCategory.photo"
+                                                                    <div v-if="hoveredCategory.image"
+                                                                         class="mb-2 aspect-w-1 aspect-h-1 overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75">
+                                                                        <img :src="hoveredCategory.image"
                                                                              :alt="hoveredCategory.title"
                                                                              :title="hoveredCategory.title"
-                                                                             class="object-cover object-center"/>
+                                                                             class="object-cover object-center" />
                                                                     </div>
                                                                     <Link
                                                                         href="#"
-                                                                        class="mt-3 block font-medium text-gray-900">
+                                                                        class="text-base font-medium text-gray-300 dark:text-gray-200 hover:text-gray-700 dark:hover:text-gray-100 focus:text-gray-700 dark:focus:text-gray-300">
                                                                             <span class="absolute inset-0 z-10"
-                                                                                  aria-hidden="true"/>
+                                                                                  aria-hidden="true" />
                                                                         {{ hoveredCategory.title }}
                                                                     </Link>
-                                                                    <p aria-hidden="true" class="mt-1">Shop now</p>
+                                                                    <p aria-hidden="true" class="mt-1 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-100 hover:border-gray-300 dark:hover:border-gray-700 focus:text-gray-700 dark:focus:text-gray-300">Shop now</p>
                                                                 </div>
                                                             </div>
                                                         </div>

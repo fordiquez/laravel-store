@@ -19,12 +19,7 @@ class CategoryFactory extends Factory
     {
         return [
             'title' => fake()->unique()->jobTitle(),
-            'slug' => function (array $attributes) {
-                return Str::slug($attributes['title']);
-            },
-            'src' => function (array $attributes) {
-                return $this->faker->loremflickr('categories', $attributes['slug']);
-            },
+            'slug' => fn (array $attributes) => Str::slug($attributes['title']),
         ];
     }
 }

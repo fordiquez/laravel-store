@@ -22,9 +22,7 @@ class GoodFactory extends Factory
         return [
             'vendor_code' => fake()->unique()->numberBetween(1000000000),
             'title' => fake()->unique()->text(20),
-            'slug' => function (array $attributes) {
-                return Str::slug($attributes['title']);
-            },
+            'slug' => fn (array $attributes) => Str::slug($attributes['title']),
             'category_id' => Category::whereNotIn('id', [1, 6, 16, 17, 20, 23, 24])->inRandomOrder()->value('id'),
             'description' => fake()->paragraph(10),
             'short_description' => fake()->sentence(50),

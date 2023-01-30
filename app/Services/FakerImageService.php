@@ -9,7 +9,7 @@ use Illuminate\Support\Str;
 
 final class FakerImageService extends Base
 {
-    public function loremflickr(string $dir = '', string $name = ''): string
+    public function loremflickr(string $dir = 'images', string $name = ''): string
     {
         $width = $dir === 'users' ? 500 : 994;
         $height = $dir === 'users' ? 500 : 1280;

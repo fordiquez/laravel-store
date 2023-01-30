@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Category;
 use Database\Factories\CategoryFactory;
 use Illuminate\Database\Seeder;
 
@@ -15,7 +14,7 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
-        CategoryFactory::new()->createMany([
+        CategoryFactory::new()->hasImage(1)->createMany([
             [
                 'title' => 'Laptops and Computers',
                 'slug' => 'laptops-and-computers'
