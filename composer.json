@@ -9,9 +9,11 @@
         "guzzlehttp/guzzle": "^7.2",
         "inertiajs/inertia-laravel": "^0.6.8",
         "laravel/framework": "^9.19",
+        "laravel/horizon": "^5.13",
         "laravel/sanctum": "^3.2",
         "laravel/telescope": "^4.12",
         "laravel/tinker": "^2.7",
+        "predis/predis": "^2.1",
         "tightenco/ziggy": "^1.0"
     },
     "require-dev": {
