@@ -2,16 +2,14 @@
 
 namespace Database\Factories;
 
-use App\Models\GoodStatus;
+use App\Models\Brand;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends Factory
+ * @extends Factory<Brand>
  */
-class GoodStatusFactory extends Factory
+class BrandFactory extends Factory
 {
-    public int $index = 0;
-
     /**
      * Define the model's default state.
      *
@@ -20,7 +18,8 @@ class GoodStatusFactory extends Factory
     public function definition(): array
     {
         return [
-            'title' => GoodStatus::$statuses[$this->index++]
+            'name' => fake()->company,
+            'slug' => fn (array $attributes) => str($attributes['name'])->slug(),
         ];
     }
 }

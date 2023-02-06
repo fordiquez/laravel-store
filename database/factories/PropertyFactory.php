@@ -18,7 +18,7 @@ class PropertyFactory extends Factory
     public function definition(): array
     {
         return [
-            'title' => fake()->unique()->sentence(5),
+            'name' => fake()->unique()->sentence(5),
         ];
     }
 }

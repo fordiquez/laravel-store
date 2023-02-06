@@ -14,123 +14,243 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
-        CategoryFactory::new()->hasImage(1)->createMany([
-            [
-                'title' => 'Laptops and Computers',
-                'slug' => 'laptops-and-computers'
-            ],
+        $laptopsAndComputers = CategoryFactory::new()->hasImage()->create([
+            'title' => 'Laptops and Computers',
+        ]);
+
+        CategoryFactory::new()->hasImage()->createMany([
             [
                 'title' => 'Laptops',
-                'slug' => 'laptops',
-                'parent_id' => 1
+                'parent_id' => $laptopsAndComputers->id
             ],
             [
-                'title' => 'Computers',
-                'slug' => 'computers',
-                'parent_id' => 1
+                'title' => 'Computers, nettops, monoblocs',
+                'parent_id' => $laptopsAndComputers->id
             ],
             [
                 'title' => 'Monitors',
-                'slug' => 'monitors',
-                'parent_id' => 1
+                'parent_id' => $laptopsAndComputers->id
+            ],
+        ]);
+
+        $tablets = CategoryFactory::new()->hasImage()->create([
+            'title' => 'Tablets'
+        ]);
+
+        CategoryFactory::new()->hasImage()->createMany([
+            [
+                'title' => 'Apple iPad',
+                'parent_id' => $tablets->id,
             ],
             [
-                'title' => 'Tablets',
-                'slug' => 'tablets',
-                'parent_id' => 1
+                'title' => 'Samsung',
+                'parent_id' => $tablets->id,
             ],
             [
-                'title' => 'Computer components',
-                'slug' => 'computer-components',
-                'parent_id' => 1
+                'title' => 'Lenovo',
+                'parent_id' => $tablets->id,
             ],
             [
-                'title' => 'SSD',
-                'slug' => 'ssd',
-                'parent_id' => 6
+                'title' => 'Xiaomi',
+                'parent_id' => $tablets->id,
             ],
+        ]);
+
+        $computerComponents = CategoryFactory::new()->hasImage()->create([
+            'title' => 'Computer components',
+            'parent_id' => $laptopsAndComputers->id
+        ]);
+
+        CategoryFactory::new()->hasImage()->createMany([
             [
-                'title' => 'Cooling systems',
-                'slug' => 'cooling-systems',
-                'parent_id' => 6
-            ],
-            [
-                'title' => 'Video cards',
-                'slug' => 'video-cards',
-                'parent_id' => 6
-            ],
-            [
-                'title' => 'RAM',
-                'slug' => 'ram',
-                'parent_id' => 6
+                'title' => 'Motherboards',
+                'parent_id' => $computerComponents->id,
             ],
             [
                 'title' => 'Processors',
-                'slug' => 'processors',
-                'parent_id' => 6
+                'parent_id' => $computerComponents->id,
             ],
             [
-                'title' => 'Motherboards',
-                'slug' => 'motherboards',
-                'parent_id' => 6
+                'title' => 'RAM',
+                'parent_id' => $computerComponents->id,
+            ],
+            [
+                'title' => 'Video cards',
+                'parent_id' => $computerComponents->id,
+            ],
+            [
+                'title' => 'Sound cards',
+                'parent_id' => $computerComponents->id,
             ],
             [
                 'title' => 'Hard drives',
-                'slug' => 'hard-drives',
-                'parent_id' => 6
+                'parent_id' => $computerComponents->id,
+            ],
+            [
+                'title' => 'Optical drives',
+                'parent_id' => $computerComponents->id,
             ],
             [
                 'title' => 'Power supply units',
-                'slug' => 'power-supply-units',
-                'parent_id' => 6
+                'parent_id' => $computerComponents->id,
             ],
             [
-                'title' => 'Headphones and accessories',
-                'slug' => 'headphones-and-accessories',
-                'parent_id' => 1
+                'title' => 'Cases',
+                'parent_id' => $computerComponents->id,
             ],
             [
-                'title' => 'Keyboards and mouses',
-                'slug' => 'keyboards-and-mouses',
-                'parent_id' => 1
+                'title' => 'Cooling systems',
+                'parent_id' => $computerComponents->id,
             ],
             [
-                'title' => 'Computer mouses',
-                'slug' => 'computer-mouses',
-                'parent_id' => 16
+                'title' => 'Uninterrupted power supply',
+                'parent_id' => $computerComponents->id,
             ],
             [
-                'title' => 'Mouse mats',
-                'slug' => 'mouse-mats',
-                'parent_id' => 16
+                'title' => 'SSD',
+                'parent_id' => $computerComponents->id,
+            ],
+            [
+                'title' => 'Video capture cards',
+                'parent_id' => $computerComponents->id,
+            ],
+        ]);
+
+        $keyboardsAndMice = CategoryFactory::new()->hasImage()->create([
+            'title' => 'Keyboards and mice',
+            'parent_id' => $computerComponents->id,
+        ]);
+
+        CategoryFactory::new()->hasImage()->createMany([
+            [
+                'title' => 'Computer mice',
+                'parent_id' => $keyboardsAndMice->id,
+            ],
+            [
+                'title' => 'Gaming mice',
+                'parent_id' => $keyboardsAndMice->id,
+            ],
+            [
+                'title' => 'Gaming keyboards',
+                'parent_id' => $keyboardsAndMice->id,
             ],
             [
                 'title' => 'Keyboards',
-                'slug' => 'keyboards',
-                'parent_id' => 16
+                'parent_id' => $keyboardsAndMice->id,
+            ],
+            [
+                'title' => 'Playing surfaces',
+                'parent_id' => $keyboardsAndMice->id,
+            ],
+            [
+                'title' => 'Keyboard + mouse',
+                'parent_id' => $keyboardsAndMice->id,
+            ],
+            [
+                'title' => 'Accessories for keyboards and mice',
+                'parent_id' => $keyboardsAndMice->id,
+            ],
+            [
+                'title' => 'Gaming keyboard + mouse',
+                'parent_id' => $keyboardsAndMice->id,
+            ],
+        ]);
+
+        CategoryFactory::new()->hasImage()->createMany([
+            [
+                'title' => 'Cables and adapters',
+                'parent_id' => $laptopsAndComputers->id
+            ],
+            [
+                'title' => 'Headphones and accessories',
+                'parent_id' => $laptopsAndComputers->id
             ],
             [
                 'title' => 'Accessories for electronics',
-                'slug' => 'accessories-for-electronics',
-                'parent_id' => 1
+                'parent_id' => $laptopsAndComputers->id
+            ],
+        ]);
+
+        $gamerGoods = CategoryFactory::new()->hasImage()->create([
+            'title' => 'Goods for gamers',
+        ]);
+
+        CategoryFactory::new()->hasImage()->createMany([
+            [
+                'title' => 'Game consoles',
+                'parent_id' => $gamerGoods->id
             ],
             [
-                'title' => 'USB flash drives',
-                'slug' => 'usb-flash-drives',
-                'parent_id' => 20
+                'title' => 'Gaming laptops',
+                'parent_id' => $gamerGoods->id
             ],
             [
-                'title' => 'Bags, backpacks and laptop cases',
-                'slug' => 'bags-backpacks-and-laptop-cases',
-                'parent_id' => 20
+                'title' => 'Gaming computers',
+                'parent_id' => $gamerGoods->id
             ],
             [
-                'title' => 'Smartphones, TV and Electronics',
-                'slug' => 'smartphones-tv-and-electronics'
+                'title' => 'Gaming monitors',
+                'parent_id' => $gamerGoods->id
             ],
             [
-                'title' => 'Goods for gamers',
-                'slug' => 'goods-for-gamers'
+                'title' => 'Armchairs for gamers',
+                'parent_id' => $gamerGoods->id
+            ],
+            [
+                'title' => 'Gaming tables',
+                'parent_id' => $gamerGoods->id
+            ],
+            [
+                'title' => 'Gaming routers',
+                'parent_id' => $gamerGoods->id
+            ],
+            [
+                'title' => 'Accessories and souvenirs',
+                'parent_id' => $gamerGoods->id
+            ],
+            [
+                'title' => 'Games',
+                'parent_id' => $gamerGoods->id
+            ],
+            [
+                'title' => 'Game peripherals',
+                'parent_id' => $gamerGoods->id
+            ],
+            [
+                'title' => 'Glasses and helmets of virtual reality',
+                'parent_id' => $gamerGoods->id
+            ],
+        ]);
+
+        $gamerComponents = CategoryFactory::new()->hasImage()->create([
+            'title' => 'Components for gamers',
+            'parent_id' => $gamerGoods->id
+        ]);
+
+        CategoryFactory::new()->hasImage()->createMany([
+            [
+                'title' => 'Gaming Video cards',
+                'parent_id' => $gamerComponents->id
+            ],
+            [
+                'title' => 'Gaming Processors',
+                'parent_id' => $gamerComponents->id
+            ],
+            [
+                'title' => 'Gaming Motherboards',
+                'parent_id' => $gamerComponents->id
+            ],
+            [
+                'title' => 'Gaming Power supply units',
+                'parent_id' => $gamerComponents->id
+            ],
+            [
+                'title' => 'Gaming Cooling systems',
+                'parent_id' => $gamerComponents->id
+            ],
+            [
+                'title' => 'Gaming Cases',
+                'parent_id' => $gamerComponents->id
             ],
         ]);
     }

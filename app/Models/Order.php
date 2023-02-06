@@ -12,15 +12,19 @@ class Order extends Model
     use HasFactory;
 
     protected $fillable = [
-        'number',
+        'ref_id',
         'user_id',
+        'user_address_id',
+        'promo_code_id',
         'delivery_method',
-        'pay_method',
-        'promocode_id',
+        'payment_method',
         'goods_cost',
         'delivery_cost',
         'total_cost',
+        'status',
     ];
+
+    public static array $statuses = ['unpaid', 'paid', 'under_process', 'processing', 'finished', 'rejected', 'canceled', 'refunded_request', 'refunded', 'returned'];
 
     public static array $deliveryMethods = [
         'Courier',
@@ -29,9 +33,15 @@ class Order extends Model
         'Self-delivery from Nova Poshta'
     ];
 
+    public static array $paymentMethods = [
+        'cash',
+        'Stripe',
+        'Bank Transfer'
+    ];
+
     public function goods(): BelongsToMany
     {
-        return $this->belongsToMany(Good::class, 'good_order', 'order_id', 'good_id');
+        return $this->belongsToMany(Good::class, 'order_items', 'order_id', 'good_id');
     }
 
     public function orderHistories(): HasMany

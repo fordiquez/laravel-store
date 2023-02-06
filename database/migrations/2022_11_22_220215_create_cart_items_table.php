@@ -14,15 +14,11 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('reviews', function (Blueprint $table) {
+        Schema::create('cart_items', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class)->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignIdFor(Good::class)->constrained()->cascadeOnUpdate()->cascadeOnDelete();
-            $table->text('description');
-            $table->tinyText('advantages');
-            $table->tinyText('disadvantages');
-            $table->unsignedTinyInteger('rating');
-            $table->string('video_src')->nullable();
+            $table->unsignedTinyInteger('quantity')->default(1);
             $table->timestamps();
         });
     }
@@ -34,6 +30,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('reviews');
+        Schema::dropIfExists('cart_items');
     }
 };

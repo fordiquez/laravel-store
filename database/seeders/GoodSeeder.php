@@ -2,9 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\GoodStatus;
 use Database\Factories\GoodFactory;
-use Database\Factories\GoodStatusFactory;
 use Database\Factories\OptionFactory;
 use Database\Factories\OptionValueFactory;
 use Database\Factories\PropertyFactory;
@@ -22,8 +20,6 @@ class GoodSeeder extends Seeder
      */
     public function run(): void
     {
-        GoodStatusFactory::new()->count(count(GoodStatus::$statuses) - 1)->create();
-
         $tags = TagFactory::new()->count(22)->create();
 
         PropertyFactory::new()->count(5)->create();
@@ -34,8 +30,8 @@ class GoodSeeder extends Seeder
 
         GoodFactory::new()->count(3)
             ->hasImages(rand(1, 3))
-            ->has(ReviewFactory::new()->count(rand(1, 3))
-                ->hasImages(rand(1, 3)))
+            ->has(ReviewFactory::new()->count(1)
+                ->hasImages())
             ->hasAttached($tags->toQuery()->inRandomOrder()->take(rand(1, 5))->get())
             ->hasAttached($propertyValues->toQuery()->inRandomOrder()->take(rand(1, 5))->get())
             ->hasAttached($optionValues->toQuery()->inRandomOrder()->take(rand(1, 5))->get())

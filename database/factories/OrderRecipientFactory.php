@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,11 +19,12 @@ class OrderRecipientFactory extends Factory
     public function definition(): array
     {
         return [
-            'profile_title' => fake()->text(50),
+            'user_id' => User::inRandomOrder()->value('id'),
+            'description' => fake()->text(50),
             'first_name' => fake()->firstName(),
             'last_name' => fake()->lastName(),
-            'mobile_phone' => "+380" . $this->networkCodes[rand(0, count($this->networkCodes) - 1)] . fake()->unique()->numberBetween(1000000, 9999999),
-            'is_active' => rand(0, 1)
+            'phone' => "+380" . $this->networkCodes[rand(0, count($this->networkCodes) - 1)] . fake()->unique()->numberBetween(1000000, 9999999),
+            'is_default' => fake()->boolean,
         ];
     }
 }

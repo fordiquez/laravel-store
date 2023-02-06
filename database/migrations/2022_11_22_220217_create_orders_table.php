@@ -3,6 +3,7 @@
 use App\Models\Order;
 use App\Models\PromoCode;
 use App\Models\User;
+use App\Models\UserAddress;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,13 +18,16 @@ return new class extends Migration {
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('number')->unique();
+            $table->uuid('ref_id')->unique();
             $table->foreignIdFor(User::class)->constrained()->cascadeOnUpdate()->cascadeOnDelete();
-            $table->enum('delivery_method', Order::$deliveryMethods);
+            $table->foreignIdFor(UserAddress::class)->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignIdFor(PromoCode::class)->nullable()->constrained()->cascadeOnUpdate()->cascadeOnDelete();
-            $table->unsignedInteger('goods_cost');
-            $table->unsignedInteger('delivery_cost')->nullable()->default(0);
-            $table->unsignedInteger('total_cost');
+            $table->enum('delivery_method', Order::$deliveryMethods);
+            $table->enum('payment_method', Order::$paymentMethods);
+            $table->unsignedDecimal('goods_cost');
+            $table->unsignedDecimal('delivery_cost')->nullable()->default(0);
+            $table->unsignedDecimal('total_cost');
+            $table->enum('status', Order::$statuses)->default('unpaid');
             $table->timestamps();
         });
     }

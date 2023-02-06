@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\GoodStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,9 +12,9 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('good_statuses', function (Blueprint $table) {
+        Schema::create('properties', function (Blueprint $table) {
             $table->id();
-            $table->enum('title', GoodStatus::$statuses);
+            $table->string('name')->unique();
             $table->timestamps();
         });
     }
@@ -27,6 +26,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('good_statuses');
+        Schema::dropIfExists('properties');
     }
 };

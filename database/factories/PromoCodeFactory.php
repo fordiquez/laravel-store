@@ -18,11 +18,14 @@ class PromoCodeFactory extends Factory
     public function definition(): array
     {
         return [
-            'title' => fake()->sentence(10),
             'key' => Str::random(8),
+            'type' => fake()->boolean ? 'fixed' : 'percentage',
             'value' => fake()->numberBetween(1, 99),
-            'deadline' => fake()->dateTimeThisYear(),
-            'is_active' => fake()->numberBetween(0, 1)
+            'description' => fake()->sentence(10),
+            'used_times' => fake()->numberBetween(0, 1000),
+            'start_date' => fake()->dateTimeThisYear(),
+            'expire_date' => fake()->dateTimeThisYear(),
+            'is_active' => fake()->boolean
         ];
     }
 }

@@ -14,7 +14,7 @@ return new class extends Migration {
     {
         Schema::create('options', function (Blueprint $table) {
             $table->id();
-            $table->string('title')->unique();
+            $table->string('name')->unique();
             $table->timestamps();
         });
     }

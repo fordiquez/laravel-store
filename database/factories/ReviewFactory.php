@@ -21,10 +21,11 @@ class ReviewFactory extends Factory
         return [
             'user_id' => User::query()->inRandomOrder()->value('id'),
             'good_id' => Good::query()->inRandomOrder()->value('id'),
-            'description' => fake()->paragraph(10),
+            'content' => fake()->paragraph(10),
             'advantages' => fake()->sentence(10),
             'disadvantages' => fake()->sentence(10),
-            'rating' => fake()->numberBetween(1, 5)
+            'rating' => fake()->numberBetween(1, 5),
+            'ip_address' => fake()->ipv4,
         ];
     }
 }

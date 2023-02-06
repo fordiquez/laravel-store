@@ -17,12 +17,14 @@ class UserAddressFactory extends Factory
     public function definition(): array
     {
         return [
-            'country' => fake()->country(),
-            'city' => fake()->city(),
-            'street' => fake()->streetName(),
-            'house' => fake()->buildingNumber(),
-            'flat' => fake()->numberBetween(0, 100),
-            'is_active' => rand(0, 1),
+            'title' => fake()->word,
+            'is_main' => fake()->boolean,
+            'country' => fake()->country,
+            'city' => fake()->city,
+            'street' => fake()->streetName,
+            'house' => fake()->buildingNumber,
+            'flat' => fake()->boolean ?: fake()->numberBetween(0, 100),
+            'postal_code' => fake()->postcode,
         ];
     }
 }

@@ -13,11 +13,12 @@ class Review extends Model
     protected $fillable = [
         'user_id',
         'good_id',
-        'description',
+        'content',
         'advantages',
         'disadvantages',
         'rating',
-        'video_src'
+        'video_src',
+        'ip_address',
     ];
 
     public function images(): MorphMany

@@ -16,11 +16,12 @@ return new class extends Migration {
         Schema::create('order_recipients', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class)->constrained()->cascadeOnUpdate()->cascadeOnDelete();
-            $table->string('profile_title')->unique();
+            $table->string('description')->unique();
             $table->string('first_name', 50);
             $table->string('last_name', 50);
-            $table->string('mobile_phone', 13);
-            $table->boolean('is_active')->default(false);
+            $table->string('second_name')->nullable();
+            $table->string('phone', 13);
+            $table->boolean('is_default')->default(false);
             $table->timestamps();
         });
     }

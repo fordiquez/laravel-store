@@ -37,8 +37,8 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('option_values');
-
         Schema::dropIfExists('good_option_value');
+
+        Schema::dropIfExists('option_values');
     }
 };

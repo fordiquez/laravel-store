@@ -6,13 +6,14 @@ use App\Notifications\SendVerifyWithQueueNotification;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -22,9 +23,12 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $fillable = [
         'first_name',
         'last_name',
-        'birthday_date',
+        'birth_date',
         'gender',
+        'avatar',
+        'status',
         'email',
+        'phone',
         'password',
     ];
 
@@ -46,6 +50,10 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public static array $genders = ['male', 'female'];
+
+    public static array $statuses = ['active', 'inactive', 'blocked'];
 
     public function sendEmailVerificationNotification()
     {
@@ -78,10 +86,5 @@ class User extends Authenticatable implements MustVerifyEmail
     public function userAddresses(): HasMany
     {
         return $this->hasMany(UserAddress::class);
-    }
-
-    public function userContacts(): HasMany
-    {
-        return $this->hasMany(UserContact::class);
     }
 }

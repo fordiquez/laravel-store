@@ -18,23 +18,28 @@ class Good extends Model
         'title',
         'slug',
         'category_id',
+        'brand_id',
         'description',
         'short_description',
         'warning_description',
         'old_price',
         'price',
         'quantity',
-        'status_id'
+        'status'
+    ];
+
+    public static array $statuses = [
+        'ready for dispatch',
+        'in stock',
+        'ends',
+        'is over',
+        'out of stock',
+        'discontinued'
     ];
 
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
-    }
-
-    public function status(): BelongsTo
-    {
-        return $this->belongsTo(GoodStatus::class);
     }
 
     public function tags(): BelongsToMany

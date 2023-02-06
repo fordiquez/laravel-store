@@ -17,6 +17,7 @@ return new class extends Migration {
             $table->id();
             $table->string('section');
             $table->string('name')->nullable();
+            $table->string('details')->nullable();
             $table->string('key');
             $table->text('value');
             $table->enum('type', Setting::$types)->nullable()->default(Setting::$types[0]);

@@ -16,10 +16,18 @@ class Category extends Model
     protected $fillable = [
         'title',
         'slug',
-        'parent_id'
+        'parent_id',
+        'manual_url',
     ];
 
     protected $with = ['image'];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(fn (Category $category) => $category->slug = $category->slug ?? str($category->title)->slug());
+    }
 
     public function parent(): BelongsTo
     {

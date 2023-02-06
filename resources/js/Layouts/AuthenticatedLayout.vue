@@ -87,7 +87,7 @@ const closeResponsiveCategories = () => showingResponsiveCategories.value = fals
                                                                 </ul>
                                                             </div>
                                                             <div
-                                                                class="flex flex-col flex-wrap grow h-[300px]">
+                                                                class="flex flex-col flex-wrap grow h-[300px] overflow-hidden">
                                                                 <ul class="flex"
                                                                     v-for="subcategory in hoveredCategory.subcategories"
                                                                     :key="subcategory.id">

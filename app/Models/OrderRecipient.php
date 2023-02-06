@@ -11,10 +11,11 @@ class OrderRecipient extends Model
 
     protected $fillable = [
         'user_id',
-        'profile_title',
+        'description',
         'first_name',
         'last_name',
-        'mobile_phone',
-        'is_active'
+        'second_name',
+        'phone',
+        'is_default'
     ];
 }

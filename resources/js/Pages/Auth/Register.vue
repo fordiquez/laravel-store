@@ -12,7 +12,7 @@ const form = useForm({
     email: '',
     password: '',
     password_confirmation: '',
-    birthday_date: '2001-02-22',
+    birth_date: '2001-02-22',
     gender: 'male'
 });
 

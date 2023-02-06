@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 
 /**
  * @extends Factory
@@ -19,7 +18,9 @@ class CategoryFactory extends Factory
     {
         return [
             'title' => fake()->unique()->jobTitle(),
-            'slug' => fn (array $attributes) => Str::slug($attributes['title']),
+            'slug' => fn (array $attributes) => str($attributes['title'])->slug(),
+            'description' => fake()->sentence(rand(2, 10)),
+            'is_active' => true,
         ];
     }
 }
