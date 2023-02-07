@@ -26,7 +26,7 @@ class UserFactory extends Factory
             'last_name' => fake()->lastName(),
             'birth_date' => fake()->dateTimeBetween('-30 years', '-14 years'),
             'gender' => $gender,
-            'avatar' => fn (array $attributes) => $this->faker->loremflickr('avatars'),
+            'avatar' => fn (array $attributes) => $this->faker->fakeImage('avatars'),
             'phone' => "+380" . $this->networkCodes[rand(0, count($this->networkCodes) - 1)] . fake()->unique()->numberBetween(1000000, 9999999),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),

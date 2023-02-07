@@ -1,5 +1,9 @@
 <?php
 
+use App\Models\City;
+use App\Models\Country;
+use App\Models\State;
+use App\Models\Street;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -18,9 +22,10 @@ return new class extends Migration {
             $table->foreignIdFor(User::class)->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->string('title')->default('Main');
             $table->boolean('is_main')->default(false);
-            $table->string('country');
-            $table->string('city');
-            $table->string('street');
+            $table->foreignIdFor(Country::class)->constrained()->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignIdFor(State::class)->constrained()->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignIdFor(City::class)->nullable()->constrained()->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignIdFor(Street::class)->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->string('house');
             $table->string('flat')->nullable();
             $table->string('postal_code')->nullable();

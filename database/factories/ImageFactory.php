@@ -21,7 +21,7 @@ class ImageFactory extends Factory
     public function definition(): array
     {
         return [
-            'url' => fn (array $attributes) => $this->faker->loremflickr($this->directory($attributes['imageable_type']))
+            'url' => fn (array $attributes) => $this->faker->fakeImage($this->directory($attributes['imageable_type']))
         ];
     }
 
