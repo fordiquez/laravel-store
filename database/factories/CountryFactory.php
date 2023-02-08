@@ -20,15 +20,13 @@ class CountryFactory extends Factory
         return [
             'name' => fake()->country,
             'capital' => fake()->city,
-            'flag' => fn(array $attributes) => $this->faker->fakeImage('flags', $attributes['iso2']),
             'iso2' => fake()->countryCode,
             'iso3' => fake()->countryISOAlpha3,
             'phone_code' => fake()->phoneNumber,
             'currency_code' => fake()->currencyCode,
             'tld' => strtolower('.' . fake()->currencyCode),
             'region' => Country::$regions[rand(0, count(Country::$regions) - 1)],
-            'timezone' => fake()->timezone,
-            'is_active' => fake()->boolean(22)
+            'is_active' => fake()->boolean(22),
         ];
     }
 }

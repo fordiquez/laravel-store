@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Third Party Services
@@ -31,4 +30,8 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'multiavatar' => [
+        'url' => 'https://api.multiavatar.com/',
+        'key' => env('MULTIAVATAR_API_KEY')
+    ]
 ];

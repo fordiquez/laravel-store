@@ -24,20 +24,27 @@ class Order extends Model
         'status',
     ];
 
-    public static array $statuses = ['unpaid', 'paid', 'under_process', 'processing', 'finished', 'rejected', 'canceled', 'refunded_request', 'refunded', 'returned'];
+    public static array $statuses = [
+        'unpaid',
+        'paid',
+        'under_process',
+        'processing',
+        'finished',
+        'rejected',
+        'canceled',
+        'refunded_request',
+        'refunded',
+        'returned',
+    ];
 
     public static array $deliveryMethods = [
         'Courier',
         'Self-delivery from Meest',
         'Self-delivery from Ukrposhta',
-        'Self-delivery from Nova Poshta'
+        'Self-delivery from Nova Poshta',
     ];
 
-    public static array $paymentMethods = [
-        'cash',
-        'Stripe',
-        'Bank Transfer'
-    ];
+    public static array $paymentMethods = ['cash', 'Stripe', 'Bank Transfer'];
 
     public function goods(): BelongsToMany
     {

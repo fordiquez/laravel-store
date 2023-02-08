@@ -6,13 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class OrderPayment extends Model
 {
-    protected $fillable = [
-        'order_id',
-        'amount',
-        'status',
-        'type',
-        'session_id',
-    ];
+    protected $fillable = ['order_id', 'amount', 'status', 'type', 'session_id'];
 
     public static array $types = [
         'Payment upon receipt of goods',
@@ -24,6 +18,6 @@ class OrderPayment extends Model
         'Payment for individuals through a current account',
         'PrivatPay',
         'Credit and payment in installments',
-        'Issuance of loans in partner banks'
+        'Issuance of loans in partner banks',
     ];
 }

@@ -19,7 +19,7 @@ class PropertyValueFactory extends Factory
     {
         return [
             'value' => ucfirst(fake()->word()),
-            'property_id' => Property::inRandomOrder()->value('id')
+            'property_id' => Property::inRandomOrder()->value('id'),
         ];
     }
 }

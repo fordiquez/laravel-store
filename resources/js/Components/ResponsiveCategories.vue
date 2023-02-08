@@ -1,31 +1,34 @@
 <script setup>
-import {computed, onMounted, onUnmounted, reactive, ref} from "vue";
-import { TransitionRoot, TransitionChild, Dialog, DialogPanel, DialogTitle } from '@headlessui/vue'
+import { computed, onMounted, onUnmounted, reactive, ref } from 'vue';
+import { TransitionRoot, TransitionChild, Dialog, DialogPanel, DialogTitle } from '@headlessui/vue';
 
 const props = defineProps({
     showing: Boolean,
-    categories: Array
-})
-const emit = defineEmits(['close'])
+    categories: Array,
+});
+const emit = defineEmits(['close']);
 
-const showingSubcategories = ref(false)
-const selectedCategory = reactive({})
+const showingSubcategories = ref(false);
+const selectedCategory = reactive({});
 
-onMounted(() => document.querySelector('body').classList.add('overflow-hidden'))
-onUnmounted(() => document.querySelector('body').classList.remove('overflow-hidden'))
+onMounted(() => document.querySelector('body').classList.add('overflow-hidden'));
+onUnmounted(() => document.querySelector('body').classList.remove('overflow-hidden'));
 
-const selectedCategoryTitle = computed(() => selectedCategory?.title ?? 'Categories of goods')
+const selectedCategoryTitle = computed(() => selectedCategory?.title ?? 'Categories of goods');
 
-const closeModal = () => emit('close')
+const closeModal = () => emit('close');
 
 const renderSubcategories = (categoryId) => {
-    Object.assign(selectedCategory, props.categories.find(category => category.id === categoryId))
-    showingSubcategories.value = true
-}
+    Object.assign(
+        selectedCategory,
+        props.categories.find((category) => category.id === categoryId),
+    );
+    showingSubcategories.value = true;
+};
 const rollbackCategories = () => {
-    Object.keys(selectedCategory).forEach(key => delete selectedCategory[key])
-    showingSubcategories.value = false
-}
+    Object.keys(selectedCategory).forEach((key) => delete selectedCategory[key]);
+    showingSubcategories.value = false;
+};
 </script>
 
 <template>
@@ -55,37 +58,63 @@ const rollbackCategories = () => {
                         leave-to="opacity-0 scale-95"
                     >
                         <DialogPanel
-                            class="w-full transform overflow-hidden rounded-2xl bg-white dark:bg-gray-800 p-6 text-left align-middle shadow-xl transition-all" style="height: calc(100vh - 32px)"
+                            class="w-full transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all dark:bg-gray-800"
+                            style="height: calc(100vh - 32px)"
                         >
-                            <DialogTitle as="h3" class="flex items-center justify-between text-lg font-medium leading-6 text-gray-100">
+                            <DialogTitle
+                                as="h3"
+                                class="flex items-center justify-between text-lg font-medium leading-6 text-gray-100"
+                            >
                                 <span>{{ selectedCategoryTitle }}</span>
-                                <button type="button" @click="closeModal"
-                                        class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-900 focus:text-gray-500 dark:focus:text-gray-400 transition duration-150 ease-in-out">
-                                    <font-awesome-icon icon="fa-solid fa-xmark" class="w-6 h-6" />
+                                <button
+                                    type="button"
+                                    @click="closeModal"
+                                    class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 transition duration-150 ease-in-out hover:bg-gray-100 hover:text-gray-500 focus:bg-gray-100 focus:text-gray-500 focus:outline-none dark:text-gray-500 dark:hover:bg-gray-900 dark:hover:text-gray-400 dark:focus:bg-gray-900 dark:focus:text-gray-400"
+                                >
+                                    <font-awesome-icon icon="fa-solid fa-xmark" class="h-6 w-6" />
                                 </button>
                             </DialogTitle>
                             <div v-if="props.categories.length" class="mt-4">
                                 <ul v-if="!showingSubcategories" class="flex flex-col space-y-3">
-                                    <li v-for="category in props.categories" :key="category.id" @click="renderSubcategories(category.id)"
-                                        class="flex justify-between p-2 text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 focus:text-gray-800 dark:focus:text-gray-200 focus:bg-gray-50 dark:focus:bg-gray-700 cursor-pointer transition duration-150 ease-in-out">
+                                    <li
+                                        v-for="category in props.categories"
+                                        :key="category.id"
+                                        @click="renderSubcategories(category.id)"
+                                        class="flex cursor-pointer justify-between p-2 text-gray-600 transition duration-150 ease-in-out hover:bg-gray-50 hover:text-gray-800 focus:bg-gray-50 focus:text-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-200 dark:focus:bg-gray-700 dark:focus:text-gray-200"
+                                    >
                                         <div class="inline-flex items-center font-medium">
-                                            <font-awesome-icon icon="fa-solid fa-ellipsis" class="w-6 h-6" />
+                                            <font-awesome-icon icon="fa-solid fa-ellipsis" class="h-6 w-6" />
                                             <span class="ml-2">{{ category.title }}</span>
                                         </div>
-                                        <font-awesome-icon icon="fa-solid fa-arrow-right-long" class="w-6 h-6 ml-auto" />
+                                        <font-awesome-icon
+                                            icon="fa-solid fa-arrow-right-long"
+                                            class="ml-auto h-6 w-6"
+                                        />
                                     </li>
                                 </ul>
                                 <div v-else>
-                                    <button @click="rollbackCategories" class="flex w-full items-center justify-center py-2.5 text-gray-400 dark:text-gray-200 bg-indigo-600 rounded shadow-md hover:bg-indigo-700 hover:shadow-lg focus:bg-indigo-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-indigo-800 active:shadow-lg transition duration-150 ease-in-out">
-                                        <font-awesome-icon icon="fa-solid fa-arrow-left-long" class="w-6 h-6" />
-                                        <span class="ml-2 text-base font-semibold tracking-widest uppercase leading-6">Categories</span>
+                                    <button
+                                        @click="rollbackCategories"
+                                        class="flex w-full items-center justify-center rounded bg-indigo-600 py-2.5 text-gray-400 shadow-md transition duration-150 ease-in-out hover:bg-indigo-700 hover:shadow-lg focus:bg-indigo-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-indigo-800 active:shadow-lg dark:text-gray-200"
+                                    >
+                                        <font-awesome-icon icon="fa-solid fa-arrow-left-long" class="h-6 w-6" />
+                                        <span class="ml-2 text-base font-semibold uppercase leading-6 tracking-widest"
+                                            >Categories</span
+                                        >
                                     </button>
                                     <ul v-if="selectedCategory.subcategories" class="mt-4 flex flex-col space-y-3">
                                         <li v-for="subcategory in selectedCategory.subcategories" :key="subcategory.id">
-                                            <a :href="subcategory.slug" class="text-gray-300 dark:text-gray-200 hover:text-gray-700 dark:hover:text-gray-100">{{ subcategory.title }}</a>
+                                            <a
+                                                :href="subcategory.slug"
+                                                class="text-gray-300 hover:text-gray-700 dark:text-gray-200 dark:hover:text-gray-100"
+                                                >{{ subcategory.title }}</a
+                                            >
                                             <ul v-if="subcategory.subcategories" class="my-2 space-y-2">
                                                 <li v-for="item in subcategory.subcategories" :key="item.id">
-                                                    <a class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-100" :href="item.slug">
+                                                    <a
+                                                        class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-100"
+                                                        :href="item.slug"
+                                                    >
                                                         <span class="">{{ item.title }}</span>
                                                     </a>
                                                 </li>

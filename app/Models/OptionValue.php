@@ -10,10 +10,7 @@ class OptionValue extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'option_id',
-        'value',
-    ];
+    protected $fillable = ['option_id', 'value'];
 
     public function options(): BelongsTo
     {

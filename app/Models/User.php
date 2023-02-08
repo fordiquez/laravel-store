@@ -29,7 +29,6 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser, Has
         'last_name',
         'birth_date',
         'gender',
-        'avatar',
         'status',
         'email',
         'phone',
@@ -41,10 +40,7 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser, Has
      *
      * @var array<int, string>
      */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+    protected $hidden = ['password', 'remember_token'];
 
     /**
      * The attributes that should be cast.
@@ -68,7 +64,7 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser, Has
     {
         return [
             'male' => 'Male',
-            'female' => 'Female'
+            'female' => 'Female',
         ];
     }
 

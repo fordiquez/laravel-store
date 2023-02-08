@@ -19,8 +19,7 @@ return new class extends Migration {
             $table->string('last_name', 50)->after('first_name');
             $table->date('birth_date')->after('last_name');
             $table->enum('gender', User::$genders)->after('birth_date');
-            $table->string('avatar')->after('gender')->nullable();
-            $table->enum('status', User::$statuses)->after('avatar')->default('active');
+            $table->enum('status', User::$statuses)->after('gender')->default('active');
             $table->string('phone')->after('status')->nullable();
             $table->softDeletes()->after('updated_at');
         });
@@ -35,7 +34,7 @@ return new class extends Migration {
     {
         Schema::table('users', function (Blueprint $table) {
             $table->string('name')->after('id');
-            $table->dropColumn(['first_name', 'last_name', 'birth_date', 'gender', 'avatar', 'status', 'phone']);
+            $table->dropColumn(['first_name', 'last_name', 'birth_date', 'gender', 'status', 'phone']);
             $table->dropSoftDeletes();
         });
     }

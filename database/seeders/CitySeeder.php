@@ -25,7 +25,7 @@ class CitySeeder extends Seeder
                 'name' => 'Odesa',
                 'state_id' => State::whereName('Odeska oblast')->value('id'),
                 'is_state_center' => true,
-                'big_city' => true
+                'big_city' => true,
             ],
         ]);
     }

@@ -36,17 +36,34 @@ class UserResource extends Resource
 
     public static function form(Form $form): Form
     {
-        return $form
-            ->schema([
-                Card::make()->schema([
-                    TextInput::make('first_name')->required()->minLength(2)->maxLength(50),
-                    TextInput::make('last_name')->required()->minLength(2)->maxLength(50),
-                    TextInput::make('email')->email()->required()->unique(User::class, ignoreRecord: true),
-                    TextInput::make('phone')->tel()->telRegex('/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\.\/0-9]*$/'),
-                    DatePicker::make('birth_date')->required()->maxDate(now()),
+        return $form->schema([
+            Card::make()
+                ->schema([
+                    TextInput::make('first_name')
+                        ->required()
+                        ->minLength(2)
+                        ->maxLength(50),
+                    TextInput::make('last_name')
+                        ->required()
+                        ->minLength(2)
+                        ->maxLength(50),
+                    TextInput::make('email')
+                        ->email()
+                        ->required()
+                        ->unique(User::class, ignoreRecord: true),
+                    TextInput::make('phone')
+                        ->tel()
+                        ->telRegex('/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\.\/0-9]*$/'),
+                    DatePicker::make('birth_date')
+                        ->required()
+                        ->maxDate(now()),
                     SpatieMediaLibraryFileUpload::make('avatar')->collection('avatars'),
-                    Select::make('gender')->options(UserGender::asSelectArray())->required(),
-                    Select::make('status')->options(UserStatus::asSelectArray())->required(),
+                    Select::make('gender')
+                        ->options(UserGender::asSelectArray())
+                        ->required(),
+                    Select::make('status')
+                        ->options(UserStatus::asSelectArray())
+                        ->required(),
                     Password::make('password')
                         ->password()
                         ->minLength(8)
@@ -65,9 +82,10 @@ class UserResource extends Resource
                         ->label('Password Confirmation')
                         ->required(fn(Page $livewire): bool => $livewire instanceof CreateRecord)
                         ->minLength(8)
-                        ->dehydrated(false)
-                ])->columns()
-            ]);
+                        ->dehydrated(false),
+                ])
+                ->columns(),
+        ]);
     }
 
     /**
@@ -77,7 +95,8 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
-                SpatieMediaLibraryImageColumn::make('avatar')->collection('avatars'),
+                TextColumn::make('id')->sortable(),
+                SpatieMediaLibraryImageColumn::make('')->collection('avatars'),
                 TextColumn::make('first_name')->sortable()->searchable(),
                 TextColumn::make('last_name')->sortable()->searchable(),
                 TextColumn::make('email')
@@ -92,15 +111,14 @@ class UserResource extends Resource
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
-                Filter::make('Verified email')->query(fn(Builder $query): Builder => $query->where('email_verified_at', '!=', null)),
-                Filter::make('Unverified email')->query(fn(Builder $query): Builder => $query->where('email_verified_at', null)),
+                Filter::make('Verified email')
+                    ->query(fn(Builder $query): Builder => $query->where('email_verified_at', '!=', null)),
+                Filter::make('Unverified email')
+                    ->query(fn(Builder $query): Builder => $query->where('email_verified_at', null)),
                 SelectFilter::make('gender')->options(UserGender::asSelectArray()),
                 SelectFilter::make('status')->options(UserStatus::asSelectArray()),
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-            ])
+            ->actions([Tables\Actions\EditAction::make(), Tables\Actions\DeleteAction::make()])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
                 Tables\Actions\ForceDeleteBulkAction::make(),
@@ -111,15 +129,13 @@ class UserResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
-        ];
+                //
+            ];
     }
 
     public static function getWidgets(): array
     {
-        return [
-            UsersOverview::class,
-        ];
+        return [UsersOverview::class];
     }
 
     public static function getPages(): array
@@ -133,9 +149,6 @@ class UserResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()
-            ->withoutGlobalScopes([
-                SoftDeletingScope::class,
-            ]);
+        return parent::getEloquentQuery()->withoutGlobalScopes([SoftDeletingScope::class]);
     }
 }

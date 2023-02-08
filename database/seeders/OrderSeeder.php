@@ -17,11 +17,19 @@ class OrderSeeder extends Seeder
     public function run(): void
     {
         $goods = Good::all();
-        $orders = OrderFactory::new()->count(10)->has(OrderHistory::factory()->count(rand(1, 3)))->create();
+        $orders = OrderFactory::new()
+            ->count(10)
+            ->has(OrderHistory::factory()->count(rand(1, 3)))
+            ->create();
 
         if ($goods->count()) {
             $orders->each(function ($order) use ($goods) {
-                $order->goods()->attach($goods->random(rand(1, $goods->count() > 1 ? $goods->count() / 2 : $goods->count()))->pluck('id')->toArray());
+                $order->goods()->attach(
+                    $goods
+                        ->random(rand(1, $goods->count() > 1 ? $goods->count() / 2 : $goods->count()))
+                        ->pluck('id')
+                        ->toArray(),
+                );
             });
         }
     }

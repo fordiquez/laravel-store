@@ -17,11 +17,49 @@ class StateSeeder extends Seeder
     public function run(): void
     {
         $validCountries = [
-            'UA', 'PL', 'EE', 'LV', 'LT', 'DK', 'US', 'CA', 'GB', 'DE', 'FR', 'NO',
-            'AU', 'AT', 'BE', 'BG', 'CZ', 'ES', 'FI', 'GR', 'IS', 'IE', 'IT', 'JP', 'LU', 'MD', 'MA', 'NL', 'NZ', 'PT', 'RO', 'SA', 'SK', 'SI', 'KR', 'SE', 'CH', 'TR'
+            'UA',
+            'PL',
+            'EE',
+            'LV',
+            'LT',
+            'DK',
+            'US',
+            'CA',
+            'GB',
+            'DE',
+            'FR',
+            'NO',
+            'AU',
+            'AT',
+            'BE',
+            'BG',
+            'CZ',
+            'ES',
+            'FI',
+            'GR',
+            'IS',
+            'IE',
+            'IT',
+            'JP',
+            'LU',
+            'MD',
+            'MA',
+            'NL',
+            'NZ',
+            'PT',
+            'RO',
+            'SA',
+            'SK',
+            'SI',
+            'KR',
+            'SE',
+            'CH',
+            'TR',
         ];
 
-        $states = Http::acceptJson()->get('https://raw.githubusercontent.com/dr5hn/countries-states-cities-database/master/states.json')->json();
+        $states = Http::acceptJson()
+            ->get('https://raw.githubusercontent.com/dr5hn/countries-states-cities-database/master/states.json')
+            ->json();
 
         foreach ($states as $state) {
             if (in_array($state['country_code'], $validCountries)) {

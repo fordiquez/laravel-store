@@ -15,6 +15,8 @@ class PromoCodeSeeder extends Seeder
      */
     public function run(): void
     {
-        PromoCodeFactory::new()->count(10)->create();
+        PromoCodeFactory::new()
+            ->count(10)
+            ->create();
     }
 }

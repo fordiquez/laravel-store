@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Database\Factories\CountryFactory;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Http;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileCannotBeAdded;
 
 class CountrySeeder extends Seeder
 {
@@ -16,15 +17,18 @@ class CountrySeeder extends Seeder
     public function run(): void
     {
         $validCountries = [
-            'UA', 'PL', 'EE', 'LV', 'LT', 'DK', 'US', 'CA', 'GB', 'DE', 'FR', 'NO',
-            'AU', 'AT', 'BE', 'BG', 'CZ', 'ES', 'FI', 'GR', 'IS', 'IE', 'IT', 'JP', 'LU', 'MD', 'MA', 'NL', 'NZ', 'PT', 'RO', 'SA', 'SK', 'SI', 'KR', 'SE', 'CH', 'TR'
+            'UA', 'PL', 'EE', 'LV', 'LT', 'CZ', 'DK', 'US', 'CA', 'GB', 'DE', 'FR', 'NO',
+            'AU', 'AT', 'BE', 'BG', 'ES', 'FI', 'GR', 'IS', 'IE', 'IL', 'IT', 'JP', 'LU',
+            'MD', 'MA', 'NL', 'NZ', 'PT', 'RO', 'SA', 'SK', 'SI', 'KR', 'SE', 'CH', 'TR',
         ];
 
-        $countries = Http::acceptJson()->get('https://raw.githubusercontent.com/dr5hn/countries-states-cities-database/master/countries.json')->json();
+        $countries = Http::acceptJson()
+            ->get('https://raw.githubusercontent.com/dr5hn/countries-states-cities-database/master/countries.json')
+            ->json();
 
         foreach ($countries as $country) {
             if (in_array($country['iso2'], $validCountries)) {
-                CountryFactory::new()->create([
+                $model = CountryFactory::new()->create([
                     'name' => $country['name'],
                     'capital' => $country['capital'] === 'Kiev' ? 'Kyiv' : $country['capital'],
                     'iso2' => $country['iso2'],
@@ -34,9 +38,13 @@ class CountrySeeder extends Seeder
                     'tld' => $country['tld'],
                     'region' => $country['region'],
                     'subregion' => $country['subregion'],
-                    'timezone' => $country['timezones'][0]['zoneName'],
-                    'is_active' => true
+                    'is_active' => true,
                 ]);
+                $iso2 = strtolower($model->iso2);
+                $flagUrl = "https://raw.githubusercontent.com/MohmmedAshraf/blade-flags/main/resources/svg/country-$iso2.svg";
+                try {
+                    $model->addMediaFromUrl($flagUrl)->toMediaCollection('flags', 'public');
+                } catch (FileCannotBeAdded) {}
             }
         }
     }

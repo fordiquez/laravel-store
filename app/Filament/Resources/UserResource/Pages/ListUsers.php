@@ -12,15 +12,11 @@ class ListUsers extends ListRecords
 
     protected function getActions(): array
     {
-        return [
-            Actions\CreateAction::make(),
-        ];
+        return [Actions\CreateAction::make()];
     }
 
     protected function getHeaderWidgets(): array
     {
-        return [
-            UserResource\Widgets\UsersOverview::class,
-        ];
+        return [UserResource\Widgets\UsersOverview::class];
     }
 }

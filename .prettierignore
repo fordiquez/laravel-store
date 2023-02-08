@@ -1,0 +1,6 @@
+**/bootstrap
+**/storage
+**/public/build
+**/vendor
+**/composer.lock
+*.php

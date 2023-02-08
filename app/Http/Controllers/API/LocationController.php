@@ -16,7 +16,7 @@ class LocationController extends Controller
             return response()->json(Country::where('name', 'like', "%$name%")->get());
         } else {
             return response()->json([
-                'message' => 'Not enough length'
+                'message' => 'Not enough length',
             ]);
         }
     }

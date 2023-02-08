@@ -1,12 +1,12 @@
 name: Build project
 
 env:
-  "DB_DATABASE": "laravel_store"
-  "DB_USERNAME": "root"
-  "DB_PASSWORD": "root"
+  'DB_DATABASE': 'laravel_store'
+  'DB_USERNAME': 'root'
+  'DB_PASSWORD': 'root'
 on:
   push:
-    branches: [ "main" ]
+    branches: ['main']
 
 jobs:
   build:

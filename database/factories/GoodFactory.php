@@ -23,16 +23,16 @@ class GoodFactory extends Factory
         return [
             'vendor_code' => fake()->unique()->numberBetween(1000000000),
             'title' => fake()->unique()->text(20),
-            'slug' => fn (array $attributes) => Str::slug($attributes['title']),
-            'category_id' => Category::whereNotIn('id', [1, 6, 16, 17, 20, 23, 24])->inRandomOrder()->value('id'),
+            'slug' => fn(array $attributes) => Str::slug($attributes['title']),
+            'category_id' => Category::whereDoesntHave('subcategories')->inRandomOrder()->value('id'),
             'brand_id' => Brand::inRandomOrder()->value('id'),
             'description' => fake()->paragraph(10),
             'short_description' => fake()->sentence(50),
             'warning_description' => fake()->sentence(200),
             'old_price' => fake()->numberBetween(100, 10000),
-            'price' => fn (array $attributes) => $attributes['old_price'] - (($attributes['old_price'] * rand(1, 80)) / 100),
+            'price' => fn(array $attributes) => $attributes['old_price'] - ($attributes['old_price'] * rand(1, 80)) / 100,
             'quantity' => fake()->numberBetween(0, 100),
-            'status' => Good::$statuses[rand(0, count(Good::$statuses) - 1)]
+            'status' => Good::$statuses[rand(0, count(Good::$statuses) - 1)],
         ];
     }
 }

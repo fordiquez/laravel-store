@@ -77,13 +77,13 @@ const form = useForm({
             </div>
 
             <div v-if="props.mustVerifyEmail && user.email_verified_at === null">
-                <p class="text-sm mt-2 text-gray-800 dark:text-gray-200">
+                <p class="mt-2 text-sm text-gray-800 dark:text-gray-200">
                     Your email address is unverified.
                     <Link
                         :href="route('verification.send')"
                         method="post"
                         as="button"
-                        class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
+                        class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:text-gray-400 dark:hover:text-gray-100 dark:focus:ring-offset-gray-800"
                     >
                         Click here to re-send the verification email.
                     </Link>
@@ -91,7 +91,7 @@ const form = useForm({
 
                 <div
                     v-show="props.status === 'verification-link-sent'"
-                    class="mt-2 font-medium text-sm text-green-600 dark:text-green-400"
+                    class="mt-2 text-sm font-medium text-green-600 dark:text-green-400"
                 >
                     A new verification link has been sent to your email address.
                 </div>

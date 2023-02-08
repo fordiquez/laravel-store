@@ -12,14 +12,11 @@ class EditUser extends EditRecord
 
     protected function getActions(): array
     {
-        return [
-            Actions\DeleteAction::make(),
-            Actions\ForceDeleteAction::make(),
-            Actions\RestoreAction::make(),
-        ];
+        return [Actions\DeleteAction::make(), Actions\ForceDeleteAction::make(), Actions\RestoreAction::make()];
     }
 
-    protected function getRedirectUrl(): string {
+    protected function getRedirectUrl(): string
+    {
         return $this->getResource()::getUrl('index');
     }
 }

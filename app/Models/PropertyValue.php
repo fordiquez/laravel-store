@@ -10,10 +10,7 @@ class PropertyValue extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'property_id',
-        'value'
-    ];
+    protected $fillable = ['property_id', 'value'];
 
     public function property(): BelongsTo
     {

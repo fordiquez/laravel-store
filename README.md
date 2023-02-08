@@ -9,30 +9,36 @@
 
 # Laravel Store with Laravel 9, Inertia.js 1 and Vue.js 3
 
-
 ## Must have requirements
-- PHP v8.0+
-- Composer package
-- MySQL
-- Node
-- NPM
+
+-   PHP v8.0+
+-   Composer
+-   MySQL
+-   Node
+-   NPM
 
 ## Local installation workflow
 
 ### 1. Clone this repository to your local folder
+
 ```
 git clone https://github.com/fordiquez/laravel-store.git
 ```
+
 ```
 cd laravel-store
 ```
 
 ### 2. Create .env
+
 ```
 cp .env.example .env
 ```
+
 ### 3. Setup .env variables
+
 #### 3.1 Setup base url for your application
+
 ```
 APP_URL=
 ```
@@ -60,25 +66,37 @@ MAIL_ENCRYPTION=
 MAIL_FROM_ADDRESS=
 MAIL_FROM_NAME=
 ```
-3.2 If you are using Redis for queue jobs, then change connection & setup requirement credentials
+
+#### 3.4 If you are using Redis for queue jobs, then change connection & setup requirement credentials
+
 ```
 QUEUE_CONNECTION=redis
 ```
+
 ```
 REDIS_HOST=
 REDIS_PASSWORD=
 REDIS_PORT=
 ```
 
+#### 3.5 Setup multiavatar api key
+
+```
+MULTIAVATAR_API_KEY=
+```
+
 ### 4. Install all composer & npm dependencies
+
 ```
 composer install
 ```
+
 ```
 npm install
 ```
 
 ### 5. Run artisan commands
+
 ```
 php artisan key:generate
 ```

@@ -14,6 +14,8 @@ class StreetSeeder extends Seeder
      */
     public function run(): void
     {
-        StreetFactory::new()->count(222)->create();
+        StreetFactory::new()
+            ->count(222)
+            ->create();
     }
 }

@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Storage;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class DatabaseSeeder extends Seeder
 {
@@ -14,10 +15,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $storageDirectories = ['avatars', 'categories', 'flags', 'goods', 'reviews'];
-
-        foreach ($storageDirectories as $storageDirectory) {
-            if (Storage::directoryExists($storageDirectory)) Storage::deleteDirectory($storageDirectory);
+        foreach (Storage::directories() as $directory) {
+            Storage::deleteDirectory($directory);
         }
 
         $this->call([
@@ -26,8 +25,8 @@ class DatabaseSeeder extends Seeder
             CitySeeder::class,
             StreetSeeder::class,
             UserSeeder::class,
-            BrandSeeder::class,
-            CategorySeeder::class,
+//            BrandSeeder::class,
+//            CategorySeeder::class,
 //            GoodSeeder::class,
 //            PromoCodeSeeder::class,
 //            OrderSeeder::class,

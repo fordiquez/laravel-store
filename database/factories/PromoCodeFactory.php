@@ -25,7 +25,7 @@ class PromoCodeFactory extends Factory
             'used_times' => fake()->numberBetween(0, 1000),
             'start_date' => fake()->dateTimeThisYear(),
             'expire_date' => fake()->dateTimeThisYear(),
-            'is_active' => fake()->boolean
+            'is_active' => fake()->boolean,
         ];
     }
 }

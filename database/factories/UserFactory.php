@@ -26,11 +26,10 @@ class UserFactory extends Factory
             'last_name' => fake()->lastName(),
             'birth_date' => fake()->dateTimeBetween('-30 years', '-14 years'),
             'gender' => $gender,
-            'avatar' => fn (array $attributes) => $this->faker->fakeImage('avatars'),
-            'phone' => "+380" . $this->networkCodes[rand(0, count($this->networkCodes) - 1)] . fake()->unique()->numberBetween(1000000, 9999999),
+            'phone' => '+380' . $this->networkCodes[rand(0, count($this->networkCodes) - 1)] . fake()->unique()->numberBetween(1000000, 9999999),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
             'remember_token' => Str::random(10),
         ];
     }
@@ -42,8 +41,10 @@ class UserFactory extends Factory
      */
     public function unverified(): static
     {
-        return $this->state(fn (array $attributes) => [
-            'email_verified_at' => null,
-        ]);
+        return $this->state(
+            fn(array $attributes) => [
+                'email_verified_at' => null,
+            ],
+        );
     }
 }

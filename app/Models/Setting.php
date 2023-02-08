@@ -6,15 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Setting extends Model
 {
-    protected $fillable = [
-        'section',
-        'name',
-        'details',
-        'key',
-        'value',
-        'type',
-        'rules'
-    ];
+    protected $fillable = ['section', 'name', 'details', 'key', 'value', 'type', 'rules'];
 
     public static array $types = ['text', 'number', 'checkbox', 'radio', 'image', 'file', 'editor', 'textarea'];
 }

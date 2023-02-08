@@ -17,7 +17,7 @@ class OptionFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->unique()->colorName()
+            'name' => fake()->unique()->colorName(),
         ];
     }
 }

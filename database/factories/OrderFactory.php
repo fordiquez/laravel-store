@@ -27,8 +27,8 @@ class OrderFactory extends Factory
             'payment_method' => Order::$paymentMethods[fake()->numberBetween(0, count(Order::$paymentMethods) - 1)],
             'goods_cost' => fake()->numberBetween(100, 10000),
             'delivery_cost' => fake()->numberBetween(0, 100),
-            'total_cost' => fn (array $attributes) => $attributes['goods_cost'] + $attributes['delivery_cost'],
-            'status' => Order::$statuses[rand(0, count(Order::$statuses) - 1)]
+            'total_cost' => fn(array $attributes) => $attributes['goods_cost'] + $attributes['delivery_cost'],
+            'status' => Order::$statuses[rand(0, count(Order::$statuses) - 1)],
         ];
     }
 }

@@ -21,20 +21,20 @@ class CategorySeeder extends Seeder
         CategoryFactory::new()->hasImage()->createMany([
             [
                 'title' => 'Laptops',
-                'parent_id' => $laptopsAndComputers->id
+                'parent_id' => $laptopsAndComputers->id,
             ],
             [
                 'title' => 'Computers, nettops, monoblocs',
-                'parent_id' => $laptopsAndComputers->id
+                'parent_id' => $laptopsAndComputers->id,
             ],
             [
                 'title' => 'Monitors',
-                'parent_id' => $laptopsAndComputers->id
+                'parent_id' => $laptopsAndComputers->id,
             ],
         ]);
 
         $tablets = CategoryFactory::new()->hasImage()->create([
-            'title' => 'Tablets'
+            'title' => 'Tablets',
         ]);
 
         CategoryFactory::new()->hasImage()->createMany([
@@ -58,7 +58,7 @@ class CategorySeeder extends Seeder
 
         $computerComponents = CategoryFactory::new()->hasImage()->create([
             'title' => 'Computer components',
-            'parent_id' => $laptopsAndComputers->id
+            'parent_id' => $laptopsAndComputers->id,
         ]);
 
         CategoryFactory::new()->hasImage()->createMany([
@@ -159,15 +159,15 @@ class CategorySeeder extends Seeder
         CategoryFactory::new()->hasImage()->createMany([
             [
                 'title' => 'Cables and adapters',
-                'parent_id' => $laptopsAndComputers->id
+                'parent_id' => $laptopsAndComputers->id,
             ],
             [
                 'title' => 'Headphones and accessories',
-                'parent_id' => $laptopsAndComputers->id
+                'parent_id' => $laptopsAndComputers->id,
             ],
             [
                 'title' => 'Accessories for electronics',
-                'parent_id' => $laptopsAndComputers->id
+                'parent_id' => $laptopsAndComputers->id,
             ],
         ]);
 
@@ -178,79 +178,79 @@ class CategorySeeder extends Seeder
         CategoryFactory::new()->hasImage()->createMany([
             [
                 'title' => 'Game consoles',
-                'parent_id' => $gamerGoods->id
+                'parent_id' => $gamerGoods->id,
             ],
             [
                 'title' => 'Gaming laptops',
-                'parent_id' => $gamerGoods->id
+                'parent_id' => $gamerGoods->id,
             ],
             [
                 'title' => 'Gaming computers',
-                'parent_id' => $gamerGoods->id
+                'parent_id' => $gamerGoods->id,
             ],
             [
                 'title' => 'Gaming monitors',
-                'parent_id' => $gamerGoods->id
+                'parent_id' => $gamerGoods->id,
             ],
             [
                 'title' => 'Armchairs for gamers',
-                'parent_id' => $gamerGoods->id
+                'parent_id' => $gamerGoods->id,
             ],
             [
                 'title' => 'Gaming tables',
-                'parent_id' => $gamerGoods->id
+                'parent_id' => $gamerGoods->id,
             ],
             [
                 'title' => 'Gaming routers',
-                'parent_id' => $gamerGoods->id
+                'parent_id' => $gamerGoods->id,
             ],
             [
                 'title' => 'Accessories and souvenirs',
-                'parent_id' => $gamerGoods->id
+                'parent_id' => $gamerGoods->id,
             ],
             [
                 'title' => 'Games',
-                'parent_id' => $gamerGoods->id
+                'parent_id' => $gamerGoods->id,
             ],
             [
                 'title' => 'Game peripherals',
-                'parent_id' => $gamerGoods->id
+                'parent_id' => $gamerGoods->id,
             ],
             [
                 'title' => 'Glasses and helmets of virtual reality',
-                'parent_id' => $gamerGoods->id
+                'parent_id' => $gamerGoods->id,
             ],
         ]);
 
         $gamerComponents = CategoryFactory::new()->hasImage()->create([
             'title' => 'Components for gamers',
-            'parent_id' => $gamerGoods->id
+            'parent_id' => $gamerGoods->id,
         ]);
 
         CategoryFactory::new()->hasImage()->createMany([
             [
                 'title' => 'Gaming Video cards',
-                'parent_id' => $gamerComponents->id
+                'parent_id' => $gamerComponents->id,
             ],
             [
                 'title' => 'Gaming Processors',
-                'parent_id' => $gamerComponents->id
+                'parent_id' => $gamerComponents->id,
             ],
             [
                 'title' => 'Gaming Motherboards',
-                'parent_id' => $gamerComponents->id
+                'parent_id' => $gamerComponents->id,
             ],
             [
                 'title' => 'Gaming Power supply units',
-                'parent_id' => $gamerComponents->id
+                'parent_id' => $gamerComponents->id,
             ],
             [
                 'title' => 'Gaming Cooling systems',
-                'parent_id' => $gamerComponents->id
+                'parent_id' => $gamerComponents->id,
             ],
             [
                 'title' => 'Gaming Cases',
-                'parent_id' => $gamerComponents->id
+                'parent_id' => $gamerComponents->id,
             ],
         ]);
     }

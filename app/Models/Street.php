@@ -10,12 +10,7 @@ class Street extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'uuid',
-        'city_id',
-        'name',
-        'old_name'
-    ];
+    protected $fillable = ['uuid', 'city_id', 'name', 'old_name'];
 
     public function city(): BelongsTo
     {

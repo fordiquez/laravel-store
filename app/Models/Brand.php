@@ -10,11 +10,7 @@ class Brand extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'name',
-        'slug',
-        'url',
-    ];
+    protected $fillable = ['name', 'slug', 'url'];
 
     public function image(): MorphOne
     {

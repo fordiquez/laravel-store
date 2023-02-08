@@ -43,7 +43,6 @@ class StoreUserJob implements ShouldQueue
 
             $user = User::where('email', $this->data['email'])->firstOrFail();
             event(new Registered($user));
-
         }, function () {
             $this->release(2);
         });

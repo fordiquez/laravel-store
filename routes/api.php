@@ -20,7 +20,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::prefix('locations')->name('locations.')->controller(LocationController::class)->group(function () {
-   Route::get('countries', 'countries')->name('countries');
+    Route::get('countries', 'countries')->name('countries');
 });
 
 Route::get('categories', [\App\Http\Controllers\API\CategoryController::class, 'index'])->name('categories');

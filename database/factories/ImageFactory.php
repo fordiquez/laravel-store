@@ -21,7 +21,7 @@ class ImageFactory extends Factory
     public function definition(): array
     {
         return [
-            'url' => fn (array $attributes) => $this->faker->fakeImage($this->directory($attributes['imageable_type']))
+            'url' => fn(array $attributes) => $this->faker->fakeImage($this->directory($attributes['imageable_type'])),
         ];
     }
 
@@ -40,7 +40,8 @@ class ImageFactory extends Factory
         return $this->for(static::factoryForModel($this->imageable()), 'imageable');
     }
 
-    public function imageable() {
+    public function imageable()
+    {
         return $this->faker->randomElement([Category::class, Good::class, Review::class]);
     }
 }

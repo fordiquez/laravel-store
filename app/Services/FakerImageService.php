@@ -10,8 +10,8 @@ final class FakerImageService extends Base
 {
     public function fakeImage(string $dir = 'images', string $name = ''): string
     {
-        $width = $dir === 'users' ? 500 : 994;
-        $height = $dir === 'users' ? 500 : 1280;
+        $width = $dir === 'avatars' ? 500 : 994;
+        $height = $dir === 'avatars' ? 500 : 1280;
         $filename = !empty($name) ? strtolower($name) : Str::random(8);
         if ($dir === 'flags') {
             $format = 'svg';

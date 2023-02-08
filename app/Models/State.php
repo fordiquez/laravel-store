@@ -11,15 +11,7 @@ class State extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'uuid',
-        'name',
-        'old_name',
-        'country_id',
-        'parent_id',
-        'type',
-        'is_active'
-    ];
+    protected $fillable = ['uuid', 'name', 'old_name', 'country_id', 'parent_id', 'type', 'is_active'];
 
     public static array $types = [
         'state',
@@ -32,7 +24,7 @@ class State extends Model
         'islands / groups of islands',
         'autonomous region',
         'metropolitan department',
-        'republic'
+        'republic',
     ];
 
     public function country(): BelongsTo

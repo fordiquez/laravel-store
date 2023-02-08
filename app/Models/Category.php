@@ -13,12 +13,7 @@ class Category extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = [
-        'title',
-        'slug',
-        'parent_id',
-        'manual_url',
-    ];
+    protected $fillable = ['title', 'slug', 'parent_id', 'manual_url'];
 
     protected $with = ['image'];
 
@@ -26,7 +21,9 @@ class Category extends Model
     {
         parent::boot();
 
-        static::creating(fn (Category $category) => $category->slug = $category->slug ?? str($category->title)->slug());
+        static::creating(
+            fn(Category $category) => ($category->slug = $category->slug ?? str($category->title)->slug()),
+        );
     }
 
     public function parent(): BelongsTo
@@ -39,7 +36,8 @@ class Category extends Model
         return $this->hasMany(Category::class, 'parent_id');
     }
 
-    public function loopCategories($categories) {
+    public function loopCategories($categories)
+    {
         foreach ($categories as $category) {
             if ($category->subcategories()->count()) {
                 $category['subcategories'] = $category->subcategories;

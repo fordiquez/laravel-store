@@ -25,7 +25,7 @@ class Good extends Model
         'old_price',
         'price',
         'quantity',
-        'status'
+        'status',
     ];
 
     public static array $statuses = [
@@ -34,7 +34,7 @@ class Good extends Model
         'ends',
         'is over',
         'out of stock',
-        'discontinued'
+        'discontinued',
     ];
 
     public function category(): BelongsTo

@@ -19,7 +19,7 @@ class OrderHistoryFactory extends Factory
     {
         return [
             'order_id' => Order::query()->inRandomOrder()->value('id'),
-            'status' => Order::$statuses[rand(0, count(Order::$statuses) - 1)]
+            'status' => Order::$statuses[rand(0, count(Order::$statuses) - 1)],
         ];
     }
 }

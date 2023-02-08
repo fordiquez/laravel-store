@@ -30,8 +30,7 @@ class GoodSeeder extends Seeder
 
         GoodFactory::new()->count(3)
             ->hasImages(rand(1, 3))
-            ->has(ReviewFactory::new()->count(1)
-                ->hasImages())
+            ->has(ReviewFactory::new()->hasImages())
             ->hasAttached($tags->toQuery()->inRandomOrder()->take(rand(1, 5))->get())
             ->hasAttached($propertyValues->toQuery()->inRandomOrder()->take(rand(1, 5))->get())
             ->hasAttached($optionValues->toQuery()->inRandomOrder()->take(rand(1, 5))->get())
