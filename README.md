@@ -60,6 +60,15 @@ MAIL_ENCRYPTION=
 MAIL_FROM_ADDRESS=
 MAIL_FROM_NAME=
 ```
+3.2 If you are using Redis for queue jobs, then change connection & setup requirement credentials
+```
+QUEUE_CONNECTION=redis
+```
+```
+REDIS_HOST=
+REDIS_PASSWORD=
+REDIS_PORT=
+```
 
 ### 4. Install all composer & npm dependencies
 ```

@@ -6,6 +6,9 @@
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
+        "bensampo/laravel-enum": "^6.3",
+        "filament/filament": "^2.0",
+        "filament/spatie-laravel-media-library-plugin": "^2.0",
         "guzzlehttp/guzzle": "^7.2",
         "inertiajs/inertia-laravel": "^0.6.8",
         "laravel/framework": "^9.19",
@@ -13,11 +16,13 @@
         "laravel/sanctum": "^3.2",
         "laravel/telescope": "^4.12",
         "laravel/tinker": "^2.7",
+        "phpsa/filament-password-reveal": "^1.1",
         "predis/predis": "^2.1",
         "tightenco/ziggy": "^1.0"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.7",
+        "doctrine/dbal": "^3.6",
         "fakerphp/faker": "^1.9.1",
         "laravel/breeze": "^1.18",
         "laravel/pint": "^1.0",

@@ -1,4 +1,5 @@
 const defaultTheme = require('tailwindcss/defaultTheme');
+const colors = require('tailwindcss/colors')
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -7,8 +8,10 @@ module.exports = {
         './storage/framework/views/*.php',
         './resources/views/**/*.blade.php',
         './resources/js/**/*.vue',
+        './vendor/filament/**/*.blade.php',
     ],
 
+    darkMode: 'class',
     theme: {
         extend: {
             fontFamily: {
@@ -51,19 +54,11 @@ module.exports = {
                 '450': '450ms',
             },
             colors: {
-                'wave': {
-                    50: '#F2F8FF',
-                    100: '#E6F0FF',
-                    200: '#BFDAFF',
-                    300: '#99C3FF',
-                    400: '#4D96FF',
-                    500: '#0069FF',
-                    600: '#005FE6',
-                    700: '#003F99',
-                    800: '#002F73',
-                    900: '#00204D',
-                },
-            }
+                danger: colors.rose,
+                primary: colors.purple,
+                success: colors.green,
+                warning: colors.yellow,
+            },
         },
     },
 
