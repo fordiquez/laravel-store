@@ -43,7 +43,7 @@ const onCategory = (category) => (hoveredCategoryId.value = category.id);
                 >
                     <PopoverPanel class="absolute inset-x-0 top-full z-10 text-sm text-gray-500">
                         <div aria-hidden="true" class="absolute inset-0 top-1/2 bg-white shadow" />
-                        <div class="relative bg-white dark:bg-gray-800">
+                        <div class="relative top-[1px] bg-white dark:bg-gray-800">
                             <div class="mx-auto max-w-7xl px-4">
                                 <div class="flex justify-between py-8">
                                     <div class="flex basis-1/4 xl:basis-1/5">

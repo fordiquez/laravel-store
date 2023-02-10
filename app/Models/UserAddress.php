@@ -22,6 +22,10 @@ class UserAddress extends Model
         'postal_code',
     ];
 
+    protected $casts = [
+        'is_main' => 'boolean',
+    ];
+
     public function country(): BelongsTo
     {
         return $this->belongsTo(Country::class);

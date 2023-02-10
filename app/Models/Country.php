@@ -26,6 +26,14 @@ class Country extends Model implements HasMedia
         'is_active',
     ];
 
+    public static array $validCountries = [
+        'UA', 'PL', 'EE', 'LV', 'LT', 'CZ', 'DK', 'US', 'CA', 'GB', 'DE', 'FR', 'NO',
+        'AU', 'AT', 'BE', 'BG', 'ES', 'FI', 'GR', 'IS', 'IE', 'IL', 'IT', 'JP', 'LU',
+        'MD', 'MA', 'NL', 'NZ', 'PT', 'RO', 'SA', 'SK', 'SI', 'KR', 'SE', 'CH', 'TR',
+    ];
+
+    public const DEFAULT_COUNTRY = 'UA';
+
     public static array $regions = ['Asia', 'Africa', 'Europe', 'Americas', 'Oceania'];
 
     public static array $subregions = [

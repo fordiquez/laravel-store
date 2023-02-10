@@ -6,6 +6,8 @@ use App\Models\City;
 use App\Models\Country;
 use App\Models\State;
 use App\Models\Street;
+use App\Models\User;
+use App\Models\UserAddress;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -20,13 +22,14 @@ class UserAddressFactory extends Factory
      */
     public function definition(): array
     {
+        $street = Street::inRandomOrder()->first();
+
         return [
             'title' => fake()->word,
-            'is_main' => fake()->boolean,
-            'country_id' => Country::inRandomOrder()->value('id'),
-            'state_id' => State::inRandomOrder()->value('id'),
-            'city_id' => City::inRandomOrder()->value('id'),
-            'street_id' => Street::inRandomOrder()->value('id'),
+            'country_id' => $street->city->state->country_id,
+            'state_id' => $street->city->state_id,
+            'city_id' => $street->city_id,
+            'street_id' => $street->id,
             'house' => fake()->buildingNumber,
             'flat' => fake()->boolean ?: fake()->numberBetween(0, 100),
             'postal_code' => fake()->postcode,

@@ -6,6 +6,7 @@ use App\Notifications\SendVerifyWithQueueNotification;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasName;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -34,6 +35,8 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser, Has
         'phone',
         'password',
     ];
+
+    protected $appends = ['avatar'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -73,19 +76,14 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser, Has
         return $this->gender == 'male' ? 'Male' : 'Female';
     }
 
-    public function getFullNameAttribute(): string
+    public function userAddresses(): HasMany
     {
-        return "$this->first_name $this->last_name";
+        return $this->hasMany(UserAddress::class);
     }
 
     public function orderRecipients(): HasMany
     {
         return $this->hasMany(OrderRecipient::class);
-    }
-
-    public function userAddresses(): HasMany
-    {
-        return $this->hasMany(UserAddress::class);
     }
 
     public function canAccessFilament(): bool
@@ -96,5 +94,10 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser, Has
     public function getFilamentName(): string
     {
         return "$this->first_name $this->last_name";
+    }
+
+    public function avatar(): Attribute
+    {
+        return Attribute::get(fn($value) => $this->getFirstMediaUrl('avatars'));
     }
 }

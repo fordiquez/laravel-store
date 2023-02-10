@@ -5,7 +5,10 @@ namespace App\Filament\Resources;
 use App\Enums\UserGender;
 use App\Enums\UserStatus;
 use App\Filament\Resources\UserResource\Pages;
+use App\Filament\Resources\UserResource\RelationManagers\OrderRecipientsRelationManager;
+use App\Filament\Resources\UserResource\RelationManagers\UserAddressesRelationManager;
 use App\Filament\Resources\UserResource\Widgets\UsersOverview;
+use App\Models\Country;
 use App\Models\User;
 use Filament\Forms\Components\Card;
 use Filament\Forms\Components\DatePicker;
@@ -25,12 +28,16 @@ use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Phpsa\FilamentPasswordReveal\Password;
+use Ysfkaya\FilamentPhoneInput\PhoneInput;
+use Ysfkaya\FilamentPhoneInput\PhoneInputNumberType;
 
 class UserResource extends Resource
 {
     protected static ?string $model = User::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-collection';
+    protected static ?string $navigationIcon = 'heroicon-o-user-group';
+
+    protected static ?string $navigationGroup = 'User Management';
 
     protected static ?string $recordTitleAttribute = 'email';
 
@@ -39,31 +46,21 @@ class UserResource extends Resource
         return $form->schema([
             Card::make()
                 ->schema([
-                    TextInput::make('first_name')
-                        ->required()
-                        ->minLength(2)
-                        ->maxLength(50),
-                    TextInput::make('last_name')
-                        ->required()
-                        ->minLength(2)
-                        ->maxLength(50),
-                    TextInput::make('email')
-                        ->email()
-                        ->required()
-                        ->unique(User::class, ignoreRecord: true),
-                    TextInput::make('phone')
-                        ->tel()
-                        ->telRegex('/^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\.\/0-9]*$/'),
-                    DatePicker::make('birth_date')
-                        ->required()
-                        ->maxDate(now()),
+                    TextInput::make('first_name')->required()->minLength(2)->maxLength(50),
+                    TextInput::make('last_name')->required()->minLength(2)->maxLength(50),
+                    TextInput::make('email')->email()->required()->unique(User::class, ignoreRecord: true),
+                    PhoneInput::make('phone')
+                        ->nullable()
+                        ->rules(['min:9', 'max:13', 'regex:/^([0-9\s\-\+\(\)]*)$/'])
+                        ->focusNumberFormat(PhoneInputNumberType::E164)
+                        ->initialCountry(Country::DEFAULT_COUNTRY)
+                        ->preferredCountries([Country::DEFAULT_COUNTRY])
+                        ->onlyCountries(Country::$validCountries)
+                        ->formatOnDisplay(false),
+                    DatePicker::make('birth_date')->required()->maxDate(now()),
                     SpatieMediaLibraryFileUpload::make('avatar')->collection('avatars'),
-                    Select::make('gender')
-                        ->options(UserGender::asSelectArray())
-                        ->required(),
-                    Select::make('status')
-                        ->options(UserStatus::asSelectArray())
-                        ->required(),
+                    Select::make('gender')->options(UserGender::asSelectArray())->required(),
+                    Select::make('status')->options(UserStatus::asSelectArray())->required(),
                     Password::make('password')
                         ->password()
                         ->minLength(8)
@@ -96,7 +93,7 @@ class UserResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('id')->sortable(),
-                SpatieMediaLibraryImageColumn::make('')->collection('avatars'),
+                SpatieMediaLibraryImageColumn::make('avatar')->collection('avatars'),
                 TextColumn::make('first_name')->sortable()->searchable(),
                 TextColumn::make('last_name')->sortable()->searchable(),
                 TextColumn::make('email')
@@ -129,8 +126,9 @@ class UserResource extends Resource
     public static function getRelations(): array
     {
         return [
-                //
-            ];
+            UserAddressesRelationManager::class,
+            OrderRecipientsRelationManager::class,
+        ];
     }
 
     public static function getWidgets(): array

@@ -31,7 +31,9 @@ class UserSeeder extends Seeder
 
         $avatarUrl = config('services.multiavatar.url') . $user->getFilamentName() . '.svg?apikey=' . config('services.multiavatar.key');
         try {
-            $user->addMediaFromUrl($avatarUrl)->toMediaCollection('avatars', 'public');
+            $user->addMediaFromUrl($avatarUrl)
+                ->sanitizingFileName(fn($fileName) => strtolower(str_replace(['#', '/', '\\', ' '], '-', $fileName)))
+                ->toMediaCollection('avatars', 'public');
         } catch (FileCannotBeAdded) {}
     }
 }

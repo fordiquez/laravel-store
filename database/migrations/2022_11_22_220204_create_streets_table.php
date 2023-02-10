@@ -18,7 +18,6 @@ return new class extends Migration {
             $table->id();
             $table->uuid();
             $table->foreignIdFor(City::class)->constrained()->cascadeOnUpdate()->cascadeOnDelete();
-            $table->foreignIdFor(State::class)->nullable()->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->string('name');
             $table->string('old_name')->nullable();
             $table->timestamps();

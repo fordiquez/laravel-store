@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Storage;
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class DatabaseSeeder extends Seeder
 {
@@ -20,12 +19,9 @@ class DatabaseSeeder extends Seeder
         }
 
         $this->call([
-            CountrySeeder::class,
-            StateSeeder::class,
-            CitySeeder::class,
-            StreetSeeder::class,
+            LocationSeeder::class,
             UserSeeder::class,
-//            BrandSeeder::class,
+            BrandSeeder::class,
 //            CategorySeeder::class,
 //            GoodSeeder::class,
 //            PromoCodeSeeder::class,

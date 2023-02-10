@@ -21,9 +21,7 @@ class Category extends Model
     {
         parent::boot();
 
-        static::creating(
-            fn(Category $category) => ($category->slug = $category->slug ?? str($category->title)->slug()),
-        );
+        static::creating(fn(Category $category) => ($category->slug = $category->slug ?? str($category->title)->slug()));
     }
 
     public function parent(): BelongsTo

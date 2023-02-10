@@ -79,10 +79,16 @@ REDIS_PASSWORD=
 REDIS_PORT=
 ```
 
-#### 3.5 Setup multiavatar api key
+#### 3.5 Setup multiavatar API key
 
 ```
 MULTIAVATAR_API_KEY=
+```
+
+#### 3.6 Setup Countries States Cities API key
+
+```
+CSC_API_KEY=
 ```
 
 ### 4. Install all composer & npm dependencies
