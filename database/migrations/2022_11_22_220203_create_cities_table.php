@@ -17,8 +17,8 @@ return new class extends Migration {
             $table->id();
             $table->uuid();
             $table->foreignIdFor(State::class)->constrained()->cascadeOnUpdate()->cascadeOnDelete();
-            $table->string('name');
-            $table->string('old_name')->nullable();
+            $table->string('name', 50);
+            $table->string('old_name', 50)->nullable();
             $table->char('type')->nullable();
             $table->boolean('is_state_center')->default(false);
             $table->boolean('big_city')->default(false);

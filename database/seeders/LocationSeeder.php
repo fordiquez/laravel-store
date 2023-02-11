@@ -10,7 +10,6 @@ use Database\Factories\StateFactory;
 use Database\Factories\StreetFactory;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Http;
-use Spatie\MediaLibrary\MediaCollections\Exceptions\FileCannotBeAdded;
 
 class LocationSeeder extends Seeder
 {
@@ -27,23 +26,18 @@ class LocationSeeder extends Seeder
 
         foreach ($countries as $country) {
             if (in_array($country['iso2'], Country::$validCountries)) {
-                $model = CountryFactory::new()->create([
+                CountryFactory::new()->create([
                     'name' => $country['name'],
                     'capital' => $country['capital'] === 'Kiev' ? 'Kyiv' : $country['capital'],
                     'iso2' => $country['iso2'],
                     'iso3' => $country['iso3'],
                     'phone_code' => $country['phone_code'],
-                    'currency_code' => $country['currency'],
+                    'currency' => $country['currency'],
                     'tld' => $country['tld'],
                     'region' => $country['region'],
                     'subregion' => $country['subregion'],
                     'is_active' => true,
                 ]);
-                $iso2 = strtolower($model->iso2);
-                $flagUrl = "https://raw.githubusercontent.com/MohmmedAshraf/blade-flags/main/resources/svg/country-$iso2.svg";
-                try {
-                    $model->addMediaFromUrl($flagUrl)->toMediaCollection('flags', 'public');
-                } catch (FileCannotBeAdded) {}
             }
         }
 

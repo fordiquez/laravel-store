@@ -1,6 +1,6 @@
 <script setup>
-import {computed, onMounted, reactive, ref} from 'vue';
-import {Link, usePage} from '@inertiajs/vue3';
+import { computed, onMounted, reactive, ref } from 'vue';
+import { Link, usePage } from '@inertiajs/vue3';
 import { useDark, useToggle } from '@vueuse/core';
 import { initTooltips } from 'flowbite';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
@@ -14,16 +14,16 @@ import Categories from '@/Components/Categories.vue';
 const isDark = useDark();
 const toggleDark = useToggle(isDark);
 
-const { user, categories } = reactive(usePage().props)
+const { user, categories } = reactive(usePage().props);
 
 const showingNavigationDropdown = ref(false);
 const showingResponsiveCategories = ref(false);
 
 onMounted(() => {
-    initTooltips()
+    initTooltips();
 });
 
-const fullname = computed(() => `${user.first_name} ${user.last_name}`)
+const fullName = computed(() => `${user.first_name} ${user.last_name}`);
 
 const closeResponsiveCategories = () => (showingResponsiveCategories.value = false);
 </script>
@@ -104,7 +104,7 @@ const closeResponsiveCategories = () => (showingResponsiveCategories.value = fal
                                             type="button"
                                             class="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none dark:bg-gray-800 dark:hover:text-gray-300"
                                         >
-                                            {{ fullname }}
+                                            {{ fullName }}
 
                                             <svg
                                                 class="ml-2 -mr-0.5 h-4 w-4"
@@ -131,7 +131,7 @@ const closeResponsiveCategories = () => (showingResponsiveCategories.value = fal
                             </Dropdown>
                         </div>
                         <div class="ml-2 h-9 w-9">
-                            <img :src="user.avatar" :alt="fullname" :title="fullname" class="rounded-full" />
+                            <img :src="user.avatar" :alt="fullName" :title="fullName" class="rounded-full" />
                         </div>
                     </div>
 
@@ -191,7 +191,7 @@ const closeResponsiveCategories = () => (showingResponsiveCategories.value = fal
                 <div class="border-t border-gray-200 pt-4 pb-1 dark:border-gray-600">
                     <div class="px-4">
                         <div class="text-base font-medium text-gray-800 dark:text-gray-200">
-                            {{ fullname }}
+                            {{ fullName }}
                         </div>
                         <div class="text-sm font-medium text-gray-500">{{ user.email }}</div>
                     </div>

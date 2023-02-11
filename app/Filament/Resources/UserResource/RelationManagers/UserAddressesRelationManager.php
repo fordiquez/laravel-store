@@ -69,6 +69,7 @@ class UserAddressesRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('id')->sortable(),
                 Tables\Columns\TextColumn::make('title'),
                 Tables\Columns\IconColumn::make('is_main')->boolean()->toggleable()
+                    ->tooltip('Toggle value')
                     ->action(function($record, $column) {
                         $name = $column->getName();
                         UserAddress::where('id', '!=', $record->id)->whereUserId($record->user_id)->whereIsMain(true)->update([

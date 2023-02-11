@@ -23,9 +23,9 @@ class CountryFactory extends Factory
             'iso2' => fake()->countryCode,
             'iso3' => fake()->countryISOAlpha3,
             'phone_code' => fake()->phoneNumber,
-            'currency_code' => fake()->currencyCode,
+            'currency' => fake()->currencyCode,
             'tld' => strtolower('.' . fake()->currencyCode),
-            'region' => Country::$regions[rand(0, count(Country::$regions) - 1)],
+            'region' => Country::getRegions()[rand(0, count(Country::getRegions()) - 1)],
             'is_active' => fake()->boolean(22),
         ];
     }

@@ -39,7 +39,7 @@ class HandleInertiaRequests extends Middleware
                     'location' => $request->url(),
                 ]);
             },
-            'categories' => CategoryResource::collection(Category::where('parent_id', null)->get()),
+            'categories' => !$request->routeIs('livewire.message') ? CategoryResource::collection(Category::where('parent_id', null)->get()) : null,
         ]);
     }
 }

@@ -58,6 +58,7 @@ class OrderRecipientsRelationManager extends RelationManager
                 Tables\Columns\IconColumn::make('is_default')
                     ->boolean()
                     ->toggleable()
+                    ->tooltip('Toggle value')
                     ->action(function($record, $column) {
                         $name = $column->getName();
                         OrderRecipient::where('id', '!=', $record->id)->whereUserId($record->user_id)->whereIsDefault(true)->update([

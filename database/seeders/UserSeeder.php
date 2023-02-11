@@ -18,8 +18,8 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         $user = UserFactory::new()
-            ->has(OrderRecipientFactory::new()->count(rand(1, 3)))
-            ->has(UserAddressFactory::new()->count(rand(1, 3)))
+//            ->has(OrderRecipientFactory::new()->count(rand(1, 3)))
+//            ->has(UserAddressFactory::new()->count(rand(1, 3)))
             ->create([
                 'first_name' => 'Gerald',
                 'last_name' => 'Ford',
