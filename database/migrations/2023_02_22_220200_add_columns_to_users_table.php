@@ -1,6 +1,7 @@
 <?php
 
-use App\Models\User;
+use App\Enums\UserGender;
+use App\Enums\UserStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,9 +18,9 @@ return new class extends Migration {
             $table->dropColumn('name');
             $table->string('first_name', 50)->after('id');
             $table->string('last_name', 50)->after('first_name');
-            $table->date('birth_date')->after('last_name');
-            $table->enum('gender', User::$genders)->after('birth_date');
-            $table->enum('status', User::$statuses)->after('gender')->default('active');
+            $table->date('birth_date')->after('last_name')->nullable();
+            $table->enum('gender', UserGender::getValues())->after('birth_date')->nullable();
+            $table->enum('status', UserStatus::getValues())->after('gender')->default('active');
             $table->string('phone')->after('status')->nullable();
             $table->softDeletes()->after('updated_at');
         });

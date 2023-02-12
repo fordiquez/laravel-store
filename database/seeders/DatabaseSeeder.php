@@ -19,10 +19,10 @@ class DatabaseSeeder extends Seeder
         }
 
         $this->call([
-//            LocationSeeder::class,
+            LocationSeeder::class,
             UserSeeder::class,
-//            BrandSeeder::class,
-//            CategorySeeder::class,
+            BrandSeeder::class,
+            CategorySeeder::class,
 //            GoodSeeder::class,
 //            PromoCodeSeeder::class,
 //            OrderSeeder::class,

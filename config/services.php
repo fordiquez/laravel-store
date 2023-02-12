@@ -37,5 +37,15 @@ return [
     'csc' => [
         'url' => env('CSC_API_URL'),
         'key' => env('CSC_API_KEY')
-    ]
+    ],
+    'github' => [
+        'client_id' => env('GITHUB_CLIENT_ID'),
+        'client_secret' => env('GITHUB_CLIENT_SECRET'),
+        'redirect' => '/social/github/callback',
+    ],
+    'google' => [
+        'client_id' => env('GOOGLE_CLIENT_ID'),
+        'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+        'redirect' => '/social/google/callback',
+    ],
 ];

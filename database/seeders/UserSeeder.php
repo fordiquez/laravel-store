@@ -6,7 +6,10 @@ use Database\Factories\OrderRecipientFactory;
 use Database\Factories\UserAddressFactory;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Log;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileCannotBeAdded;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
 class UserSeeder extends Seeder
 {
@@ -18,8 +21,8 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         $user = UserFactory::new()
-//            ->has(OrderRecipientFactory::new()->count(rand(1, 3)))
-//            ->has(UserAddressFactory::new()->count(rand(1, 3)))
+            ->has(OrderRecipientFactory::new()->count(rand(1, 3)))
+            ->has(UserAddressFactory::new()->count(rand(1, 3)), 'addresses')
             ->create([
                 'first_name' => 'Gerald',
                 'last_name' => 'Ford',
@@ -29,11 +32,10 @@ class UserSeeder extends Seeder
                 'password' => '$2y$10$Y.tltioAYrGTul6J8GeDoOqjv/98LM8iSj4PCIDsVYkE3KWFah.lC',
             ]);
 
-        $avatarUrl = config('services.multiavatar.url') . $user->getFilamentName() . '.svg?apikey=' . config('services.multiavatar.key');
         try {
-            $user->addMediaFromUrl($avatarUrl)
-                ->sanitizingFileName(fn($fileName) => strtolower(str_replace(['#', '/', '\\', ' '], '-', $fileName)))
-                ->toMediaCollection('avatars', 'public');
-        } catch (FileCannotBeAdded) {}
+            $user->addAvatarMedia(config('services.multiavatar.url') . $user->getFilamentName() . '.svg?apikey=' . config('services.multiavatar.key'));
+        } catch (FileDoesNotExist|FileIsTooBig|FileCannotBeAdded $e) {
+            Log::error($e);
+        }
     }
 }

@@ -7,7 +7,7 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-# Laravel Store with Laravel 9, Inertia.js 1 and Vue.js 3
+# E-commerce project with Laravel 9, Vue 3 and Inertia.js
 
 ## Must have requirements
 

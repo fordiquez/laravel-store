@@ -15,6 +15,9 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileCannotBeAdded;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
 class User extends Authenticatable implements MustVerifyEmail, FilamentUser, HasName, HasMedia
 {
@@ -32,8 +35,12 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser, Has
         'gender',
         'status',
         'email',
+        'email_verified_at',
         'phone',
         'password',
+        'provider',
+        'provider_id',
+        'provider_token',
     ];
 
     protected $appends = ['avatar'];
@@ -54,31 +61,19 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser, Has
         'email_verified_at' => 'datetime',
     ];
 
-    public static array $genders = ['male', 'female'];
-
-    public static array $statuses = ['active', 'inactive', 'blocked'];
-
     public function sendEmailVerificationNotification()
     {
         $this->notify(new SendVerifyWithQueueNotification());
     }
 
-    public static function getGenders(): array
-    {
-        return [
-            'male' => 'Male',
-            'female' => 'Female',
-        ];
-    }
-
-    public function getGender(): string
-    {
-        return $this->gender == 'male' ? 'Male' : 'Female';
-    }
-
-    public function userAddresses(): HasMany
+    public function addresses(): HasMany
     {
         return $this->hasMany(UserAddress::class);
+    }
+
+    public function socials(): HasMany
+    {
+        return $this->hasMany(UserSocial::class);
     }
 
     public function orderRecipients(): HasMany
@@ -99,5 +94,16 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser, Has
     public function avatar(): Attribute
     {
         return Attribute::get(fn($value) => $this->getFirstMediaUrl('avatars'));
+    }
+
+    /**
+     * @throws FileCannotBeAdded|FileDoesNotExist|FileIsTooBig
+     */
+    public function addAvatarMedia(string $url, string $collectionName = 'avatars', string $diskName = 'public')
+    {
+        $this->clearMediaCollection($collectionName)
+            ->addMediaFromUrl($url)
+            ->sanitizingFileName(fn($fileName) => strtolower(str_replace(['#', '/', '\\', ' '], '-', $fileName)))
+            ->toMediaCollection($collectionName, $diskName);
     }
 }
