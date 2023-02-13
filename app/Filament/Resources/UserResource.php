@@ -6,7 +6,8 @@ use App\Enums\UserGender;
 use App\Enums\UserStatus;
 use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\RelationManagers\OrderRecipientsRelationManager;
-use App\Filament\Resources\UserResource\RelationManagers\UserAddressesRelationManager;
+use App\Filament\Resources\UserResource\RelationManagers\AddressesRelationManager;
+use App\Filament\Resources\UserResource\RelationManagers\SocialsRelationManager;
 use App\Filament\Resources\UserResource\Widgets\UsersOverview;
 use App\Models\Country;
 use App\Models\User;
@@ -39,6 +40,8 @@ class UserResource extends Resource
 
     protected static ?string $navigationGroup = 'User Management';
 
+    protected static ?int $navigationSort = 0;
+
     protected static ?string $recordTitleAttribute = 'email';
 
     public static function form(Form $form): Form
@@ -50,16 +53,15 @@ class UserResource extends Resource
                     TextInput::make('last_name')->required()->minLength(2)->maxLength(50),
                     TextInput::make('email')->email()->required()->unique(User::class, ignoreRecord: true),
                     PhoneInput::make('phone')
-                        ->nullable()
                         ->rules(['min:9', 'max:13', 'regex:/^([0-9\s\-\+\(\)]*)$/'])
                         ->focusNumberFormat(PhoneInputNumberType::E164)
                         ->initialCountry(Country::DEFAULT_COUNTRY)
                         ->preferredCountries([Country::DEFAULT_COUNTRY])
                         ->onlyCountries(Country::$validCountries)
                         ->formatOnDisplay(false),
-                    DatePicker::make('birth_date')->required()->maxDate(now()),
+                    DatePicker::make('birth_date')->maxDate(now()),
                     SpatieMediaLibraryFileUpload::make('avatar')->collection('avatars'),
-                    Select::make('gender')->options(UserGender::asSelectArray())->required(),
+                    Select::make('gender')->options(UserGender::asSelectArray()),
                     Select::make('status')->options(UserStatus::asSelectArray())->required(),
                     Password::make('password')
                         ->password()
@@ -97,6 +99,7 @@ class UserResource extends Resource
                 TextColumn::make('first_name')->sortable()->searchable(),
                 TextColumn::make('last_name')->sortable()->searchable(),
                 TextColumn::make('email')
+                    ->tooltip('Copy to clipboard')
                     ->copyable()
                     ->copyMessage('Email address copied')
                     ->copyMessageDuration(1500)
@@ -130,7 +133,8 @@ class UserResource extends Resource
     public static function getRelations(): array
     {
         return [
-            UserAddressesRelationManager::class,
+            AddressesRelationManager::class,
+            SocialsRelationManager::class,
             OrderRecipientsRelationManager::class,
         ];
     }

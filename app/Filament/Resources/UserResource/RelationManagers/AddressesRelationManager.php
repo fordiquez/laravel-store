@@ -17,9 +17,9 @@ use Filament\Tables;
 use Filament\Tables\Contracts\HasRelationshipTable;
 use Illuminate\Database\Eloquent\Model;
 
-class UserAddressesRelationManager extends RelationManager
+class AddressesRelationManager extends RelationManager
 {
-    protected static string $relationship = 'userAddresses';
+    protected static string $relationship = 'addresses';
 
     protected static ?string $recordTitleAttribute = 'title';
 

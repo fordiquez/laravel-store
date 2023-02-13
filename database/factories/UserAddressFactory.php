@@ -25,7 +25,7 @@ class UserAddressFactory extends Factory
         $street = Street::inRandomOrder()->first();
 
         return [
-            'title' => fake()->word,
+            'title' => fake()->unique()->words(rand(1, 3), true),
             'country_id' => $street->city->state->country_id,
             'state_id' => $street->city->state_id,
             'city_id' => $street->city_id,

@@ -20,16 +20,18 @@ return new class extends Migration {
         Schema::create('user_addresses', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class)->constrained()->cascadeOnUpdate()->cascadeOnDelete();
-            $table->string('title')->default('Main');
+            $table->string('title', 100);
             $table->boolean('is_main')->default(false);
             $table->foreignIdFor(Country::class)->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignIdFor(State::class)->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignIdFor(City::class)->nullable()->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignIdFor(Street::class)->constrained()->cascadeOnUpdate()->cascadeOnDelete();
-            $table->string('house');
-            $table->string('flat')->nullable();
-            $table->string('postal_code')->nullable();
+            $table->string('house', 10);
+            $table->string('flat', 10)->nullable();
+            $table->string('postal_code', 10)->nullable();
             $table->timestamps();
+
+            $table->unique(['user_id', 'title']);
         });
     }
 

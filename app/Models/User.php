@@ -15,7 +15,6 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
-use Spatie\MediaLibrary\MediaCollections\Exceptions\FileCannotBeAdded;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
@@ -61,6 +60,8 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser, Has
         'email_verified_at' => 'datetime',
     ];
 
+    public const ADMIN_EMAIL = 'fordiquez@store.com';
+
     public function sendEmailVerificationNotification()
     {
         $this->notify(new SendVerifyWithQueueNotification());
@@ -83,7 +84,7 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser, Has
 
     public function canAccessFilament(): bool
     {
-        return str_ends_with($this->email, '@store.com') && $this->hasVerifiedEmail();
+        return $this->email === $this::ADMIN_EMAIL && $this->hasVerifiedEmail();
     }
 
     public function getFilamentName(): string
@@ -97,7 +98,7 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser, Has
     }
 
     /**
-     * @throws FileCannotBeAdded|FileDoesNotExist|FileIsTooBig
+     * @throws FileDoesNotExist|FileIsTooBig
      */
     public function addAvatarMedia(string $url, string $collectionName = 'avatars', string $diskName = 'public')
     {
