@@ -22,8 +22,6 @@ class StoreUserJob implements ShouldQueue
 
     /**
      * Create a new job instance.
-     *
-     * @param array $data
      */
     public function __construct(array $data)
     {
@@ -32,8 +30,6 @@ class StoreUserJob implements ShouldQueue
 
     /**
      * Execute the job.
-     *
-     * @return void
      * @throws LimiterTimeoutException
      */
     public function handle(): void

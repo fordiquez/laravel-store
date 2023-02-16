@@ -119,8 +119,12 @@ php artisan migrate --seed
 php artisan optimize:clear
 ```
 
-### 6. Run application server
+### 6. Run application server & SSR rendering
 
 ```
 npm run dev
+```
+
+```
+php artisan inertia:start-ssr
 ```

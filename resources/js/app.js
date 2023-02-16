@@ -19,7 +19,7 @@ import { faXmark, faEllipsis, faArrowRightLong, faArrowLeftLong } from '@fortawe
 library.add(faXmark, faEllipsis, faArrowRightLong, faArrowLeftLong);
 dom.watch();
 
-const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
+const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'brandford.';
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,

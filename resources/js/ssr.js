@@ -5,7 +5,7 @@ import createServer from '@inertiajs/vue3/server';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
 
-const appName = 'Laravel';
+const appName = 'brandford.';
 
 createServer((page) =>
     createInertiaApp({
@@ -21,5 +21,5 @@ createServer((page) =>
                     location: new URL(page.props.ziggy.location),
                 });
         },
-    }),
+    })
 );
