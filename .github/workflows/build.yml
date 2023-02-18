@@ -32,14 +32,14 @@ jobs:
           mysql database: ${{ env.DB_DATABASE }}
           mysql root password: ${{ env.DB_USERNAME }}
 
-      - name: Encrypt .env
-        run: php artisan env:decrypt --key=${{ secrets.ENV_KEY }}
-
       - name: Install composer dependencies
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
       - name: Install npm dependencies
         run: npm ci
+
+      - name: Encrypt .env
+        run: php artisan env:decrypt --key=${{ secrets.ENV_KEY }}
 
       - name: Run artisan commands & build npm assets
         run: |

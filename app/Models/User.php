@@ -17,10 +17,11 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements MustVerifyEmail, FilamentUser, HasName, HasMedia
 {
-    use HasApiTokens, HasFactory, Notifiable, SoftDeletes, InteractsWithMedia;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes, InteractsWithMedia, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -37,9 +38,6 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser, Has
         'email_verified_at',
         'phone',
         'password',
-        'provider',
-        'provider_id',
-        'provider_token',
     ];
 
     protected $appends = ['avatar'];

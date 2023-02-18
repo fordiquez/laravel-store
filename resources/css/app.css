@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+div.phpdebugbar * {
+    font-size: inherit !important;
+}

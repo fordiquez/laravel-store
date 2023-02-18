@@ -116,6 +116,10 @@ php artisan migrate --seed
 ```
 
 ```
+php artisan shield:install --fresh
+```
+
+```
 php artisan optimize:clear
 ```
 
