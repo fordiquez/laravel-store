@@ -156,7 +156,6 @@ class CountryResource extends Resource
                 Tables\Filters\SelectFilter::make('subregion')->options(Country::getSubregions(withNamedKeys: true)),
             ])
             ->actions([
-//                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make()
             ])
@@ -179,7 +178,6 @@ class CountryResource extends Resource
         return [
             'index' => Pages\ListCountries::route('/'),
             'create' => Pages\CreateCountry::route('/create'),
-            'view' => Pages\ViewCountry::route('/{record}'),
             'edit' => Pages\EditCountry::route('/{record}/edit'),
         ];
     }

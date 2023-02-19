@@ -14,11 +14,11 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
-        $laptopsAndComputers = CategoryFactory::new()->hasImage()->create([
+        $laptopsAndComputers = CategoryFactory::new()->create([
             'title' => 'Laptops and Computers',
         ]);
 
-        CategoryFactory::new()->hasImage()->createMany([
+        CategoryFactory::new()->createMany([
             [
                 'title' => 'Laptops',
                 'parent_id' => $laptopsAndComputers->id,
@@ -33,11 +33,11 @@ class CategorySeeder extends Seeder
             ],
         ]);
 
-        $tablets = CategoryFactory::new()->hasImage()->create([
+        $tablets = CategoryFactory::new()->create([
             'title' => 'Tablets',
         ]);
 
-        CategoryFactory::new()->hasImage()->createMany([
+        CategoryFactory::new()->createMany([
             [
                 'title' => 'Apple iPad',
                 'parent_id' => $tablets->id,
@@ -56,12 +56,12 @@ class CategorySeeder extends Seeder
             ],
         ]);
 
-        $computerComponents = CategoryFactory::new()->hasImage()->create([
+        $computerComponents = CategoryFactory::new()->create([
             'title' => 'Computer components',
             'parent_id' => $laptopsAndComputers->id,
         ]);
 
-        CategoryFactory::new()->hasImage()->createMany([
+        CategoryFactory::new()->createMany([
             [
                 'title' => 'Motherboards',
                 'parent_id' => $computerComponents->id,
@@ -116,12 +116,12 @@ class CategorySeeder extends Seeder
             ],
         ]);
 
-        $keyboardsAndMice = CategoryFactory::new()->hasImage()->create([
+        $keyboardsAndMice = CategoryFactory::new()->create([
             'title' => 'Keyboards and mice',
             'parent_id' => $computerComponents->id,
         ]);
 
-        CategoryFactory::new()->hasImage()->createMany([
+        CategoryFactory::new()->createMany([
             [
                 'title' => 'Computer mice',
                 'parent_id' => $keyboardsAndMice->id,
@@ -156,7 +156,7 @@ class CategorySeeder extends Seeder
             ],
         ]);
 
-        CategoryFactory::new()->hasImage()->createMany([
+        CategoryFactory::new()->createMany([
             [
                 'title' => 'Cables and adapters',
                 'parent_id' => $laptopsAndComputers->id,
@@ -171,11 +171,11 @@ class CategorySeeder extends Seeder
             ],
         ]);
 
-        $gamerGoods = CategoryFactory::new()->hasImage()->create([
+        $gamerGoods = CategoryFactory::new()->create([
             'title' => 'Goods for gamers',
         ]);
 
-        CategoryFactory::new()->hasImage()->createMany([
+        CategoryFactory::new()->createMany([
             [
                 'title' => 'Game consoles',
                 'parent_id' => $gamerGoods->id,
@@ -222,12 +222,12 @@ class CategorySeeder extends Seeder
             ],
         ]);
 
-        $gamerComponents = CategoryFactory::new()->hasImage()->create([
+        $gamerComponents = CategoryFactory::new()->create([
             'title' => 'Components for gamers',
             'parent_id' => $gamerGoods->id,
         ]);
 
-        CategoryFactory::new()->hasImage()->createMany([
+        CategoryFactory::new()->createMany([
             [
                 'title' => 'Gaming Video cards',
                 'parent_id' => $gamerComponents->id,

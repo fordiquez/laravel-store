@@ -38,7 +38,7 @@ jobs:
       - name: Install npm dependencies
         run: npm ci
 
-      - name: Encrypt .env
+      - name: Decrypt .env
         run: php artisan env:decrypt --key=${{ secrets.ENV_KEY }}
 
       - name: Run artisan commands & build npm assets

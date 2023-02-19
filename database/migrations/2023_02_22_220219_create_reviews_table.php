@@ -23,7 +23,7 @@ return new class extends Migration {
             $table->tinyText('disadvantages');
             $table->unsignedTinyInteger('rating');
             $table->string('video_src')->nullable();
-            $table->string('ip_address')->nullable();
+            $table->ipAddress()->nullable();
             $table->timestamps();
         });
     }

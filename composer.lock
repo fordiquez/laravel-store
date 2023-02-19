@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "da297bb1fa76e9dc5a73894783448cb1",
+    "content-hash": "0916e1ea97191422dd03eaa5d870997f",
     "packages": [
         {
             "name": "akaunting/laravel-money",
@@ -453,6 +453,86 @@
                 }
             ],
             "time": "2022-08-10T22:54:19+00:00"
+        },
+        {
+            "name": "camya/filament-title-with-slug",
+            "version": "v0.5.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/camya/filament-title-with-slug.git",
+                "reference": "57f2495fc0ded4c641e13f8b632a9b1c13bd6f12"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/camya/filament-title-with-slug/zipball/57f2495fc0ded4c641e13f8b632a9b1c13bd6f12",
+                "reference": "57f2495fc0ded4c641e13f8b632a9b1c13bd6f12",
+                "shasum": ""
+            },
+            "require": {
+                "filament/filament": "^2.16",
+                "illuminate/contracts": "^9.0|^10.0",
+                "php": "^8.0.2",
+                "spatie/laravel-package-tools": "^1.13.0"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.0",
+                "nunomaduro/collision": "^6.0",
+                "nunomaduro/larastan": "^2.0.1",
+                "orchestra/testbench": "^7.0|^8.0",
+                "pestphp/pest": "^1.21",
+                "pestphp/pest-plugin-laravel": "^1.1",
+                "phpstan/extension-installer": "^1.1",
+                "phpstan/phpstan-deprecation-rules": "^1.0",
+                "phpstan/phpstan-phpunit": "^1.0",
+                "phpunit/phpunit": "^9.5",
+                "roave/security-advisories": "dev-latest",
+                "spatie/laravel-ray": "^1.31"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Camya\\Filament\\FilamentTitleWithSlugServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/helpers.php"
+                ],
+                "psr-4": {
+                    "Camya\\Filament\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Andreas Scheibel",
+                    "email": "contact@camya.com",
+                    "homepage": "https://www.camya.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "TitleWithSlugInput - Easy Permalink Slugs for the FilamentPHP Form Builder (PHP / Laravel / Livewire)",
+            "homepage": "https://github.com/camya/filament-title-with-slug",
+            "keywords": [
+                "alpinejs",
+                "filament",
+                "framework",
+                "laravel",
+                "livewire",
+                "permalink",
+                "slug",
+                "tailwindcss"
+            ],
+            "support": {
+                "issues": "https://github.com/camya/filament-title-with-slug/issues",
+                "source": "https://github.com/camya/filament-title-with-slug/tree/v0.5.6"
+            },
+            "time": "2023-02-15T15:17:37+00:00"
         },
         {
             "name": "composer/class-map-generator",
