@@ -2,10 +2,11 @@
 
 namespace Database\Factories;
 
+use App\Enums\GoodStatus;
 use App\Models\Brand;
 use App\Models\Category;
-use App\Models\Good;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 /**
@@ -32,7 +33,7 @@ class GoodFactory extends Factory
             'old_price' => fake()->numberBetween(100, 10000),
             'price' => fn(array $attributes) => $attributes['old_price'] - ($attributes['old_price'] * rand(1, 80)) / 100,
             'quantity' => fake()->numberBetween(0, 100),
-            'status' => Good::$statuses[rand(0, count(Good::$statuses) - 1)],
+            'status' => Arr::random(GoodStatus::getValues()),
         ];
     }
 }

@@ -130,15 +130,14 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Eager-scan log files
+    | Log Viewer API middleware.
     |--------------------------------------------------------------------------
-    | Whether to eagerly scan all log files configured with the Log Viewer.
-    | Scanning a log file will create an index for it, which will
-    | speed up further navigation of that log file.
+    | Optional middleware to use on every API request. The same API is also
+    | used from within the Log Viewer user interface.
     |
     */
 
-    'eager_scan' => env('LOG_VIEWER_EAGER_SCAN', true),
+    'api_middleware' => [],
 
     /*
     |--------------------------------------------------------------------------

@@ -1,8 +1,8 @@
 <?php
 
+use App\Enums\GoodStatus;
 use App\Models\Brand;
 use App\Models\Category;
-use App\Models\Good;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,7 +17,7 @@ return new class extends Migration {
     {
         Schema::create('goods', function (Blueprint $table) {
             $table->id();
-            $table->integer('vendor_code')->unique();
+            $table->bigInteger('vendor_code')->unique();
             $table->string('title');
             $table->string('slug')->unique();
             $table->foreignIdFor(Category::class)->constrained()->cascadeOnUpdate()->cascadeOnDelete();
@@ -28,8 +28,10 @@ return new class extends Migration {
             $table->unsignedDecimal('old_price')->nullable();
             $table->unsignedDecimal('price');
             $table->unsignedInteger('quantity')->default(0);
-            $table->enum('status', Good::$statuses);
+            $table->enum('status', GoodStatus::getValues());
             $table->timestamps();
+
+            $table->softDeletes();
         });
     }
 

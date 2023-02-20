@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\Country;
 use App\Models\State;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Arr;
 
 /**
  * @extends Factory<State>
@@ -22,7 +23,7 @@ class StateFactory extends Factory
             'uuid' => fake()->uuid,
             'name' => fake()->city,
             'country_id' => Country::inRandomOrder()->value('id'),
-            'type' => State::$types[rand(0, count(State::$types) - 1)],
+            'type' => Arr::random(State::$types),
         ];
     }
 }

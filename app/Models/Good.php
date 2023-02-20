@@ -2,16 +2,19 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Good extends Model
+class Good extends Model implements HasMedia
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes, InteractsWithMedia;
 
     protected $fillable = [
         'vendor_code',
@@ -28,18 +31,16 @@ class Good extends Model
         'status',
     ];
 
-    public static array $statuses = [
-        'ready for dispatch',
-        'in stock',
-        'ends',
-        'is over',
-        'out of stock',
-        'discontinued',
-    ];
+    protected $appends = ['preview'];
 
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function brand(): BelongsTo
+    {
+        return $this->belongsTo(Brand::class);
     }
 
     public function tags(): BelongsToMany
@@ -62,8 +63,8 @@ class Good extends Model
         return $this->hasMany(Review::class);
     }
 
-    public function images(): MorphMany
+    protected function preview(): Attribute
     {
-        return $this->morphMany(Image::class, 'imageable');
+        return Attribute::get(fn () => $this->hasMedia('goods') ? $this->getFirstMediaUrl('goods') : url('static/not-found.svg'));
     }
 }

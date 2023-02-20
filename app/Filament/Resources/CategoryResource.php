@@ -17,9 +17,9 @@ class CategoryResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-collection';
 
-    protected static ?string $navigationGroup = 'Goods management';
+    protected static ?string $navigationGroup = 'Goods Management';
 
-    protected static ?int $navigationSort = 1;
+    protected static ?int $navigationSort = 2;
 
     public static function form(Form $form): Form
     {
@@ -45,7 +45,7 @@ class CategoryResource extends Resource
                     Forms\Components\TextInput::make('description')->maxLength(255),
                     Forms\Components\Toggle::make('is_active')->required(),
                     Forms\Components\TextInput::make('manual_url')->url()->maxLength(255),
-                    Forms\Components\SpatieMediaLibraryFileUpload::make('image')->collection('categories')
+                    Forms\Components\SpatieMediaLibraryFileUpload::make('thumbnail')->collection('categories')
                 ])
             ]);
     }
@@ -58,7 +58,7 @@ class CategoryResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('id'),
-                Tables\Columns\SpatieMediaLibraryImageColumn::make('image')->collection('categories')->width(100),
+                Tables\Columns\SpatieMediaLibraryImageColumn::make('thumbnail')->collection('categories')->width(100),
                 Tables\Columns\TextColumn::make('parent.title')->toggleable(),
                 Tables\Columns\TextColumn::make('title')->sortable()->searchable(),
                 Tables\Columns\TextColumn::make('slug')->toggleable(),

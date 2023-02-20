@@ -17,7 +17,7 @@ class Category extends Model implements HasMedia
 
     protected $fillable = ['title', 'slug', 'parent_id', 'manual_url'];
 
-    protected $appends = ['image'];
+    protected $appends = ['thumbnail'];
 
     protected static function boot()
     {
@@ -52,7 +52,7 @@ class Category extends Model implements HasMedia
         return 'slug';
     }
 
-    protected function image(): Attribute
+    protected function thumbnail(): Attribute
     {
         return Attribute::get(fn () => $this->hasMedia('categories') ? $this->getFirstMediaUrl('categories') : url('static/not-found.svg'));
     }

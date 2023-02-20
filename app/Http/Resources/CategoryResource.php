@@ -15,7 +15,7 @@ class CategoryResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'slug' => $this->slug,
-            'image' => $this->image,
+            'image' => $this->thumbnail,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'subcategories' => $this->subcategories()->count() ? $this::loopCategories($this->subcategories) : null,

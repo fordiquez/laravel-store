@@ -9,13 +9,34 @@
 
 # E-commerce project with Laravel 9, Vue 3 and Inertia.js
 
+## Used dependencies
+
+### Composer
+-   **Laravel: 10.x;**
+-   **Filament: 2.x;**
+-   **Laravel Socialite: 5.x;**
+-   **Laravel Horizon: 5.x;**
+-   **Laravel Telescope: 4.x;**
+-   **Laravel enum: 6.x;**
+-   **Log viewer: 2.x.**
+
+### NPM
+-   **Vite: 4.x;**
+-   **Vue: 3.x;**
+-   **Inertia.js: 1.x;**
+-   **TailwindCSS: 3.x;**
+-   **Flowbite: 1.x;**
+-   **Prettier: 2.x;**
+-   **Axios: 1.x;**
+-   **Font awesome: 6.x.**
+
 ## Must have requirements
 
--   PHP v8.0+
--   Composer
--   MySQL
--   Node
--   NPM
+-   **PHP v8.1;**
+-   **Composer v2.0;**
+-   **MySQL;**
+-   **Node;**
+-   **NPM;**
 
 ## Local installation workflow
 

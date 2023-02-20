@@ -22,7 +22,7 @@
         "laravel/socialite": "^5.6",
         "laravel/telescope": "^4.12",
         "laravel/tinker": "^2.7",
-        "opcodesio/log-viewer": "^1.9",
+        "opcodesio/log-viewer": "^2.0",
         "phpsa/filament-password-reveal": "^1.1",
         "predis/predis": "^2.1",
         "tightenco/ziggy": "^1.0",

@@ -19,11 +19,12 @@ class DatabaseSeeder extends Seeder
         }
 
         $this->call([
+            SettingSeeder::class,
             LocationSeeder::class,
             UserSeeder::class,
             BrandSeeder::class,
             CategorySeeder::class,
-//            GoodSeeder::class,
+            GoodSeeder::class,
 //            PromoCodeSeeder::class,
 //            OrderSeeder::class,
         ]);
