@@ -19,6 +19,7 @@ class PropertyFactory extends Factory
     {
         return [
             'name' => fake()->unique()->sentence(5),
+            'slug' => fn(array $attributes) => str($attributes['name'])->slug(),
         ];
     }
 }

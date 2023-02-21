@@ -12,7 +12,7 @@ class OptionValue extends Model
 
     protected $fillable = ['option_id', 'value'];
 
-    public function options(): BelongsTo
+    public function option(): BelongsTo
     {
         return $this->belongsTo(Option::class);
     }

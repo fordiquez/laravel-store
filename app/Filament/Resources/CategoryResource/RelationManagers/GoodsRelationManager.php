@@ -1,29 +1,24 @@
 <?php
 
-namespace App\Filament\Resources;
+namespace App\Filament\Resources\CategoryResource\RelationManagers;
 
 use App\Enums\GoodStatus;
-use App\Filament\Resources\GoodResource\Pages;
 use App\Models\Good;
 use App\Models\Setting;
 use Camya\Filament\Forms\Components\TitleWithSlugInput;
 use Filament\Forms;
 use Filament\Resources\Form;
-use Filament\Resources\Resource;
+use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class GoodResource extends Resource
+class GoodsRelationManager extends RelationManager
 {
-    protected static ?string $model = Good::class;
+    protected static string $relationship = 'goods';
 
-    protected static ?string $navigationIcon = 'heroicon-o-shopping-bag';
-
-    protected static ?string $navigationGroup = 'Goods Management';
-
-    protected static ?int $navigationSort = 1;
+    protected static ?string $recordTitleAttribute = 'title';
 
     public static function form(Form $form): Form
     {
@@ -33,7 +28,8 @@ class GoodResource extends Resource
                     Forms\Components\Select::make('category_id')
                         ->relationship('category', 'title')
                         ->required()
-                        ->searchable(),
+                        ->disabled()
+                        ->default(fn(RelationManager $livewire) => $livewire->ownerRecord->id),
                     Forms\Components\Select::make('brand_id')
                         ->relationship('brand', 'name')
                         ->required()
@@ -76,14 +72,6 @@ class GoodResource extends Resource
                         ->relationship('tags', 'name')
                         ->preload()
                         ->columnSpanFull(),
-                    Forms\Components\Select::make('propertyValues')
-                        ->multiple()
-                        ->relationship('propertyValues', 'value')
-                        ->preload(),
-                    Forms\Components\Select::make('optionValues')
-                        ->multiple()
-                        ->relationship('optionValues', 'value')
-                        ->preload(),
                     Forms\Components\TextInput::make('old_price')
                         ->numeric()
                         ->suffix(Setting::where('key', 'currency')->value('value')),
@@ -113,12 +101,11 @@ class GoodResource extends Resource
                     ->searchable()
                     ->copyable()
                     ->tooltip('Click to copy')
-                ->toggleable(),
+                    ->toggleable(),
                 Tables\Columns\SpatieMediaLibraryImageColumn::make('preview')
                     ->collection('goods')
                     ->toggleable(),
                 Tables\Columns\TextColumn::make('category.title')->limit(25)->sortable()->toggleable(),
-                Tables\Columns\TextColumn::make('brand.name')->limit(25)->sortable()->toggleable(),
                 Tables\Columns\TextColumn::make('title')->limit(25)->sortable()->searchable(),
                 Tables\Columns\TextColumn::make('old_price')->sortable()->toggleable(),
                 Tables\Columns\TextColumn::make('price')->sortable()->toggleable(),
@@ -135,36 +122,28 @@ class GoodResource extends Resource
                     ->relationship('category', 'title'),
                 Tables\Filters\SelectFilter::make('status')->options(GoodStatus::asSelectArray())
             ])
+            ->filters([
+                Tables\Filters\TrashedFilter::make()
+            ])
+            ->headerActions([
+                Tables\Actions\CreateAction::make(),
+            ])
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
+                Tables\Actions\ForceDeleteAction::make(),
+                Tables\Actions\RestoreAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
-                Tables\Actions\ForceDeleteBulkAction::make(),
                 Tables\Actions\RestoreBulkAction::make(),
+                Tables\Actions\ForceDeleteBulkAction::make(),
             ]);
     }
 
-    public static function getRelations(): array
+    protected function getTableQuery(): Builder
     {
-        return [
-            //
-        ];
-    }
-
-    public static function getPages(): array
-    {
-        return [
-            'index' => Pages\ListGoods::route('/'),
-            'create' => Pages\CreateGood::route('/create'),
-            'edit' => Pages\EditGood::route('/{record}/edit'),
-        ];
-    }
-
-    public static function getEloquentQuery(): Builder
-    {
-        return parent::getEloquentQuery()
+        return parent::getTableQuery()
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);

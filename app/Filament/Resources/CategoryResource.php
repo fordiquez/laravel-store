@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\CategoryResource\Pages;
+use App\Filament\Resources\CategoryResource\RelationManagers\GoodsRelationManager;
 use App\Models\Category;
 use Camya\Filament\Forms\Components\TitleWithSlugInput;
 use Filament\Forms;
@@ -19,7 +20,7 @@ class CategoryResource extends Resource
 
     protected static ?string $navigationGroup = 'Goods Management';
 
-    protected static ?int $navigationSort = 2;
+    protected static ?int $navigationSort = 3;
 
     public static function form(Form $form): Form
     {
@@ -86,7 +87,7 @@ class CategoryResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            GoodsRelationManager::class,
         ];
     }
 

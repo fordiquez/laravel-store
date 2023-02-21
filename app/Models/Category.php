@@ -36,6 +36,11 @@ class Category extends Model implements HasMedia
         return $this->hasMany(Category::class, 'parent_id');
     }
 
+    public function goods(): HasMany
+    {
+        return $this->hasMany(Good::class);
+    }
+
     public function loopCategories($categories)
     {
         foreach ($categories as $category) {

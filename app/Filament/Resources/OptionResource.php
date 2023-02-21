@@ -2,9 +2,8 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\BrandResource\Pages;
-use App\Filament\Resources\BrandResource\RelationManagers\GoodsRelationManager;
-use App\Models\Brand;
+use App\Filament\Resources\OptionResource\Pages;
+use App\Models\Option;
 use Camya\Filament\Forms\Components\TitleWithSlugInput;
 use Filament\Forms;
 use Filament\Resources\Form;
@@ -12,15 +11,15 @@ use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
 
-class BrandResource extends Resource
+class OptionResource extends Resource
 {
-    protected static ?string $model = Brand::class;
+    protected static ?string $model = Option::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-gift';
+    protected static ?string $navigationIcon = 'heroicon-o-clipboard-list';
 
     protected static ?string $navigationGroup = 'Goods Management';
 
-    protected static ?int $navigationSort = 2;
+    protected static ?int $navigationSort = 7;
 
     public static function form(Form $form): Form
     {
@@ -32,17 +31,13 @@ class BrandResource extends Resource
                         fieldSlug: 'slug',
                         urlHostVisible: false,
                         titleLabel: 'Name',
-                        titleRules: ['required', 'max:100'],
                         slugLabel: 'Slug',
-                        slugRules: ['required', 'max:100', 'alpha_dash'],
                         slugRuleUniqueParameters: [
-                            'table' => 'brands',
+                            'table' => 'properties',
                             'column' => 'slug',
                             'ignoreRecord' => true
                         ]
                     ),
-                    Forms\Components\TextInput::make('url')->maxLength(255),
-                    Forms\Components\SpatieMediaLibraryFileUpload::make('logo')->collection('brands')
                 ])
             ]);
     }
@@ -55,10 +50,10 @@ class BrandResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('id')->sortable(),
-                Tables\Columns\SpatieMediaLibraryImageColumn::make('logo')->collection('brands')->width(100),
-                Tables\Columns\TextColumn::make('name')->sortable()->searchable(),
-                Tables\Columns\TextColumn::make('slug')->sortable()->searchable()->toggleable(),
-                Tables\Columns\TextColumn::make('url')->toggleable(),
+                Tables\Columns\TextColumn::make('name')->limit(50)->sortable()->searchable(),
+                Tables\Columns\TextColumn::make('slug')->limit(25)->sortable(),
+                Tables\Columns\TextColumn::make('created_at')->dateTime()->sortable()->toggleable(),
+                Tables\Columns\TextColumn::make('updated_at')->dateTime()->sortable()->toggleable(),
             ])
             ->filters([
                 //
@@ -75,16 +70,16 @@ class BrandResource extends Resource
     public static function getRelations(): array
     {
         return [
-            GoodsRelationManager::class,
+            //
         ];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListBrands::route('/'),
-            'create' => Pages\CreateBrand::route('/create'),
-            'edit' => Pages\EditBrand::route('/{record}/edit'),
+            'index' => Pages\ListOptions::route('/'),
+            'create' => Pages\CreateOption::route('/create'),
+            'edit' => Pages\EditOption::route('/{record}/edit'),
         ];
     }
 }
