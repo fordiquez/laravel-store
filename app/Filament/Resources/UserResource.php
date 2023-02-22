@@ -7,6 +7,7 @@ use App\Enums\UserStatus;
 use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\RelationManagers\OrderRecipientsRelationManager;
 use App\Filament\Resources\UserResource\RelationManagers\AddressesRelationManager;
+use App\Filament\Resources\UserResource\RelationManagers\ReviewsRelationManager;
 use App\Filament\Resources\UserResource\RelationManagers\SocialsRelationManager;
 use App\Filament\Resources\UserResource\Widgets\UsersOverview;
 use App\Models\Country;
@@ -186,6 +187,7 @@ class UserResource extends Resource
             AddressesRelationManager::class,
             SocialsRelationManager::class,
             OrderRecipientsRelationManager::class,
+            ReviewsRelationManager::class,
         ];
     }
 

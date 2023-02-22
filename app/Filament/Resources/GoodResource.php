@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Enums\GoodStatus;
 use App\Filament\Resources\GoodResource\Pages;
+use App\Filament\Resources\GoodResource\RelationManagers\ReviewsRelationManager;
 use App\Models\Good;
 use App\Models\Setting;
 use Camya\Filament\Forms\Components\TitleWithSlugInput;
@@ -149,7 +150,7 @@ class GoodResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            ReviewsRelationManager::class,
         ];
     }
 

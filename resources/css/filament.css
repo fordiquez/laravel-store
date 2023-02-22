@@ -1,5 +1,1 @@
 @import '../../vendor/filament/filament/resources/css/app.css';
-
-div.phpdebugbar * {
-    font-size: inherit !important;
-}

@@ -80,6 +80,11 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser, Has
         return $this->hasMany(OrderRecipient::class);
     }
 
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(Review::class);
+    }
+
     public function canAccessFilament(): bool
     {
         return $this->email === $this::ADMIN_EMAIL && $this->hasVerifiedEmail();
