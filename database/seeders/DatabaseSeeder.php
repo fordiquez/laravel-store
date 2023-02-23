@@ -25,8 +25,8 @@ class DatabaseSeeder extends Seeder
             BrandSeeder::class,
             CategorySeeder::class,
             GoodSeeder::class,
-//            PromoCodeSeeder::class,
-//            OrderSeeder::class,
+            PromoCodeSeeder::class,
+            OrderSeeder::class,
         ]);
     }
 }

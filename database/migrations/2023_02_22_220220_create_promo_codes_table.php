@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\PromoCode;
+use App\Enums\PromoCode;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,8 +15,8 @@ return new class extends Migration {
     {
         Schema::create('promo_codes', function (Blueprint $table) {
             $table->id();
-            $table->string('key')->unique();
-            $table->enum('type', PromoCode::$types);
+            $table->string('key', 50)->unique();
+            $table->enum('type', PromoCode::getValues());
             $table->tinyInteger('value');
             $table->string('description');
             $table->integer('used_times')->default(0);

@@ -3,7 +3,6 @@
 namespace App\Filament\Resources\OptionResource\Pages;
 
 use App\Filament\Resources\OptionResource;
-use Filament\Pages\Actions;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreateOption extends CreateRecord

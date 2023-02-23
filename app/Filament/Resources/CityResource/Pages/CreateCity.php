@@ -3,7 +3,6 @@
 namespace App\Filament\Resources\CityResource\Pages;
 
 use App\Filament\Resources\CityResource;
-use Filament\Pages\Actions;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreateCity extends CreateRecord

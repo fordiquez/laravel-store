@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\OrderStatus;
 use App\Models\Order;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -19,7 +20,7 @@ class OrderHistoryFactory extends Factory
     {
         return [
             'order_id' => Order::query()->inRandomOrder()->value('id'),
-            'status' => Order::$statuses[rand(0, count(Order::$statuses) - 1)],
+            'status' => OrderStatus::getRandomValue(),
         ];
     }
 }

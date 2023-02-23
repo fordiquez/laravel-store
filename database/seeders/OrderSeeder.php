@@ -24,7 +24,7 @@ class OrderSeeder extends Seeder
 
         if ($goods->count()) {
             $orders->each(function ($order) use ($goods) {
-                $order->goods()->attach(
+                $order->items()->attach(
                     $goods
                         ->random(rand(1, $goods->count() > 1 ? $goods->count() / 2 : $goods->count()))
                         ->pluck('id')

@@ -2,6 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Enums\OrderDelivery;
+use App\Enums\OrderPayment;
+use App\Enums\OrderStatus;
 use App\Models\Order;
 use App\Models\User;
 use App\Models\UserAddress;
@@ -23,12 +26,12 @@ class OrderFactory extends Factory
             'ref_id' => fake()->unique()->uuid,
             'user_id' => User::query()->inRandomOrder()->value('id'),
             'user_address_id' => UserAddress::query()->inRandomOrder()->value('id'),
-            'delivery_method' => Order::$deliveryMethods[fake()->numberBetween(0, count(Order::$deliveryMethods) - 1)],
-            'payment_method' => Order::$paymentMethods[fake()->numberBetween(0, count(Order::$paymentMethods) - 1)],
+            'delivery_method' => OrderDelivery::getRandomValue(),
+            'payment_method' => OrderPayment::getRandomValue(),
             'goods_cost' => fake()->numberBetween(100, 10000),
             'delivery_cost' => fake()->numberBetween(0, 100),
             'total_cost' => fn(array $attributes) => $attributes['goods_cost'] + $attributes['delivery_cost'],
-            'status' => Order::$statuses[rand(0, count(Order::$statuses) - 1)],
+            'status' => OrderStatus::getRandomValue(),
         ];
     }
 }

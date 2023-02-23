@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -24,29 +25,22 @@ class Order extends Model
         'status',
     ];
 
-    public static array $statuses = [
-        'unpaid',
-        'paid',
-        'under_process',
-        'processing',
-        'finished',
-        'rejected',
-        'canceled',
-        'refunded_request',
-        'refunded',
-        'returned',
-    ];
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 
-    public static array $deliveryMethods = [
-        'Courier',
-        'Self-delivery from Meest',
-        'Self-delivery from Ukrposhta',
-        'Self-delivery from Nova Poshta',
-    ];
+    public function userAddress(): BelongsTo
+    {
+        return $this->belongsTo(UserAddress::class);
+    }
 
-    public static array $paymentMethods = ['cash', 'Stripe', 'Bank Transfer'];
+    public function promoCode(): BelongsTo
+    {
+        return $this->belongsTo(PromoCode::class);
+    }
 
-    public function goods(): BelongsToMany
+    public function items(): BelongsToMany
     {
         return $this->belongsToMany(Good::class, 'order_items', 'order_id', 'good_id');
     }

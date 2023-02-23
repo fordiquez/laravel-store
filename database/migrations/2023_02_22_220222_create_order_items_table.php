@@ -19,6 +19,7 @@ return new class extends Migration {
             $table->foreignIdFor(Order::class)->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignIdFor(Good::class)->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->tinyInteger('quantity')->default(1);
+            $table->unsignedDecimal('unit_price')->nullable();
             $table->timestamps();
         });
     }

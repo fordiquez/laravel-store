@@ -33,7 +33,7 @@ class GoodFactory extends Factory
             'old_price' => fake()->numberBetween(100, 10000),
             'price' => fn(array $attributes) => $attributes['old_price'] - ($attributes['old_price'] * rand(1, 80)) / 100,
             'quantity' => fake()->numberBetween(0, 100),
-            'status' => Arr::random(GoodStatus::getValues()),
+            'status' => GoodStatus::getRandomValue(),
         ];
     }
 }

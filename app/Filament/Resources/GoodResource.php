@@ -24,7 +24,7 @@ class GoodResource extends Resource
 
     protected static ?string $navigationGroup = 'Goods Management';
 
-    protected static ?int $navigationSort = 1;
+    protected static ?int $navigationSort = 2;
 
     public static function form(Form $form): Form
     {

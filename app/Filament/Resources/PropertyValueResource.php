@@ -18,7 +18,7 @@ class PropertyValueResource extends Resource
 
     protected static ?string $navigationGroup = 'Goods Management';
 
-    protected static ?int $navigationSort = 6;
+    protected static ?int $navigationSort = 7;
 
     public static function form(Form $form): Form
     {

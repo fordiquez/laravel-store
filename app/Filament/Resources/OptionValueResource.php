@@ -18,7 +18,7 @@ class OptionValueResource extends Resource
 
     protected static ?string $navigationGroup = 'Goods Management';
 
-    protected static ?int $navigationSort = 8;
+    protected static ?int $navigationSort = 9;
 
     public static function form(Form $form): Form
     {
