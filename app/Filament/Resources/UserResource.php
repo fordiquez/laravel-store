@@ -35,9 +35,6 @@ use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
-use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Filters\Filter;
-use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -143,32 +140,32 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('id')->sortable(),
+                Tables\Columns\TextColumn::make('id')->sortable(),
                 SpatieMediaLibraryImageColumn::make('avatar')->collection('avatars'),
-                TextColumn::make('first_name')->sortable()->searchable(),
-                TextColumn::make('last_name')->sortable()->searchable(),
-                TextColumn::make('email')
+                Tables\Columns\TextColumn::make('first_name')->sortable()->searchable(),
+                Tables\Columns\TextColumn::make('last_name')->sortable()->searchable(),
+                Tables\Columns\TextColumn::make('email')
                     ->tooltip('Copy to clipboard')
                     ->copyable()
                     ->copyMessage('Email address copied')
                     ->copyMessageDuration(1500)
                     ->sortable()
                     ->searchable(),
-                TextColumn::make('email_verified_at')->dateTime()->sortable()->toggleable(),
+                Tables\Columns\TextColumn::make('email_verified_at')->dateTime()->sortable()->toggleable(),
                 Tables\Columns\TextColumn::make('roles.name')->formatStateUsing(fn($state) => Str::of($state)->headline()),
-                TextColumn::make('birth_date')->date()->sortable()->toggleable(),
-                TextColumn::make('gender')->enum(UserGender::getValues())->sortable()->toggleable(),
-                TextColumn::make('status')->enum(UserStatus::getValues())->sortable(),
+                Tables\Columns\TextColumn::make('birth_date')->date()->sortable()->toggleable(),
+                Tables\Columns\TextColumn::make('gender')->enum(UserGender::getValues())->sortable()->toggleable(),
+                Tables\Columns\TextColumn::make('status')->enum(UserStatus::getValues())->sortable(),
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
-                Filter::make('Verified email')
+                Tables\Filters\Filter::make('Verified email')
                     ->query(fn(Builder $query): Builder => $query->where('email_verified_at', '!=', null)),
-                Filter::make('Unverified email')
+                Tables\Filters\Filter::make('Unverified email')
                     ->query(fn(Builder $query): Builder => $query->where('email_verified_at', null)),
                 Tables\Filters\SelectFilter::make('roles')->relationship('roles', 'name'),
-                SelectFilter::make('gender')->options(UserGender::asSelectArray()),
-                SelectFilter::make('status')->options(UserStatus::asSelectArray()),
+                Tables\Filters\SelectFilter::make('gender')->options(UserGender::asSelectArray()),
+                Tables\Filters\SelectFilter::make('status')->options(UserStatus::asSelectArray()),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

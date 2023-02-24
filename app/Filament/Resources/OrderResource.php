@@ -61,10 +61,26 @@ class OrderResource extends Resource
                         ->default(OrderStatus::UNPAID),
                 ])->columns(),
                 Forms\Components\Card::make()->schema([
-                    Forms\Components\Repeater::make('items')
-                        ->relationship('items')
+                    Forms\Components\Grid::make()->schema([
+                        Forms\Components\Placeholder::make('Goods cost')
+                            ->label('Goods Cost')
+                            ->content(fn (callable $get) => collect($get('orderItems'))->reduce(fn (?float $carry, array $item) => floatval($item['unit_price'] * intval($item['quantity'])))),
+                        Forms\Components\Placeholder::make('Goods cost')
+                            ->label('Goods Cost')
+                            ->content(fn (callable $get) => collect($get('orderItems'))->pluck('unit_price')->count())
+                    ]),
+                ]),
+                Forms\Components\Card::make()->schema([
+                    Forms\Components\Repeater::make('orderItems')
+                        ->relationship()
+                        ->mutateRelationshipDataBeforeFillUsing(function (array $data) {
+                            $data['price'] = number_format($data['unit_price'] * $data['quantity'], 2);
+
+                            return $data;
+                        })
                         ->schema([
-                            Forms\Components\Select::make('good')
+                            Forms\Components\Select::make('good_id')
+                                ->label('Good')
                                 ->required()
                                 ->reactive()
                                 ->options(Good::pluck('title', 'id'))
@@ -73,21 +89,30 @@ class OrderResource extends Resource
                                     if ($good) {
                                         $set('unit_price', $good->price);
                                         $set('price', number_format($good->price * intval($get('quantity')), 2));
+                                        $goodsCost = 0;
+                                        foreach ($get('../../orderItems') as $item) {
+                                            $goodsCost += floatval($item['unit_price']) * intval($item['quantity']);
+                                        }
+                                        $set('../../goods_cost', $goodsCost);
+                                        $set('../../total_cost', floatval($get('../../delivery_cost')) + $goodsCost);
                                     }
                                 })
-                                ->columnSpan(6),
+                                ->columnSpan(4),
                             Forms\Components\TextInput::make('quantity')
                                 ->numeric()
                                 ->default(1)
-                                ->disabled(fn(callable $get) => !$get('good'))
+                                ->disabled(fn(callable $get) => !$get('good_id'))
                                 ->reactive()
                                 ->afterStateUpdated(fn($state, callable $get, callable $set) => $set('price', number_format($get('unit_price') * intval($state), 2)))
                                 ->columnSpan(2),
-                            Forms\Components\Hidden::make('unit_price'),
-                            Forms\Components\TextInput::make('price')
+                            Forms\Components\TextInput::make('unit_price')
                                 ->disabled()
                                 ->postfix(Setting::where('key', 'currency')->value('value'))
+                                ->columnSpan(2),
+                            Forms\Components\TextInput::make('price')
+                                ->disabled()
                                 ->dehydrated(false)
+                                ->postfix(Setting::where('key', 'currency')->value('value'))
                                 ->columnSpan(2)
                         ])->defaultItems(1)->columnSpanFull()->columns([
                             'md' => 10

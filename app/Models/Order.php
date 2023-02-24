@@ -40,9 +40,9 @@ class Order extends Model
         return $this->belongsTo(PromoCode::class);
     }
 
-    public function items(): BelongsToMany
+    public function orderItems(): HasMany
     {
-        return $this->belongsToMany(Good::class, 'order_items', 'order_id', 'good_id');
+        return $this->hasMany(OrderItem::class);
     }
 
     public function orderHistories(): HasMany
