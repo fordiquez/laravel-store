@@ -25,6 +25,7 @@
         "opcodesio/log-viewer": "^2.0",
         "phpsa/filament-password-reveal": "^1.1",
         "predis/predis": "^2.1",
+        "pxlrbt/filament-spotlight": "^0.3.6",
         "tightenco/ziggy": "^1.0",
         "ysfkaya/filament-phone-input": "^1.2"
     },

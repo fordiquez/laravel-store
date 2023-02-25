@@ -86,6 +86,11 @@ class CityResource extends Resource
             ]);
     }
 
+    protected static function getNavigationBadge(): ?string
+    {
+        return static::$model::count();
+    }
+
     public static function getRelations(): array
     {
         return [

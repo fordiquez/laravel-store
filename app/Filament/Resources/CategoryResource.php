@@ -22,6 +22,8 @@ class CategoryResource extends Resource
 
     protected static ?int $navigationSort = 4;
 
+    protected static ?string $recordTitleAttribute = 'title';
+
     public static function form(Form $form): Form
     {
         return $form
@@ -82,6 +84,11 @@ class CategoryResource extends Resource
                 Tables\Actions\ForceDeleteBulkAction::make(),
                 Tables\Actions\RestoreBulkAction::make(),
             ]);
+    }
+
+    protected static function getNavigationBadge(): ?string
+    {
+        return static::$model::count();
     }
 
     public static function getRelations(): array

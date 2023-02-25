@@ -18,7 +18,7 @@ return new class extends Migration {
         Schema::create('option_values', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Option::class)->constrained()->cascadeOnUpdate()->cascadeOnDelete();
-            $table->string('value');
+            $table->string('value', 100);
             $table->timestamps();
         });
 

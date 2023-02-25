@@ -38,6 +38,11 @@ class PropertyResource extends Resource
                             'ignoreRecord' => true
                         ]
                     ),
+                ]),
+                Forms\Components\Card::make()->schema([
+                    Forms\Components\Repeater::make('propertyValues')->relationship()->schema([
+                        Forms\Components\TextInput::make('value')->required()->maxLength(100)
+                    ])
                 ])
             ]);
     }
@@ -65,6 +70,11 @@ class PropertyResource extends Resource
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
+    }
+
+    protected static function getNavigationBadge(): ?string
+    {
+        return static::$model::count();
     }
 
     public static function getRelations(): array

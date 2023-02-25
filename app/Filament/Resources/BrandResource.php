@@ -22,6 +22,8 @@ class BrandResource extends Resource
 
     protected static ?int $navigationSort = 3;
 
+    protected static ?string $recordTitleAttribute = 'name';
+
     public static function form(Form $form): Form
     {
         return $form
@@ -70,6 +72,11 @@ class BrandResource extends Resource
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
+    }
+
+    protected static function getNavigationBadge(): ?string
+    {
+        return static::$model::count();
     }
 
     public static function getRelations(): array

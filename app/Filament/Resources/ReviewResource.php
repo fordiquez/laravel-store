@@ -101,6 +101,11 @@ class ReviewResource extends Resource
             ]);
     }
 
+    protected static function getNavigationBadge(): ?string
+    {
+        return static::$model::count();
+    }
+
     public static function ratingState(int $state): string
     {
         return match ($state) {

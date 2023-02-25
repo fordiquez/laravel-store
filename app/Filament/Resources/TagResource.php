@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\TagResource\Pages;
 use App\Models\Tag;
+use Camya\Filament\Forms\Components\TitleWithSlugInput;
 use Filament\Forms;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
@@ -24,12 +25,20 @@ class TagResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
-                    ->required()
-                    ->maxLength(50),
-                Forms\Components\TextInput::make('slug')
-                    ->required()
-                    ->maxLength(50),
+                Forms\Components\Card::make()->schema([
+                    TitleWithSlugInput::make(
+                        fieldTitle: 'name',
+                        fieldSlug: 'slug',
+                        urlHostVisible: false,
+                        titleLabel: 'Name',
+                        slugLabel: 'Slug',
+                        slugRuleUniqueParameters: [
+                            'table' => 'tags',
+                            'column' => 'slug',
+                            'ignoreRecord' => true
+                        ]
+                    )
+                ])
             ]);
     }
 
@@ -59,6 +68,11 @@ class TagResource extends Resource
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
+    }
+
+    protected static function getNavigationBadge(): ?string
+    {
+        return static::$model::count();
     }
 
     public static function getRelations(): array
