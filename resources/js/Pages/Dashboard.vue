@@ -1,6 +1,6 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head } from '@inertiajs/vue3';
+import { Head, Link, usePage } from '@inertiajs/vue3';
 </script>
 
 <template>
@@ -12,10 +12,134 @@ import { Head } from '@inertiajs/vue3';
         </template>
 
         <div class="py-12">
-            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
+            <div class="mx-auto max-w-9xl sm:px-6 lg:px-8">
                 <div class="overflow-hidden bg-white shadow-sm dark:bg-gray-800 sm:rounded-lg">
-                    <div class="p-6 text-gray-900 dark:text-gray-100">You're logged in!</div>
+                    <div
+                        class="p-6 text-center text-xl font-semibold uppercase tracking-wider text-gray-900 dark:text-gray-100"
+                    >
+                        Find exactly what you need!
+                    </div>
+                    <div class="flex flex-wrap">
+                        <div
+                            class="flex flex-col p-4 sm:w-1/2 lg:w-1/3 xl:w-1/4"
+                            v-for="category in usePage().props.categories"
+                            :key="category.id"
+                        >
+                            <div class="group relative flex flex-col text-base sm:text-sm" :title="category.title">
+                                <div
+                                    v-if="category.thumbnail"
+                                    class="aspect-w-1 aspect-h-1 mb-4 overflow-hidden rounded-lg group-hover:opacity-75"
+                                >
+                                    <img
+                                        :alt="category.title"
+                                        :src="category.thumbnail"
+                                        class="object-cover object-center"
+                                    />
+                                </div>
+                                <Link
+                                    class="text-center text-base font-medium text-gray-600 hover:text-gray-900 focus:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100 dark:focus:text-gray-100"
+                                    :href="route('index.category', category)"
+                                >
+                                    <span class="absolute inset-0 z-10" />
+                                    <h2 class="text-center text-lg font-medium text-gray-800 dark:text-gray-200">
+                                        {{ category.title }}
+                                    </h2>
+                                </Link>
+                                <p
+                                    class="mt-1 text-center text-sm text-gray-500 hover:text-gray-900 focus:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 dark:focus:text-gray-100"
+                                >
+                                    Shop now
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+                <section class="text-gray-400 bg-gray-900 body-font">
+                    <div class="container px-5 py-24 mx-auto">
+                        <div class="flex flex-wrap -m-4">
+                            <div class="lg:w-1/4 md:w-1/2 p-4 w-full">
+                                <a class="block relative h-48 rounded overflow-hidden">
+                                    <img alt="ecommerce" class="object-cover object-center w-full h-full block" src="https://dummyimage.com/420x260">
+                                </a>
+                                <div class="mt-4">
+                                    <h3 class="text-gray-500 text-xs tracking-widest title-font mb-1">CATEGORY</h3>
+                                    <h2 class="text-white title-font text-lg font-medium">The Catalyzer</h2>
+                                    <p class="mt-1">$16.00</p>
+                                </div>
+                            </div>
+                            <div class="lg:w-1/4 md:w-1/2 p-4 w-full">
+                                <a class="block relative h-48 rounded overflow-hidden">
+                                    <img alt="ecommerce" class="object-cover object-center w-full h-full block" src="https://dummyimage.com/421x261">
+                                </a>
+                                <div class="mt-4">
+                                    <h3 class="text-gray-500 text-xs tracking-widest title-font mb-1">CATEGORY</h3>
+                                    <h2 class="text-white title-font text-lg font-medium">Shooting Stars</h2>
+                                    <p class="mt-1">$21.15</p>
+                                </div>
+                            </div>
+                            <div class="lg:w-1/4 md:w-1/2 p-4 w-full">
+                                <a class="block relative h-48 rounded overflow-hidden">
+                                    <img alt="ecommerce" class="object-cover object-center w-full h-full block" src="https://dummyimage.com/422x262">
+                                </a>
+                                <div class="mt-4">
+                                    <h3 class="text-gray-500 text-xs tracking-widest title-font mb-1">CATEGORY</h3>
+                                    <h2 class="text-white title-font text-lg font-medium">Neptune</h2>
+                                    <p class="mt-1">$12.00</p>
+                                </div>
+                            </div>
+                            <div class="lg:w-1/4 md:w-1/2 p-4 w-full">
+                                <a class="block relative h-48 rounded overflow-hidden">
+                                    <img alt="ecommerce" class="object-cover object-center w-full h-full block" src="https://dummyimage.com/423x263">
+                                </a>
+                                <div class="mt-4">
+                                    <h3 class="text-gray-500 text-xs tracking-widest title-font mb-1">CATEGORY</h3>
+                                    <h2 class="text-white title-font text-lg font-medium">The 400 Blows</h2>
+                                    <p class="mt-1">$18.40</p>
+                                </div>
+                            </div>
+                            <div class="lg:w-1/4 md:w-1/2 p-4 w-full">
+                                <a class="block relative h-48 rounded overflow-hidden">
+                                    <img alt="ecommerce" class="object-cover object-center w-full h-full block" src="https://dummyimage.com/424x264">
+                                </a>
+                                <div class="mt-4">
+                                    <h3 class="text-gray-500 text-xs tracking-widest title-font mb-1">CATEGORY</h3>
+                                    <h2 class="text-white title-font text-lg font-medium">The Catalyzer</h2>
+                                    <p class="mt-1">$16.00</p>
+                                </div>
+                            </div>
+                            <div class="lg:w-1/4 md:w-1/2 p-4 w-full">
+                                <a class="block relative h-48 rounded overflow-hidden">
+                                    <img alt="ecommerce" class="object-cover object-center w-full h-full block" src="https://dummyimage.com/425x265">
+                                </a>
+                                <div class="mt-4">
+                                    <h3 class="text-gray-500 text-xs tracking-widest title-font mb-1">CATEGORY</h3>
+                                    <h2 class="text-white title-font text-lg font-medium">Shooting Stars</h2>
+                                    <p class="mt-1">$21.15</p>
+                                </div>
+                            </div>
+                            <div class="lg:w-1/4 md:w-1/2 p-4 w-full">
+                                <a class="block relative h-48 rounded overflow-hidden">
+                                    <img alt="ecommerce" class="object-cover object-center w-full h-full block" src="https://dummyimage.com/427x267">
+                                </a>
+                                <div class="mt-4">
+                                    <h3 class="text-gray-500 text-xs tracking-widest title-font mb-1">CATEGORY</h3>
+                                    <h2 class="text-white title-font text-lg font-medium">Neptune</h2>
+                                    <p class="mt-1">$12.00</p>
+                                </div>
+                            </div>
+                            <div class="lg:w-1/4 md:w-1/2 p-4 w-full">
+                                <a class="block relative h-48 rounded overflow-hidden">
+                                    <img alt="ecommerce" class="object-cover object-center w-full h-full block" src="https://dummyimage.com/428x268">
+                                </a>
+                                <div class="mt-4">
+                                    <h3 class="text-gray-500 text-xs tracking-widest title-font mb-1">CATEGORY</h3>
+                                    <h2 class="text-white title-font text-lg font-medium">The 400 Blows</h2>
+                                    <p class="mt-1">$18.40</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
             </div>
         </div>
     </AuthenticatedLayout>

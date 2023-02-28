@@ -26,7 +26,7 @@ const onCategory = (category) => (hoveredCategoryId.value = category.id);
                             popover
                                 ? 'border-indigo-400 text-gray-900 focus:border-indigo-700 dark:border-indigo-600 dark:text-gray-100'
                                 : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 focus:border-gray-300 focus:text-gray-700 dark:text-gray-400 dark:hover:border-gray-700 dark:hover:text-gray-300 dark:focus:border-gray-700 dark:focus:text-gray-300',
-                            'relative z-10 inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium leading-5 transition duration-150 ease-in-out focus:outline-none',
+                            'relative inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium leading-5 transition duration-150 ease-in-out focus:outline-none',
                         ]"
                     >
                         Categories
@@ -41,10 +41,10 @@ const onCategory = (category) => (hoveredCategoryId.value = category.id);
                     leave-from-class="opacity-100"
                     leave-to-class="opacity-0"
                 >
-                    <PopoverPanel class="absolute inset-x-0 top-full z-10 text-sm text-gray-500">
+                    <PopoverPanel class="absolute inset-x-0 top-full z-20 text-sm text-gray-500">
                         <div aria-hidden="true" class="absolute inset-0 top-1/2 bg-white shadow" />
                         <div class="relative top-[1px] bg-white dark:bg-gray-800">
-                            <div class="mx-auto max-w-7xl px-4">
+                            <div class="mx-auto max-w-9xl px-4">
                                 <div class="flex justify-between py-8">
                                     <div class="flex basis-1/4 xl:basis-1/5">
                                         <ul class="flex flex-col space-y-1.5">
@@ -62,7 +62,7 @@ const onCategory = (category) => (hoveredCategoryId.value = category.id);
                                             >
                                                 <Link
                                                     class="flex rounded-md p-1.5 font-semibold focus:outline-none focus:ring-2 focus:ring-gray-200 dark:focus:ring-gray-700"
-                                                    href="#"
+                                                    :href="route('index.category', category)"
                                                 >
                                                     {{ category.title }}
                                                 </Link>
@@ -103,12 +103,12 @@ const onCategory = (category) => (hoveredCategoryId.value = category.id);
                                     <div class="hidden basis-1/5 xl:block">
                                         <div class="group relative text-base sm:text-sm">
                                             <div
-                                                v-if="hoveredCategory.image"
+                                                v-if="hoveredCategory.thumbnail"
                                                 class="aspect-w-1 aspect-h-1 mb-2 overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75"
                                             >
                                                 <img
                                                     :alt="hoveredCategory.title"
-                                                    :src="hoveredCategory.image"
+                                                    :src="hoveredCategory.thumbnail"
                                                     :title="hoveredCategory.title"
                                                     class="object-cover object-center"
                                                 />
@@ -117,7 +117,7 @@ const onCategory = (category) => (hoveredCategoryId.value = category.id);
                                                 class="text-base font-medium text-gray-600 hover:text-gray-900 focus:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100 dark:focus:text-gray-100"
                                                 href="#"
                                             >
-                                                <span class="absolute inset-0 z-10" />
+                                                <span class="absolute inset-0 z-20" />
                                                 {{ hoveredCategory.title }}
                                             </Link>
                                             <p

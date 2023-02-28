@@ -15,7 +15,7 @@ class Category extends Model implements HasMedia
 {
     use HasFactory, SoftDeletes, InteractsWithMedia;
 
-    protected $fillable = ['title', 'slug', 'parent_id', 'manual_url'];
+    protected $fillable = ['title', 'slug', 'parent_id', 'is_active', 'is_navigational', 'manual_url'];
 
     protected $appends = ['thumbnail'];
 
@@ -49,7 +49,18 @@ class Category extends Model implements HasMedia
                 $this->loopCategories($category->subcategories);
             }
         }
+
         return $categories;
+    }
+
+    public function breadcrumbs(Category $category, array $breadcrumbs = []): array
+    {
+        if ($category->parent) {
+            array_unshift($breadcrumbs, $category->parent);
+            return $this->breadcrumbs($category->parent, $breadcrumbs);
+        }
+
+        return $breadcrumbs;
     }
 
     public function getRouteKeyName(): string

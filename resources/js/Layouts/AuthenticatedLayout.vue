@@ -1,8 +1,8 @@
 <script setup>
-import { computed, onMounted, reactive, ref } from 'vue';
-import { Link, usePage } from '@inertiajs/vue3';
-import { useDark, useToggle } from '@vueuse/core';
-import { initTooltips } from 'flowbite';
+import {computed, onMounted, reactive, ref, defineProps } from 'vue';
+import {Link, usePage} from '@inertiajs/vue3';
+import {useDark, useToggle} from '@vueuse/core';
+import {initTooltips} from 'flowbite';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
@@ -14,7 +14,11 @@ import Categories from '@/Components/Categories.vue';
 const isDark = useDark();
 const toggleDark = useToggle(isDark);
 
-const { user, categories } = reactive(usePage().props);
+defineProps({
+    category: Object,
+})
+
+const {user, categories, breadcrumbs } = reactive(usePage().props);
 
 const showingNavigationDropdown = ref(false);
 const showingResponsiveCategories = ref(false);
@@ -23,7 +27,7 @@ onMounted(() => {
     initTooltips();
 });
 
-const fullName = computed(() => `${user.first_name} ${user.last_name}`);
+const fullName = computed(() => (user ? `${user.first_name} ${user.last_name}` : null));
 
 const closeResponsiveCategories = () => (showingResponsiveCategories.value = false);
 </script>
@@ -32,12 +36,12 @@ const closeResponsiveCategories = () => (showingResponsiveCategories.value = fal
     <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
         <nav class="border-b border-gray-100 bg-white dark:border-gray-700 dark:bg-gray-800">
             <!-- Primary Navigation Menu -->
-            <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div class="mx-auto max-w-9xl px-4 sm:px-6 lg:px-8">
                 <div class="relative flex h-16 justify-between">
                     <div class="flex">
                         <!-- Logo -->
                         <div class="flex shrink-0 items-center">
-                            <Link :href="route('dashboard')">
+                            <Link :href="route('index.dashboard')">
                                 <ApplicationLogo
                                     class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200"
                                 />
@@ -46,10 +50,10 @@ const closeResponsiveCategories = () => (showingResponsiveCategories.value = fal
 
                         <!-- Navigation Links -->
                         <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                            <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
+                            <NavLink :href="route('index.dashboard')" :active="route().current('index.dashboard')">
                                 Dashboard
                             </NavLink>
-                            <categories :categories="categories" />
+                            <categories :categories="categories"/>
                         </div>
                     </div>
 
@@ -96,7 +100,7 @@ const closeResponsiveCategories = () => (showingResponsiveCategories.value = fal
                             </svg>
                         </button>
                         <!-- Settings Dropdown -->
-                        <div class="relative ml-3">
+                        <div v-if="user" class="relative ml-3">
                             <Dropdown align="right" width="48">
                                 <template #trigger>
                                     <span class="inline-flex rounded-md">
@@ -130,8 +134,22 @@ const closeResponsiveCategories = () => (showingResponsiveCategories.value = fal
                                 </template>
                             </Dropdown>
                         </div>
-                        <div class="ml-2 h-9 w-9">
-                            <img :src="user.avatar" :alt="fullName" :title="fullName" class="rounded-full" />
+                        <div v-else>
+                            <Link
+                                :href="route('register')"
+                                class="mx-2 inline-flex items-center justify-center rounded-lg bg-gray-50 px-3 py-2.5 text-sm font-semibold uppercase tracking-wider text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                            >
+                                Sign Up
+                            </Link>
+                            <Link
+                                :href="route('login')"
+                                class="rounded-lg bg-gradient-to-br from-purple-600 to-blue-500 px-3 py-2.5 text-center text-sm font-medium font-semibold uppercase tracking-wider text-white hover:bg-gradient-to-bl focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800"
+                            >
+                                Log In
+                            </Link>
+                        </div>
+                        <div v-if="user?.avatar" class="ml-2 h-9 w-9">
+                            <img :src="user.avatar" :alt="fullName" :title="fullName" class="rounded-full"/>
                         </div>
                     </div>
 
@@ -171,7 +189,7 @@ const closeResponsiveCategories = () => (showingResponsiveCategories.value = fal
             <!-- Responsive Navigation Menu -->
             <div :class="{ block: showingNavigationDropdown, hidden: !showingNavigationDropdown }" class="sm:hidden">
                 <div class="space-y-1 pt-2 pb-3">
-                    <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
+                    <ResponsiveNavLink :href="route('index.dashboard')" :active="route().current('index.dashboard')">
                         Dashboard
                     </ResponsiveNavLink>
                     <button
@@ -188,7 +206,7 @@ const closeResponsiveCategories = () => (showingResponsiveCategories.value = fal
                 </div>
 
                 <!-- Responsive Settings Options -->
-                <div class="border-t border-gray-200 pt-4 pb-1 dark:border-gray-600">
+                <div v-if="user" class="border-t border-gray-200 pt-4 pb-1 dark:border-gray-600">
                     <div class="px-4">
                         <div class="text-base font-medium text-gray-800 dark:text-gray-200">
                             {{ fullName }}
@@ -206,16 +224,48 @@ const closeResponsiveCategories = () => (showingResponsiveCategories.value = fal
             </div>
         </nav>
 
+        <nav aria-label="Breadcrumb" v-if="category">
+            <ol role="list"
+                class="mx-auto flex max-w-2xl items-center space-x-2 px-4 sm:px-6 lg:max-w-9xl lg:px-8 mt-6">
+                <li class="flex items-center">
+                    <Link :href="route('index.dashboard')" class="mr-2">
+                        <font-awesome-icon icon="fa-solid fa-house-chimney"
+                                           class="w-4 h-4 text-gray-900 dark:text-gray-200"/>
+                    </Link>
+                    <svg width="16" height="20" viewBox="0 0 16 20" fill="currentColor" aria-hidden="true"
+                         class="text-gray-400 dark:text-gray-300">
+                        <path d="M5.697 4.34L8.98 16.532h1.327L7.025 4.341H5.697z"/>
+                    </svg>
+                </li>
+                <li v-for="breadcrumb in breadcrumbs" :key="breadcrumb.id">
+                    <div class="flex items-center">
+                        <Link :href="breadcrumb.slug"
+                              class="mr-2 text-sm font-medium text-gray-900 hover:text-gray-600 dark:text-gray-200 dark:hover:text-gray-300">
+                            {{ breadcrumb.title }}
+                        </Link>
+                        <svg width="16" height="20" viewBox="0 0 16 20" fill="currentColor" aria-hidden="true"
+                             class="text-gray-400 dark:text-gray-300">
+                            <path d="M5.697 4.34L8.98 16.532h1.327L7.025 4.341H5.697z"/>
+                        </svg>
+                    </div>
+                </li>
+                <li class="text-sm">
+                    <a aria-current="page"
+                       class="font-medium text-gray-500 dark:text-gray-400">{{
+                            category.title
+                        }}</a>
+                </li>
+            </ol>
+        </nav>
+
         <!-- Page Heading -->
-        <header class="bg-white shadow dark:bg-gray-800" v-if="$slots.header">
-            <div class="mx-auto max-w-7xl py-6 px-4 sm:px-6 lg:px-8">
-                <slot name="header" />
-            </div>
-        </header>
+        <div class="mx-auto max-w-9xl pt-6 px-4 sm:px-6 lg:px-8" v-if="$slots.header">
+            <slot name="header"/>
+        </div>
 
         <!-- Page Content -->
         <main>
-            <slot />
+            <slot/>
         </main>
 
         <responsive-categories

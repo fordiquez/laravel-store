@@ -33,29 +33,6 @@ class CategorySeeder extends Seeder
             ],
         ]);
 
-        $tablets = CategoryFactory::new()->create([
-            'title' => 'Tablets',
-        ]);
-
-        CategoryFactory::new()->createMany([
-            [
-                'title' => 'Apple iPad',
-                'parent_id' => $tablets->id,
-            ],
-            [
-                'title' => 'Samsung',
-                'parent_id' => $tablets->id,
-            ],
-            [
-                'title' => 'Lenovo',
-                'parent_id' => $tablets->id,
-            ],
-            [
-                'title' => 'Xiaomi',
-                'parent_id' => $tablets->id,
-            ],
-        ]);
-
         $computerComponents = CategoryFactory::new()->create([
             'title' => 'Computer components',
             'parent_id' => $laptopsAndComputers->id,
@@ -156,18 +133,154 @@ class CategorySeeder extends Seeder
             ],
         ]);
 
+        $electronicAccessories = CategoryFactory::new()->create([
+            'title' => 'Accessories for electronics',
+            'parent_id' => $laptopsAndComputers->id
+        ]);
+
+        CategoryFactory::new()->createMany([
+            [
+                'title' => 'USB flash drives',
+                'parent_id' => $electronicAccessories->id,
+            ],
+            [
+                'title' => 'Hubs and card readers',
+                'parent_id' => $electronicAccessories->id,
+            ],
+            [
+                'title' => 'Accessories for PCs and laptops',
+                'parent_id' => $electronicAccessories->id,
+            ],
+            [
+                'title' => 'Components for laptops',
+                'parent_id' => $electronicAccessories->id,
+            ],
+            [
+                'title' => 'Cases and keyboards for tablets',
+                'parent_id' => $electronicAccessories->id,
+            ],
+            [
+                'title' => 'Bags, backpacks and laptop cases',
+                'parent_id' => $electronicAccessories->id,
+            ],
+        ]);
+
+        $electronics = CategoryFactory::new()->create([
+            'title' => 'Smartphones, TV and Electronics'
+        ]);
+
+        CategoryFactory::new()->createMany([
+            [
+                'title' => 'Mobile phones',
+                'parent_id' => $electronics->id
+            ],
+            [
+                'title' => 'Televisions',
+                'parent_id' => $electronics->id
+            ],
+            [
+                'title' => 'Tablets',
+                'parent_id' => $electronics->id
+            ],
+            [
+                'title' => 'Power banks and charging stations',
+                'parent_id' => $electronics->id
+            ],
+        ]);
+
+        $headPhonesAndAccessories = CategoryFactory::new()->create([
+            'title' => 'Headphones and accessories',
+            'parent_id' => $electronics->id
+        ]);
+
+        CategoryFactory::new()->createMany([
+            [
+                'title' => 'Headphone',
+                'parent_id' => $headPhonesAndAccessories->id,
+            ],
+            [
+                'title' => 'Accessories for headphones',
+                'parent_id' => $headPhonesAndAccessories->id,
+            ],
+        ]);
+
+        $wearableGadgets = CategoryFactory::new()->create([
+            'title' => 'Wearable gadgets',
+            'parent_id' => $electronics->id
+        ]);
+
+        CategoryFactory::new()->createMany([
+            [
+                'title' => 'Smart watches',
+                'parent_id' => $wearableGadgets->id,
+            ],
+            [
+                'title' => 'Fitness bracelets',
+                'parent_id' => $wearableGadgets->id,
+            ],
+            [
+                'title' => 'Virtual reality glasses',
+                'parent_id' => $wearableGadgets->id,
+            ],
+        ]);
+
+        $audioEquipment = CategoryFactory::new()->create([
+            'title' => 'Audio equipment',
+            'parent_id' => $electronics->id
+        ]);
+
+        CategoryFactory::new()->createMany([
+            [
+                'title' => 'Portable speakers',
+                'parent_id' => $audioEquipment->id,
+            ],
+            [
+                'title' => 'Music centers',
+                'parent_id' => $audioEquipment->id,
+            ],
+            [
+                'title' => 'Computer speakers',
+                'parent_id' => $audioEquipment->id,
+            ],
+            [
+                'title' => 'Home cinemas',
+                'parent_id' => $audioEquipment->id,
+            ],
+        ]);
+
+        $mobilePhonesAccessories = CategoryFactory::new()->create([
+            'title' => 'Accessories for mobile phones',
+            'parent_id' => $electronics->id
+        ]);
+
         CategoryFactory::new()->createMany([
             [
                 'title' => 'Cables and adapters',
-                'parent_id' => $laptopsAndComputers->id,
+                'parent_id' => $mobilePhonesAccessories->id
             ],
             [
-                'title' => 'Headphones and accessories',
-                'parent_id' => $laptopsAndComputers->id,
+                'title' => 'Phone cases',
+                'parent_id' => $mobilePhonesAccessories->id
             ],
             [
-                'title' => 'Accessories for electronics',
-                'parent_id' => $laptopsAndComputers->id,
+                'title' => 'Protective films and glass',
+                'parent_id' => $mobilePhonesAccessories->id
+            ],
+            [
+                'title' => 'Spare parts for phones',
+                'parent_id' => $mobilePhonesAccessories->id
+            ],
+            [
+                'title' => 'Phone chargers',
+                'parent_id' => $mobilePhonesAccessories->id
+            ],
+            [
+                'title' => 'Batteries for phones',
+                'parent_id' => $mobilePhonesAccessories->id
+            ],
+            [
+                'title' => 'Phone holders',
+                'parent_id' => $mobilePhonesAccessories->id
             ],
         ]);
 

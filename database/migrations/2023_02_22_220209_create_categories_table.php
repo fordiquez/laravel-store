@@ -18,6 +18,7 @@ return new class extends Migration {
             $table->string('slug', 100)->unique();
             $table->string('description')->nullable();
             $table->boolean('is_active')->default(true);
+            $table->boolean('is_navigational')->default(true);
             $table->foreignId('parent_id')->nullable()->constrained('categories')->cascadeOnUpdate()->cascadeOnDelete();
             $table->string('manual_url')->nullable();
             $table->timestamps();

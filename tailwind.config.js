@@ -14,6 +14,15 @@ module.exports = {
 
     darkMode: 'class',
     theme: {
+        letterSpacing: {
+            tightest: '-.075em',
+            tighter: '-.05em',
+            tight: '-.025em',
+            normal: '0',
+            wide: '.05em',
+            wider: '.15em',
+            widest: '.25em',
+        },
         extend: {
             fontFamily: {
                 sans: ['Nunito', ...defaultTheme.fontFamily.sans],
@@ -33,6 +42,10 @@ module.exports = {
             height: {
                 '1/2': '0.125rem',
                 '2/3': '0.1875rem',
+            },
+            maxWidth: {
+                '8xl': '1440px',
+                '9xl': '1600px',
             },
             maxHeight: {
                 16: '16rem',

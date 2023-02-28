@@ -47,6 +47,7 @@ class CategoryResource extends Resource
                     ),
                     Forms\Components\TextInput::make('description')->maxLength(255),
                     Forms\Components\Toggle::make('is_active')->required(),
+                    Forms\Components\Toggle::make('is_navigational')->required(),
                     Forms\Components\TextInput::make('manual_url')->url()->maxLength(255),
                     Forms\Components\SpatieMediaLibraryFileUpload::make('thumbnail')->collection('categories')
                 ])
@@ -66,6 +67,7 @@ class CategoryResource extends Resource
                 Tables\Columns\TextColumn::make('title')->sortable()->searchable(),
                 Tables\Columns\TextColumn::make('slug')->toggleable(),
                 Tables\Columns\IconColumn::make('is_active')->boolean(),
+                Tables\Columns\IconColumn::make('is_navigational')->boolean(),
                 Tables\Columns\TextColumn::make('manual_url')->toggleable(),
             ])
             ->filters([
@@ -73,7 +75,9 @@ class CategoryResource extends Resource
                 Tables\Filters\SelectFilter::make('parent')
                     ->multiple()
                     ->attribute('parent_id')
-                    ->options(fn () => Category::whereHas('subcategories')->get()->pluck('title', 'id')->toArray())
+                    ->options(fn () => Category::whereHas('subcategories')->get()->pluck('title', 'id')->toArray()),
+                Tables\Filters\TernaryFilter::make('is_active'),
+                Tables\Filters\TernaryFilter::make('is_navigational'),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
