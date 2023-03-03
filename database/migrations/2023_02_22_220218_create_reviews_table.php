@@ -18,6 +18,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignIdFor(User::class)->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignIdFor(Good::class)->constrained()->cascadeOnUpdate()->cascadeOnDelete();
+            $table->boolean('is_buyer')->default(true);
             $table->text('content');
             $table->tinyText('advantages');
             $table->tinyText('disadvantages');

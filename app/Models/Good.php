@@ -33,6 +33,8 @@ class Good extends Model implements HasMedia
 
     protected $appends = ['preview'];
 
+    protected $with = ['category'];
+
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
@@ -66,5 +68,10 @@ class Good extends Model implements HasMedia
     protected function preview(): Attribute
     {
         return Attribute::get(fn () => $this->hasMedia('goods') ? $this->getFirstMediaUrl('goods') : url('static/not-found.svg'));
+    }
+
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
     }
 }

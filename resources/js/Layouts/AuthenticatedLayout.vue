@@ -1,8 +1,8 @@
 <script setup>
-import {computed, onMounted, reactive, ref, defineProps } from 'vue';
-import {Link, usePage} from '@inertiajs/vue3';
-import {useDark, useToggle} from '@vueuse/core';
-import {initTooltips} from 'flowbite';
+import { computed, onMounted, reactive, ref, defineProps } from 'vue';
+import { Link, usePage } from '@inertiajs/vue3';
+import { useDark, useToggle } from '@vueuse/core';
+import { initTooltips } from 'flowbite';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
@@ -11,14 +11,14 @@ import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import ResponsiveCategories from '@/Components/ResponsiveCategories.vue';
 import Categories from '@/Components/Categories.vue';
 
+defineProps({
+    category: Object,
+});
+
 const isDark = useDark();
 const toggleDark = useToggle(isDark);
 
-defineProps({
-    category: Object,
-})
-
-const {user, categories, breadcrumbs } = reactive(usePage().props);
+const { user, categories, breadcrumbs, title } = reactive(usePage().props);
 
 const showingNavigationDropdown = ref(false);
 const showingResponsiveCategories = ref(false);
@@ -34,7 +34,7 @@ const closeResponsiveCategories = () => (showingResponsiveCategories.value = fal
 
 <template>
     <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
-        <nav class="border-b border-gray-100 bg-white dark:border-gray-700 dark:bg-gray-800">
+        <header class="border-b border-gray-100 bg-white dark:border-gray-700 dark:bg-gray-800">
             <!-- Primary Navigation Menu -->
             <div class="mx-auto max-w-9xl px-4 sm:px-6 lg:px-8">
                 <div class="relative flex h-16 justify-between">
@@ -53,7 +53,7 @@ const closeResponsiveCategories = () => (showingResponsiveCategories.value = fal
                             <NavLink :href="route('index.dashboard')" :active="route().current('index.dashboard')">
                                 Dashboard
                             </NavLink>
-                            <categories :categories="categories"/>
+                            <categories :categories="categories" />
                         </div>
                     </div>
 
@@ -74,16 +74,7 @@ const closeResponsiveCategories = () => (showingResponsiveCategories.value = fal
                             type="button"
                             @click="toggleDark()"
                         >
-                            <svg
-                                aria-hidden="true"
-                                id="theme-toggle-dark-icon"
-                                :class="[isDark ? 'hidden' : '', 'h-5 w-5']"
-                                fill="currentColor"
-                                viewBox="0 0 20 20"
-                                xmlns="http://www.w3.org/2000/svg"
-                            >
-                                <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
-                            </svg>
+                            <font-awesome-icon icon="fa-solid fa-moon" size="xl" :class="{ hidden: isDark }" />
                             <svg
                                 aria-hidden="true"
                                 id="theme-toggle-light-icon"
@@ -109,19 +100,7 @@ const closeResponsiveCategories = () => (showingResponsiveCategories.value = fal
                                             class="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none dark:bg-gray-800 dark:hover:text-gray-300"
                                         >
                                             {{ fullName }}
-
-                                            <svg
-                                                class="ml-2 -mr-0.5 h-4 w-4"
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                viewBox="0 0 20 20"
-                                                fill="currentColor"
-                                            >
-                                                <path
-                                                    fill-rule="evenodd"
-                                                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                                    clip-rule="evenodd"
-                                                />
-                                            </svg>
+                                            <font-awesome-icon icon="fa-solid fa-angle-down" class="ml-2 -mr-0.5" />
                                         </button>
                                     </span>
                                 </template>
@@ -149,7 +128,7 @@ const closeResponsiveCategories = () => (showingResponsiveCategories.value = fal
                             </Link>
                         </div>
                         <div v-if="user?.avatar" class="ml-2 h-9 w-9">
-                            <img :src="user.avatar" :alt="fullName" :title="fullName" class="rounded-full"/>
+                            <img :src="user.avatar" :alt="fullName" :title="fullName" class="rounded-full" />
                         </div>
                     </div>
 
@@ -159,28 +138,10 @@ const closeResponsiveCategories = () => (showingResponsiveCategories.value = fal
                             @click="showingNavigationDropdown = !showingNavigationDropdown"
                             class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 transition duration-150 ease-in-out hover:bg-gray-100 hover:text-gray-500 focus:bg-gray-100 focus:text-gray-500 focus:outline-none dark:text-gray-500 dark:hover:bg-gray-900 dark:hover:text-gray-400 dark:focus:bg-gray-900 dark:focus:text-gray-400"
                         >
-                            <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                                <path
-                                    :class="{
-                                        hidden: showingNavigationDropdown,
-                                        'inline-flex': !showingNavigationDropdown,
-                                    }"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M4 6h16M4 12h16M4 18h16"
-                                />
-                                <path
-                                    :class="{
-                                        hidden: !showingNavigationDropdown,
-                                        'inline-flex': showingNavigationDropdown,
-                                    }"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M6 18L18 6M6 6l12 12"
-                                />
-                            </svg>
+                            <font-awesome-icon
+                                :icon="['fa-solid', showingNavigationDropdown ? 'fa-xmark' : 'fa-bars']"
+                                size="xl"
+                            />
                         </button>
                     </div>
                 </div>
@@ -222,50 +183,67 @@ const closeResponsiveCategories = () => (showingResponsiveCategories.value = fal
                     </div>
                 </div>
             </div>
-        </nav>
+        </header>
 
         <nav aria-label="Breadcrumb" v-if="category">
-            <ol role="list"
-                class="mx-auto flex max-w-2xl items-center space-x-2 px-4 sm:px-6 lg:max-w-9xl lg:px-8 mt-6">
+            <ol role="list" class="mt-6 flex max-w-2xl items-center space-x-2 px-4 sm:px-6 lg:max-w-9xl lg:px-8">
                 <li class="flex items-center">
                     <Link :href="route('index.dashboard')" class="mr-2">
-                        <font-awesome-icon icon="fa-solid fa-house-chimney"
-                                           class="w-4 h-4 text-gray-900 dark:text-gray-200"/>
+                        <font-awesome-icon icon="fa-solid fa-house-chimney" class="text-gray-900 dark:text-gray-200" />
                     </Link>
-                    <svg width="16" height="20" viewBox="0 0 16 20" fill="currentColor" aria-hidden="true"
-                         class="text-gray-400 dark:text-gray-300">
-                        <path d="M5.697 4.34L8.98 16.532h1.327L7.025 4.341H5.697z"/>
+                    <svg
+                        width="16"
+                        height="20"
+                        viewBox="0 0 16 20"
+                        fill="currentColor"
+                        class="text-gray-400 dark:text-gray-300"
+                    >
+                        <path d="M5.697 4.34L8.98 16.532h1.327L7.025 4.341H5.697z" />
                     </svg>
                 </li>
-                <li v-for="breadcrumb in breadcrumbs" :key="breadcrumb.id">
+                <li v-for="breadcrumb in breadcrumbs" :key="breadcrumb.id" class="hidden sm:block">
                     <div class="flex items-center">
-                        <Link :href="breadcrumb.slug"
-                              class="mr-2 text-sm font-medium text-gray-900 hover:text-gray-600 dark:text-gray-200 dark:hover:text-gray-300">
+                        <Link
+                            :href="route('index.content', breadcrumb.slug)"
+                            class="mr-2 text-sm font-medium text-gray-900 hover:text-gray-600 dark:text-gray-200 dark:hover:text-gray-300"
+                        >
                             {{ breadcrumb.title }}
                         </Link>
-                        <svg width="16" height="20" viewBox="0 0 16 20" fill="currentColor" aria-hidden="true"
-                             class="text-gray-400 dark:text-gray-300">
-                            <path d="M5.697 4.34L8.98 16.532h1.327L7.025 4.341H5.697z"/>
+                        <svg
+                            width="16"
+                            height="20"
+                            viewBox="0 0 16 20"
+                            fill="currentColor"
+                            class="text-gray-400 dark:text-gray-300"
+                        >
+                            <path d="M5.697 4.34L8.98 16.532h1.327L7.025 4.341H5.697z" />
                         </svg>
                     </div>
                 </li>
                 <li class="text-sm">
-                    <a aria-current="page"
-                       class="font-medium text-gray-500 dark:text-gray-400">{{
-                            category.title
-                        }}</a>
+                    <p v-if="route().current('index.content')" class="font-medium text-gray-500 dark:text-gray-400">
+                        {{ category.title }}
+                    </p>
+                    <Link
+                        v-else
+                        aria-current="page"
+                        class="text-sm font-medium text-gray-900 hover:text-gray-600 dark:text-gray-200 dark:hover:text-gray-300"
+                        :href="route('index.content', category)"
+                    >
+                        {{ category.title }}
+                    </Link>
                 </li>
             </ol>
         </nav>
 
         <!-- Page Heading -->
-        <div class="mx-auto max-w-9xl pt-6 px-4 sm:px-6 lg:px-8" v-if="$slots.header">
-            <slot name="header"/>
+        <div class="mx-auto max-w-9xl px-4 pt-6 pb-10 sm:px-6 lg:px-8" v-if="title">
+            <h2 class="text-3xl font-bold text-gray-800 dark:text-gray-200">{{ title }}</h2>
         </div>
 
         <!-- Page Content -->
-        <main>
-            <slot/>
+        <main class="mx-auto max-w-9xl">
+            <slot />
         </main>
 
         <responsive-categories

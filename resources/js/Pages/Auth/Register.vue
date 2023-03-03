@@ -104,6 +104,23 @@ const submit = () => {
                 <InputError class="mt-2" :message="form.errors.password_confirmation" />
             </div>
 
+            <div class="mt-3 flex flex-col justify-between space-y-2 sm:flex-row sm:space-y-0">
+                <a
+                    :href="route('social', 'github')"
+                    class="inline-flex items-center justify-center rounded-lg bg-[#24292F] px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-[#24292F]/90 focus:outline-none focus:ring-4 focus:ring-[#24292F]/50 dark:hover:bg-[#050708]/30 dark:focus:ring-gray-500"
+                >
+                    <font-awesome-icon icon="fa-brands fa-github" size="lg" class="mr-2 -ml-1" />
+                    Sign in with Github
+                </a>
+                <a
+                    :href="route('social', 'google')"
+                    class="dark:focus:ring-[#4285F4]/55 inline-flex items-center justify-center rounded-lg bg-[#4285F4] px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-[#4285F4]/90 focus:outline-none focus:ring-4 focus:ring-[#4285F4]/50"
+                >
+                    <font-awesome-icon icon="fa-brands fa-google" size="lg" class="mr-2 -ml-1" />
+                    Sign in with Google
+                </a>
+            </div>
+
             <div class="mt-4 flex items-center justify-end">
                 <Link
                     :href="route('login')"

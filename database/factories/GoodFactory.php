@@ -30,8 +30,8 @@ class GoodFactory extends Factory
             'description' => fake()->paragraph(10),
             'short_description' => fake()->sentence(50),
             'warning_description' => fake()->sentence(200),
-            'old_price' => fake()->numberBetween(100, 10000),
-            'price' => fn(array $attributes) => $attributes['old_price'] - ($attributes['old_price'] * rand(1, 80)) / 100,
+            'old_price' => fake()->boolean ? fake()->numberBetween(100, 100000) : null,
+            'price' => fn(array $attributes) => $attributes['old_price'] ? $attributes['old_price'] - ($attributes['old_price'] * rand(1, 80)) / 100 : rand(100, 100000),
             'quantity' => fake()->numberBetween(0, 100),
             'status' => GoodStatus::getRandomValue(),
         ];

@@ -36,6 +36,7 @@ class ReviewResource extends Resource
                         ->required()
                         ->searchable()
                         ->preload(),
+                    Forms\Components\Toggle::make('is_buyer')->default(true)->required(),
                     Rating::make('rating')->required(),
                     Forms\Components\Textarea::make('content')
                         ->required()
@@ -65,6 +66,7 @@ class ReviewResource extends Resource
                 Tables\Columns\TextColumn::make('id')->sortable(),
                 Tables\Columns\TextColumn::make('user.email')->sortable()->searchable(),
                 Tables\Columns\TextColumn::make('good.title')->sortable()->searchable(),
+                Tables\Columns\IconColumn::make('is_buyer')->boolean()->toggleable(),
                 Tables\Columns\TextColumn::make('rating')
                     ->sortable()
                     ->formatStateUsing(fn(string $state) => self::ratingState($state)),

@@ -21,6 +21,7 @@ class ReviewFactory extends Factory
         return [
             'user_id' => User::query()->inRandomOrder()->value('id'),
             'good_id' => Good::query()->inRandomOrder()->value('id'),
+            'is_buyer' => fake()->boolean,
             'content' => fake()->paragraph(10),
             'advantages' => fake()->sentence(10),
             'disadvantages' => fake()->sentence(10),

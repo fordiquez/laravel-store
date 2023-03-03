@@ -62,7 +62,7 @@ const onCategory = (category) => (hoveredCategoryId.value = category.id);
                                             >
                                                 <Link
                                                     class="flex rounded-md p-1.5 font-semibold focus:outline-none focus:ring-2 focus:ring-gray-200 dark:focus:ring-gray-700"
-                                                    :href="route('index.category', category)"
+                                                    :href="route('index.content', category)"
                                                 >
                                                     {{ category.title }}
                                                 </Link>
@@ -79,7 +79,7 @@ const onCategory = (category) => (hoveredCategoryId.value = category.id);
                                                 <Link
                                                     :id="subcategory.slug"
                                                     class="text-base font-medium text-gray-600 hover:text-gray-900 focus:text-gray-700 dark:text-gray-300 dark:hover:text-gray-100 dark:focus:text-gray-100"
-                                                    href="#"
+                                                    :href="route('index.content', subcategory)"
                                                 >
                                                     {{ subcategory.title }}
                                                 </Link>
@@ -89,12 +89,12 @@ const onCategory = (category) => (hoveredCategoryId.value = category.id);
                                                         :key="item.id"
                                                         class="flex"
                                                     >
-                                                        <a
-                                                            :href="item.slug"
+                                                        <Link
+                                                            :href="route('index.content', item)"
                                                             class="text-sm text-gray-500 hover:text-gray-900 focus:text-gray-700 dark:text-gray-400 dark:hover:text-gray-100 dark:focus:text-gray-100"
                                                         >
                                                             {{ item.title }}
-                                                        </a>
+                                                        </Link>
                                                     </li>
                                                 </ul>
                                             </li>
@@ -115,7 +115,7 @@ const onCategory = (category) => (hoveredCategoryId.value = category.id);
                                             </div>
                                             <Link
                                                 class="text-base font-medium text-gray-600 hover:text-gray-900 focus:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100 dark:focus:text-gray-100"
-                                                href="#"
+                                                :href="route('index.content', hoveredCategory)"
                                             >
                                                 <span class="absolute inset-0 z-20" />
                                                 {{ hoveredCategory.title }}

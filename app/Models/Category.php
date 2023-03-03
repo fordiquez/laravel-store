@@ -53,11 +53,11 @@ class Category extends Model implements HasMedia
         return $categories;
     }
 
-    public function breadcrumbs(Category $category, array $breadcrumbs = []): array
+    public static function breadcrumbs(Category $category, array $breadcrumbs = []): array
     {
         if ($category->parent) {
             array_unshift($breadcrumbs, $category->parent);
-            return $this->breadcrumbs($category->parent, $breadcrumbs);
+            return self::breadcrumbs($category->parent, $breadcrumbs);
         }
 
         return $breadcrumbs;
