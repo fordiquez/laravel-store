@@ -57,7 +57,7 @@ class GoodResource extends Resource
                         slugRuleUniqueParameters: [
                             'table' => 'goods',
                             'column' => 'slug',
-                            'ignoreRecord' => true
+                            'ignoreRecord' => true,
                         ]
                     ),
                     Forms\Components\SpatieMediaLibraryFileUpload::make('thumbnails')
@@ -99,7 +99,7 @@ class GoodResource extends Resource
                     Forms\Components\Select::make('status')
                         ->required()
                         ->options(GoodStatus::asSelectArray()),
-                ])->columns()
+                ])->columns(),
             ]);
     }
 
@@ -136,7 +136,7 @@ class GoodResource extends Resource
                 Tables\Filters\SelectFilter::make('category')
                     ->multiple()
                     ->relationship('category', 'title'),
-                Tables\Filters\SelectFilter::make('status')->options(GoodStatus::asSelectArray())
+                Tables\Filters\SelectFilter::make('status')->options(GoodStatus::asSelectArray()),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

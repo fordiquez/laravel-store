@@ -19,7 +19,7 @@ class BrandFactory extends Factory
     {
         return [
             'name' => fake()->company,
-            'slug' => fn(array $attributes) => str($attributes['name'])->slug(),
+            'slug' => fn (array $attributes) => str($attributes['name'])->slug(),
         ];
     }
 }

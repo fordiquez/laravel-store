@@ -44,7 +44,7 @@ class ReviewsRelationManager extends RelationManager
                         ->columnSpanFull(),
                     Forms\Components\TextInput::make('video_src')->maxLength(255)->url(),
                     Forms\Components\TextInput::make('ip_address')->maxLength(45)->ipv4(),
-                ])->columns()
+                ])->columns(),
             ]);
     }
 
@@ -61,7 +61,7 @@ class ReviewsRelationManager extends RelationManager
                 Tables\Columns\IconColumn::make('is_buyer')->boolean()->toggleable(),
                 Tables\Columns\TextColumn::make('rating')
                     ->sortable()
-                    ->formatStateUsing(fn(string $state) => self::ratingState($state)),
+                    ->formatStateUsing(fn (string $state) => self::ratingState($state)),
                 Tables\Columns\TextColumn::make('video_src')
                     ->searchable()
                     ->toggleable()
@@ -84,7 +84,7 @@ class ReviewsRelationManager extends RelationManager
                     3 => '★★★',
                     4 => '★★★★',
                     5 => '★★★★★',
-                ])
+                ]),
             ])
             ->headerActions([
                 Tables\Actions\CreateAction::make(),

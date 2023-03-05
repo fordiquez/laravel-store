@@ -6,7 +6,6 @@ use App\Filament\Resources\StreetResource\Pages;
 use App\Models\Street;
 use Filament\Forms;
 use Filament\Resources\Form;
-use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
@@ -32,7 +31,7 @@ class StreetResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxlength(50)
-                    ->hint(fn($state, $component) => 'left: ' . $component->getMaxLength() - strlen($state) . ' characters')
+                    ->hint(fn ($state, $component) => 'left: ' . $component->getMaxLength() - strlen($state) . ' characters')
                     ->reactive(),
                 Forms\Components\TextInput::make('old_name')->maxlength(50),
             ]);
@@ -58,7 +57,7 @@ class StreetResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make()
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),

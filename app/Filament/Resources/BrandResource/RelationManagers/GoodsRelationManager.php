@@ -33,7 +33,7 @@ class GoodsRelationManager extends RelationManager
                         ->relationship('brand', 'name')
                         ->required()
                         ->disabled()
-                        ->default(fn(RelationManager $livewire) => $livewire->ownerRecord->id),
+                        ->default(fn (RelationManager $livewire) => $livewire->ownerRecord->id),
                     Forms\Components\TextInput::make('vendor_code')
                         ->required()
                         ->numeric()
@@ -50,7 +50,7 @@ class GoodsRelationManager extends RelationManager
                         slugRuleUniqueParameters: [
                             'table' => 'goods',
                             'column' => 'slug',
-                            'ignoreRecord' => true
+                            'ignoreRecord' => true,
                         ]
                     ),
                     Forms\Components\SpatieMediaLibraryFileUpload::make('thumbnails')
@@ -84,7 +84,7 @@ class GoodsRelationManager extends RelationManager
                     Forms\Components\Select::make('status')
                         ->required()
                         ->options(GoodStatus::asSelectArray()),
-                ])->columns()
+                ])->columns(),
 
             ]);
     }
@@ -121,10 +121,10 @@ class GoodsRelationManager extends RelationManager
                 Tables\Filters\SelectFilter::make('category')
                     ->multiple()
                     ->relationship('category', 'title'),
-                Tables\Filters\SelectFilter::make('status')->options(GoodStatus::asSelectArray())
+                Tables\Filters\SelectFilter::make('status')->options(GoodStatus::asSelectArray()),
             ])
             ->filters([
-                Tables\Filters\TrashedFilter::make()
+                Tables\Filters\TrashedFilter::make(),
             ])
             ->headerActions([
                 Tables\Actions\CreateAction::make(),

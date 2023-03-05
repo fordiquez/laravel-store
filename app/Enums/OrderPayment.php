@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Enums;
 
@@ -6,9 +8,9 @@ use BenSampo\Enum\Enum;
 
 final class OrderPayment extends Enum
 {
-    const CASH = 'cash';
+    public const CASH = 'cash';
 
-    const STRIPE = 'stripe';
+    public const STRIPE = 'stripe';
 
-    const BANK_TRANSFER = 'bank_transfer';
+    public const BANK_TRANSFER = 'bank_transfer';
 }

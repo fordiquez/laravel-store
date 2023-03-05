@@ -10,24 +10,39 @@ use Filament\Forms\Components\Field;
  */
 class Rating extends Field
 {
-    protected string $color = "#EAB308";
-    protected string $disabledColor = "#6B7280";
-    protected string $clearIconColor = " #EF4444 ";
-    protected string|Closure $icon = "heroicon-o-star";
-    protected string|Closure $selectedIcon = "heroicon-s-star";
-    protected string $clearIcon = "heroicon-s-x-circle";
+    protected string $color = '#EAB308';
+
+    protected string $disabledColor = '#6B7280';
+
+    protected string $clearIconColor = ' #EF4444 ';
+
+    protected string|Closure $icon = 'heroicon-o-star';
+
+    protected string|Closure $selectedIcon = 'heroicon-s-star';
+
+    protected string $clearIcon = 'heroicon-s-x-circle';
+
     protected int|Closure $min = 1;
+
     protected int|Closure $max = 5;
+
     protected int|Closure $width = 6;
+
     protected int|Closure $height = 6;
+
     protected bool|Closure $effects = true;
+
     protected bool|Closure $clearable = false;
+
     protected string $cursor = 'pointer';
+
     protected string $disabledCursor = 'not-allowed';
-    protected string $clearIconTooltip = "";
+
+    protected string $clearIconTooltip = '';
+
     protected array $tooltips = [];
 
-    protected string $view = "filament.forms.components.rating";
+    protected string $view = 'filament.forms.components.rating';
 
     public function color(string $color): self
     {
@@ -106,7 +121,7 @@ class Rating extends Field
             $options = $options();
         }
         $this->min(1);
-        $this->max(sizeof($options));
+        $this->max(count($options));
         $this->tooltips = [];
 
         foreach ($options as $option) {
@@ -268,6 +283,6 @@ class Rating extends Field
 
     public function getCursorClass(): string
     {
-        return $this->isDisabled() ? sprintf("cursor-%s", $this->getDisabledCursor()) : sprintf("cursor-%s", $this->getCursor());
+        return $this->isDisabled() ? sprintf('cursor-%s', $this->getDisabledCursor()) : sprintf('cursor-%s', $this->getCursor());
     }
 }

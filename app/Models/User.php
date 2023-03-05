@@ -62,7 +62,7 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser, Has
 
     public function sendEmailVerificationNotification()
     {
-        $this->notify(new SendVerifyWithQueueNotification());
+        $this->notify(new SendVerifyWithQueueNotification);
     }
 
     public function addresses(): HasMany
@@ -97,7 +97,7 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser, Has
 
     public function avatar(): Attribute
     {
-        return Attribute::get(fn($value) => $this->getFirstMediaUrl('avatars'));
+        return Attribute::get(fn ($value) => $this->getFirstMediaUrl('avatars'));
     }
 
     /**
@@ -107,7 +107,7 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser, Has
     {
         $this->clearMediaCollection($collectionName)
             ->addMediaFromUrl($url)
-            ->sanitizingFileName(fn($fileName) => strtolower(str_replace(['#', '/', '\\', ' '], '-', $fileName)))
+            ->sanitizingFileName(fn ($fileName) => strtolower(str_replace(['#', '/', '\\', ' '], '-', $fileName)))
             ->toMediaCollection($collectionName, $diskName);
     }
 }

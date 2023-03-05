@@ -188,8 +188,11 @@ const closeResponsiveCategories = () => (showingResponsiveCategories.value = fal
         <nav aria-label="Breadcrumb" v-if="category">
             <ol role="list" class="mt-6 flex max-w-2xl items-center space-x-2 px-4 sm:px-6 lg:max-w-9xl lg:px-8">
                 <li class="flex items-center">
-                    <Link :href="route('index.dashboard')" class="mr-2">
-                        <font-awesome-icon icon="fa-solid fa-house-chimney" class="text-gray-900 dark:text-gray-200" />
+                    <Link
+                        :href="route('index.dashboard')"
+                        class="mr-2 text-gray-700 hover:text-purple-600 dark:text-gray-400 dark:hover:text-white"
+                    >
+                        <font-awesome-icon icon="fa-solid fa-house-chimney" />
                     </Link>
                     <svg
                         width="16"
@@ -205,7 +208,7 @@ const closeResponsiveCategories = () => (showingResponsiveCategories.value = fal
                     <div class="flex items-center">
                         <Link
                             :href="route('index.content', breadcrumb.slug)"
-                            class="mr-2 text-sm font-medium text-gray-900 hover:text-gray-600 dark:text-gray-200 dark:hover:text-gray-300"
+                            class="mr-2 text-sm font-medium text-gray-700 hover:text-purple-600 dark:text-gray-400 dark:hover:text-white"
                         >
                             {{ breadcrumb.title }}
                         </Link>
@@ -221,13 +224,13 @@ const closeResponsiveCategories = () => (showingResponsiveCategories.value = fal
                     </div>
                 </li>
                 <li class="text-sm">
-                    <p v-if="route().current('index.content')" class="font-medium text-gray-500 dark:text-gray-400">
+                    <p v-if="route().current('index.content')" class="font-medium text-gray-500 dark:text-gray-500">
                         {{ category.title }}
                     </p>
                     <Link
                         v-else
                         aria-current="page"
-                        class="text-sm font-medium text-gray-900 hover:text-gray-600 dark:text-gray-200 dark:hover:text-gray-300"
+                        class="text-sm font-medium text-gray-700 hover:text-purple-600 dark:text-gray-400 dark:hover:text-white"
                         :href="route('index.content', category)"
                     >
                         {{ category.title }}

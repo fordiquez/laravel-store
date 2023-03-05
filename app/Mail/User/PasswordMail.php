@@ -11,7 +11,8 @@ use Illuminate\Queue\SerializesModels;
 
 class PasswordMail extends Mailable implements ShouldQueue
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
     public string $password;
 
@@ -27,8 +28,6 @@ class PasswordMail extends Mailable implements ShouldQueue
 
     /**
      * Get the message envelope.
-     *
-     * @return Envelope
      */
     public function envelope(): Envelope
     {
@@ -37,8 +36,6 @@ class PasswordMail extends Mailable implements ShouldQueue
 
     /**
      * Get the message content definition.
-     *
-     * @return Content
      */
     public function content(): Content
     {
@@ -47,8 +44,6 @@ class PasswordMail extends Mailable implements ShouldQueue
 
     /**
      * Get the attachments for the message.
-     *
-     * @return array
      */
     public function attachments(): array
     {

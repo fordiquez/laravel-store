@@ -32,11 +32,11 @@ return [
 
     'multiavatar' => [
         'url' => 'https://api.multiavatar.com/',
-        'key' => env('MULTIAVATAR_API_KEY')
+        'key' => env('MULTIAVATAR_API_KEY'),
     ],
     'csc' => [
         'url' => env('CSC_API_URL'),
-        'key' => env('CSC_API_KEY')
+        'key' => env('CSC_API_KEY'),
     ],
     'github' => [
         'client_id' => env('GITHUB_CLIENT_ID'),

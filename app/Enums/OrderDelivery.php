@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Enums;
 
@@ -6,11 +8,11 @@ use BenSampo\Enum\Enum;
 
 final class OrderDelivery extends Enum
 {
-    const COURIER = 'courier';
+    public const COURIER = 'courier';
 
-    const MEEST = 'meest';
+    public const MEEST = 'meest';
 
-    const UKRPOSHTA = 'ukrposhta';
+    public const UKRPOSHTA = 'ukrposhta';
 
-    const NOVA_POSHTA = 'nova_poshta';
+    public const NOVA_POSHTA = 'nova_poshta';
 }

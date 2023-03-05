@@ -18,7 +18,7 @@ class CategoryFactory extends Factory
     {
         return [
             'title' => fake()->unique()->jobTitle(),
-            'slug' => fn(array $attributes) => str($attributes['title'])->slug(),
+            'slug' => fn (array $attributes) => str($attributes['title'])->slug(),
             'description' => fake()->sentence(rand(2, 10)),
             'is_active' => true,
         ];

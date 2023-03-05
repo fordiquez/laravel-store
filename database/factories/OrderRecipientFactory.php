@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 class OrderRecipientFactory extends Factory
 {
     public array $networkCodes = [63, 73, 93, 67, 68, 96, 97, 98, 50, 66, 95, 99];
+
     /**
      * Define the model's default state.
      *

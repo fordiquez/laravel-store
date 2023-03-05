@@ -42,15 +42,15 @@ class CategoryResource extends Resource
                         slugRuleUniqueParameters: [
                             'table' => 'categories',
                             'column' => 'slug',
-                            'ignoreRecord' => true
+                            'ignoreRecord' => true,
                         ]
                     ),
                     Forms\Components\TextInput::make('description')->maxLength(255),
                     Forms\Components\Toggle::make('is_active')->required(),
                     Forms\Components\Toggle::make('is_navigational')->required(),
                     Forms\Components\TextInput::make('manual_url')->url()->maxLength(255),
-                    Forms\Components\SpatieMediaLibraryFileUpload::make('thumbnail')->collection('categories')
-                ])
+                    Forms\Components\SpatieMediaLibraryFileUpload::make('thumbnail')->collection('categories'),
+                ]),
             ]);
     }
 

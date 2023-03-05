@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -33,7 +34,19 @@ class Good extends Model implements HasMedia
 
     protected $appends = ['preview'];
 
-    protected $with = ['category'];
+    protected $with = ['category', 'brand'];
+
+    public function scopeFiltered(Builder $query)
+    {
+        $query->when(request('brands'), function (Builder $q) {
+            $q->whereIn('brand_id', request('brands'));
+        })->when(request('prices'), function (Builder $q) {
+            $q->whereBetween('price', [
+                request('prices.from', 0),
+                request('prices.to', 100000),
+            ]);
+        });
+    }
 
     public function category(): BelongsTo
     {

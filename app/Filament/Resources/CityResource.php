@@ -29,7 +29,7 @@ class CityResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxlength(50)
-                    ->hint(fn($state, $component) => 'left: ' . $component->getMaxLength() - strlen($state) . ' characters')
+                    ->hint(fn ($state, $component) => 'left: ' . $component->getMaxLength() - strlen($state) . ' characters')
                     ->reactive(),
                 Forms\Components\TextInput::make('old_name')->maxlength(50),
                 Forms\Components\Select::make('state_id')
@@ -79,7 +79,7 @@ class CityResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make()
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
@@ -112,7 +112,7 @@ class CityResource extends Resource
         $name = $column->getName();
 
         $record->update([
-            $name => !$record->$name
+            $name => !$record->$name,
         ]);
     }
 }

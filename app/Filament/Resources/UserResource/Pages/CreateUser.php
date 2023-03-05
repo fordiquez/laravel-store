@@ -35,7 +35,7 @@ class CreateUser extends CreateRecord
         ];
 
         $this->permissions = collect($data)->filter(function ($permission, $key) use ($nonPermissionsFilter) {
-            return ! in_array($key, $nonPermissionsFilter) && Str::contains($key, '_');
+            return !in_array($key, $nonPermissionsFilter) && Str::contains($key, '_');
         })->keys();
 
         return Arr::only($data, $nonPermissionsFilter);

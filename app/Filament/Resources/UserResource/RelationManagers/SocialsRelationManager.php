@@ -22,7 +22,7 @@ class SocialsRelationManager extends RelationManager
                     Forms\Components\TextInput::make('provider'),
                     Forms\Components\TextInput::make('provider_id'),
                     Forms\Components\TextInput::make('provider_token'),
-                ])
+                ]),
             ]);
     }
 

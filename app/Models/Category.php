@@ -23,7 +23,7 @@ class Category extends Model implements HasMedia
     {
         parent::boot();
 
-        static::creating(fn(Category $category) => ($category->slug = $category->slug ?? str($category->title)->slug()));
+        static::creating(fn (Category $category) => ($category->slug = $category->slug ?? str($category->title)->slug()));
     }
 
     public function parent(): BelongsTo
@@ -57,6 +57,7 @@ class Category extends Model implements HasMedia
     {
         if ($category->parent) {
             array_unshift($breadcrumbs, $category->parent);
+
             return self::breadcrumbs($category->parent, $breadcrumbs);
         }
 

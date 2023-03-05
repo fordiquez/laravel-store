@@ -35,10 +35,10 @@ class TagResource extends Resource
                         slugRuleUniqueParameters: [
                             'table' => 'tags',
                             'column' => 'slug',
-                            'ignoreRecord' => true
+                            'ignoreRecord' => true,
                         ]
-                    )
-                ])
+                    ),
+                ]),
             ]);
     }
 

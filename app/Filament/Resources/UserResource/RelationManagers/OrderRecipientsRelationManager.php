@@ -11,7 +11,6 @@ use Filament\Resources\Table;
 use Filament\Tables;
 use Filament\Tables\Contracts\HasRelationshipTable;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Validation\Rules\Unique;
 use Ysfkaya\FilamentPhoneInput\PhoneInput;
 use Ysfkaya\FilamentPhoneInput\PhoneInputNumberType;
 
@@ -39,7 +38,7 @@ class OrderRecipientsRelationManager extends RelationManager
                         ->formatOnDisplay(false),
                     Forms\Components\TextInput::make('description')->nullable()->maxLength(255),
                     Forms\Components\Toggle::make('is_default')->default(false)->inline(),
-                ])->columns()
+                ])->columns(),
             ]);
     }
 
@@ -59,13 +58,13 @@ class OrderRecipientsRelationManager extends RelationManager
                     ->boolean()
                     ->toggleable()
                     ->tooltip('Toggle value')
-                    ->action(function($record, $column) {
+                    ->action(function ($record, $column) {
                         $name = $column->getName();
                         OrderRecipient::where('id', '!=', $record->id)->whereUserId($record->user_id)->whereIsDefault(true)->update([
-                            'is_default' => false
+                            'is_default' => false,
                         ]);
                         $record->update([
-                            $name => !$record->$name
+                            $name => !$record->$name,
                         ]);
                     }),
             ])
@@ -76,9 +75,10 @@ class OrderRecipientsRelationManager extends RelationManager
                 Tables\Actions\CreateAction::make()->using(function (HasRelationshipTable $livewire, array $data): Model {
                     if ($data['is_default']) {
                         OrderRecipient::whereUserId($livewire->ownerRecord->id)->whereIsDefault(true)->update([
-                            'is_default' => false
+                            'is_default' => false,
                         ]);
                     }
+
                     return $livewire->getRelationship()->create($data);
                 }),
             ])
@@ -88,10 +88,11 @@ class OrderRecipientsRelationManager extends RelationManager
                 })->using(function (Model $record, array $data): Model {
                     if ($data['is_default']) {
                         OrderRecipient::where('id', '!=', $record->id)->whereUserId($record->user_id)->whereIsDefault(true)->update([
-                            'is_default' => false
+                            'is_default' => false,
                         ]);
                     }
                     $record->update($data);
+
                     return $record;
                 }),
                 Tables\Actions\DeleteAction::make(),

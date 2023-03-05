@@ -16,7 +16,10 @@ use Illuminate\Support\Facades\Redis;
 
 class StoreUserJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     public array $data;
 
@@ -30,6 +33,7 @@ class StoreUserJob implements ShouldQueue
 
     /**
      * Execute the job.
+     *
      * @throws LimiterTimeoutException
      */
     public function handle(): void

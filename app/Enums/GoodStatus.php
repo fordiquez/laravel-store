@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Enums;
 
@@ -6,15 +8,15 @@ use BenSampo\Enum\Enum;
 
 final class GoodStatus extends Enum
 {
-    const READY_FOR_DISPATCH = 'ready for dispatch';
+    public const READY_FOR_DISPATCH = 'ready for dispatch';
 
-    const IN_STOCK = 'in stock';
+    public const IN_STOCK = 'in stock';
 
-    const ENDS = 'ends';
+    public const ENDS = 'ends';
 
-    const IS_OVER = 'is over';
+    public const IS_OVER = 'is over';
 
-    const OUT_OF_STOCK = 'out of stock';
+    public const OUT_OF_STOCK = 'out of stock';
 
-    const DISCONTINUED = 'discontinued';
+    public const DISCONTINUED = 'discontinued';
 }

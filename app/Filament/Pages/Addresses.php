@@ -43,7 +43,7 @@ class Addresses extends Page implements HasForms
     public function mount()
     {
         $this->form->fill([
-            'addresses' => auth()->user()->addresses->toArray()
+            'addresses' => auth()->user()->addresses->toArray(),
         ]);
     }
 
@@ -60,7 +60,7 @@ class Addresses extends Page implements HasForms
             foreach ($addresses as $address) {
                 auth()->user()->addresses()->updateOrCreate([
                     'id' => $address['id'],
-                    'user_id' => auth()->user()->id
+                    'user_id' => auth()->user()->id,
                 ], [
                     'title' => $address['title'],
                     'is_main' => $address['is_main'],
@@ -70,7 +70,7 @@ class Addresses extends Page implements HasForms
                     'street_id' => $address['street_id'],
                     'house' => $address['house'],
                     'flat' => $address['flat'],
-                    'postal_code' => $address['postal_code']
+                    'postal_code' => $address['postal_code'],
                 ]);
             }
         }
@@ -89,24 +89,24 @@ class Addresses extends Page implements HasForms
                         ->options(Country::all()->pluck('name', 'id')->toArray())
                         ->required()
                         ->reactive()
-                        ->afterStateUpdated(fn(callable $set) => $set('state_id', null)),
+                        ->afterStateUpdated(fn (callable $set) => $set('state_id', null)),
                     Select::make('state_id')
-                        ->options(fn(callable $get) => $get('country_id') ? Country::find($get('country_id'))->states->pluck('name', 'id') : [])
+                        ->options(fn (callable $get) => $get('country_id') ? Country::find($get('country_id'))->states->pluck('name', 'id') : [])
                         ->required()
                         ->reactive()
-                        ->disabled(fn(callable $get) => !$get('country_id'))
-                        ->afterStateUpdated(fn(callable $set) => $set('city_id', null)),
+                        ->disabled(fn (callable $get) => !$get('country_id'))
+                        ->afterStateUpdated(fn (callable $set) => $set('city_id', null)),
                     Select::make('city_id')
-                        ->options(fn(callable $get) => $get('state_id') ? State::find($get('state_id'))->cities->pluck('name', 'id') : [])
+                        ->options(fn (callable $get) => $get('state_id') ? State::find($get('state_id'))->cities->pluck('name', 'id') : [])
                         ->required()
                         ->reactive()
-                        ->disabled(fn(callable $get) => !$get('state_id'))
-                        ->afterStateUpdated(fn(callable $set) => $set('street_id', null)),
+                        ->disabled(fn (callable $get) => !$get('state_id'))
+                        ->afterStateUpdated(fn (callable $set) => $set('street_id', null)),
                     Select::make('street_id')
-                        ->options(fn(callable $get) => $get('city_id') ? City::find($get('city_id'))->streets->pluck('name', 'id') : [])
+                        ->options(fn (callable $get) => $get('city_id') ? City::find($get('city_id'))->streets->pluck('name', 'id') : [])
                         ->required()
                         ->reactive()
-                        ->disabled(fn(callable $get) => !$get('city_id')),
+                        ->disabled(fn (callable $get) => !$get('city_id')),
                     TextInput::make('house')->required(),
                     TextInput::make('flat')->nullable(),
                     TextInput::make('postal_code')->numeric()->nullable(),

@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Main;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\BrandResource;
 use App\Http\Resources\CategoryResource;
 use App\Http\Resources\GoodResource;
+use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Good;
 use Inertia\Inertia;
@@ -18,11 +20,20 @@ class IndexController extends Controller
 
     public function content(Category $category)
     {
-        return Inertia::render('Content', [
+        $goods = Good::whereCategoryId($category->id);
+
+        return inertia('Content', [
             'category' => new CategoryResource($category),
             'breadcrumbs' => Category::breadcrumbs($category),
             'title' => $category->title,
-            'goods' => $category->goods->count() ? GoodResource::collection(Good::whereCategoryId($category->id)->paginate(2)->onEachSide(1)->withQueryString()) : null,
+            'brands' => BrandResource::collection(Brand::whereIn('id', $goods->pluck('brand_id')->all())->get()),
+            'filters' => [
+                'prices' => [
+                    'min' => intval($goods->get()->min('price')),
+                    'max' => intval($goods->get()->max('price'))
+                ]
+            ],
+            'goods' => GoodResource::collection($goods->filtered()->paginate(10)->withQueryString()),
         ]);
     }
 
@@ -31,7 +42,7 @@ class IndexController extends Controller
         return Inertia::render('Good', [
             'good' => new GoodResource($good),
             'breadcrumbs' => Category::breadcrumbs($good->category),
-            'title' => $good->title
+            'title' => $good->title,
         ]);
     }
 }

@@ -40,12 +40,12 @@ class BrandResource extends Resource
                         slugRuleUniqueParameters: [
                             'table' => 'brands',
                             'column' => 'slug',
-                            'ignoreRecord' => true
+                            'ignoreRecord' => true,
                         ]
                     ),
                     Forms\Components\TextInput::make('url')->maxLength(255),
-                    Forms\Components\SpatieMediaLibraryFileUpload::make('logo')->collection('brands')
-                ])
+                    Forms\Components\SpatieMediaLibraryFileUpload::make('logo')->collection('brands'),
+                ]),
             ]);
     }
 

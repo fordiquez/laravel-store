@@ -63,14 +63,13 @@ class Country extends Model implements HasMedia
 
     public static function getRegions($withNamedKeys = false): array
     {
-        $regionsWithNamedKeys = Arr::map(self::$regions, fn($value, $key) => $key);
+        $regionsWithNamedKeys = Arr::map(self::$regions, fn ($value, $key) => $key);
 
         return $withNamedKeys ? $regionsWithNamedKeys : array_keys($regionsWithNamedKeys);
     }
 
     public static function getSubregions($region = null, $withNamedKeys = false): array
     {
-
         $subregions = $region ? Arr::get(self::$regions, $region) : [];
         $subregionsWithNamedKeys = [];
 

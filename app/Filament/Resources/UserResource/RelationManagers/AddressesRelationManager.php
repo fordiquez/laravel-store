@@ -34,19 +34,19 @@ class AddressesRelationManager extends RelationManager
                         ->options(Country::all()->pluck('name', 'id')->toArray())
                         ->required()
                         ->reactive()
-                        ->afterStateUpdated(fn(callable $set) => $set('state_id', null)),
+                        ->afterStateUpdated(fn (callable $set) => $set('state_id', null)),
                     Select::make('state_id')
                         ->options(fn (callable $get) => $get('country_id') ? Country::find($get('country_id'))->states->pluck('name', 'id') : [])
                         ->required()
                         ->reactive()
                         ->disabled(fn (callable $get) => !$get('country_id'))
-                        ->afterStateUpdated(fn(callable $set) => $set('city_id', null)),
+                        ->afterStateUpdated(fn (callable $set) => $set('city_id', null)),
                     Select::make('city_id')
                         ->options(fn (callable $get) => $get('state_id') ? State::find($get('state_id'))->cities->pluck('name', 'id') : [])
                         ->required()
                         ->reactive()
                         ->disabled(fn (callable $get) => !$get('state_id'))
-                        ->afterStateUpdated(fn(callable $set) => $set('street_id', null)),
+                        ->afterStateUpdated(fn (callable $set) => $set('street_id', null)),
                     Select::make('street_id')
                         ->options(fn (callable $get) => $get('city_id') ? City::find($get('city_id'))->streets->pluck('name', 'id') : [])
                         ->required()
@@ -55,7 +55,7 @@ class AddressesRelationManager extends RelationManager
                     TextInput::make('house')->required(),
                     TextInput::make('flat')->nullable(),
                     TextInput::make('postal_code')->numeric()->nullable(),
-                ])
+                ]),
             ]);
     }
 
@@ -70,13 +70,13 @@ class AddressesRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('title'),
                 Tables\Columns\IconColumn::make('is_main')->boolean()->toggleable()
                     ->tooltip('Toggle value')
-                    ->action(function($record, $column) {
+                    ->action(function ($record, $column) {
                         $name = $column->getName();
                         UserAddress::where('id', '!=', $record->id)->whereUserId($record->user_id)->whereIsMain(true)->update([
-                            'is_main' => false
+                            'is_main' => false,
                         ]);
                         $record->update([
-                            $name => !$record->$name
+                            $name => !$record->$name,
                         ]);
                     }),
                 Tables\Columns\TextColumn::make('country.name')->sortable()->searchable(),
@@ -90,17 +90,19 @@ class AddressesRelationManager extends RelationManager
             ->headerActions([
                 Tables\Actions\CreateAction::make()->using(function (HasRelationshipTable $livewire, array $data): Model {
                     UserAddress::whereUserId($livewire->ownerRecord->id)->whereIsMain(true)->update([
-                        'is_main' => false
+                        'is_main' => false,
                     ]);
+
                     return $livewire->getRelationship()->create($data);
                 }),
             ])
             ->actions([
                 Tables\Actions\EditAction::make()->using(function (Model $record, array $data): Model {
                     UserAddress::where('id', '!=', $record->id)->whereUserId($record->user_id)->whereIsMain(true)->update([
-                        'is_main' => false
+                        'is_main' => false,
                     ]);
                     $record->update($data);
+
                     return $record;
                 }),
                 Tables\Actions\DeleteAction::make(),

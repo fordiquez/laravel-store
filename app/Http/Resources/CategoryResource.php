@@ -19,8 +19,6 @@ class CategoryResource extends JsonResource
             'thumbnail' => $this->thumbnail,
             'is_active' => $this->is_active,
             'is_navigational' => $this->is_navigational,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
             'subcategories' => $this->subcategories()->count() ? $this::loopCategories($this->subcategories) : null,
         ];
     }

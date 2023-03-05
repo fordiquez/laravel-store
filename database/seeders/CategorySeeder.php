@@ -9,8 +9,6 @@ class CategorySeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
     public function run(): void
     {
@@ -135,7 +133,7 @@ class CategorySeeder extends Seeder
 
         $electronicAccessories = CategoryFactory::new()->create([
             'title' => 'Accessories for electronics',
-            'parent_id' => $laptopsAndComputers->id
+            'parent_id' => $laptopsAndComputers->id,
         ]);
 
         CategoryFactory::new()->createMany([
@@ -166,31 +164,31 @@ class CategorySeeder extends Seeder
         ]);
 
         $electronics = CategoryFactory::new()->create([
-            'title' => 'Smartphones, TV and Electronics'
+            'title' => 'Smartphones, TV and Electronics',
         ]);
 
         CategoryFactory::new()->createMany([
             [
                 'title' => 'Mobile phones',
-                'parent_id' => $electronics->id
+                'parent_id' => $electronics->id,
             ],
             [
                 'title' => 'Televisions',
-                'parent_id' => $electronics->id
+                'parent_id' => $electronics->id,
             ],
             [
                 'title' => 'Tablets',
-                'parent_id' => $electronics->id
+                'parent_id' => $electronics->id,
             ],
             [
                 'title' => 'Power banks and charging stations',
-                'parent_id' => $electronics->id
+                'parent_id' => $electronics->id,
             ],
         ]);
 
         $headPhonesAndAccessories = CategoryFactory::new()->create([
             'title' => 'Headphones and accessories',
-            'parent_id' => $electronics->id
+            'parent_id' => $electronics->id,
         ]);
 
         CategoryFactory::new()->createMany([
@@ -206,7 +204,7 @@ class CategorySeeder extends Seeder
 
         $wearableGadgets = CategoryFactory::new()->create([
             'title' => 'Wearable gadgets',
-            'parent_id' => $electronics->id
+            'parent_id' => $electronics->id,
         ]);
 
         CategoryFactory::new()->createMany([
@@ -226,7 +224,7 @@ class CategorySeeder extends Seeder
 
         $audioEquipment = CategoryFactory::new()->create([
             'title' => 'Audio equipment',
-            'parent_id' => $electronics->id
+            'parent_id' => $electronics->id,
         ]);
 
         CategoryFactory::new()->createMany([
@@ -250,37 +248,37 @@ class CategorySeeder extends Seeder
 
         $mobilePhonesAccessories = CategoryFactory::new()->create([
             'title' => 'Accessories for mobile phones',
-            'parent_id' => $electronics->id
+            'parent_id' => $electronics->id,
         ]);
 
         CategoryFactory::new()->createMany([
             [
                 'title' => 'Cables and adapters',
-                'parent_id' => $mobilePhonesAccessories->id
+                'parent_id' => $mobilePhonesAccessories->id,
             ],
             [
                 'title' => 'Phone cases',
-                'parent_id' => $mobilePhonesAccessories->id
+                'parent_id' => $mobilePhonesAccessories->id,
             ],
             [
                 'title' => 'Protective films and glass',
-                'parent_id' => $mobilePhonesAccessories->id
+                'parent_id' => $mobilePhonesAccessories->id,
             ],
             [
                 'title' => 'Spare parts for phones',
-                'parent_id' => $mobilePhonesAccessories->id
+                'parent_id' => $mobilePhonesAccessories->id,
             ],
             [
                 'title' => 'Phone chargers',
-                'parent_id' => $mobilePhonesAccessories->id
+                'parent_id' => $mobilePhonesAccessories->id,
             ],
             [
                 'title' => 'Batteries for phones',
-                'parent_id' => $mobilePhonesAccessories->id
+                'parent_id' => $mobilePhonesAccessories->id,
             ],
             [
                 'title' => 'Phone holders',
-                'parent_id' => $mobilePhonesAccessories->id
+                'parent_id' => $mobilePhonesAccessories->id,
             ],
         ]);
 

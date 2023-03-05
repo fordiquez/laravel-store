@@ -23,7 +23,7 @@ class OrderItemFactory extends Factory
             'good_id' => Good::inRandomOrder()->value('id'),
             'order_id' => Order::inRandomOrder()->value('id'),
             'quantity' => fake()->numberBetween(1, 5),
-            'unit_price' => fake()->numberBetween(100, 10000)
+            'unit_price' => fake()->numberBetween(100, 10000),
         ];
     }
 }

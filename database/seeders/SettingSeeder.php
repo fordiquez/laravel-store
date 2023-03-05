@@ -13,10 +13,10 @@ class SettingSeeder extends Seeder
     public function run(): void
     {
         Setting::create([
-           'section' => 'site',
+            'section' => 'site',
             'name' => 'Site currency',
             'key' => 'currency',
-            'value' => '₴'
+            'value' => '₴',
         ]);
     }
 }

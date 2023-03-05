@@ -60,7 +60,7 @@ class Profile extends Page implements HasForms
             'phone' => auth()->user()->phone,
             'birth_date' => auth()->user()->birth_date,
             'gender' => auth()->user()->gender,
-            'avatar' => auth()->user()->getFirstMediaUrl('avatars')
+            'avatar' => auth()->user()->getFirstMediaUrl('avatars'),
         ]);
     }
 
@@ -83,7 +83,7 @@ class Profile extends Page implements HasForms
         if (count($this->avatar)) {
             $user->clearMediaCollection('avatars')
                 ->addMedia($this->avatar[array_key_first($this->avatar)])
-                ->sanitizingFileName(fn($fileName) => strtolower(str_replace(['#', '/', '\\', ' '], '-', $fileName)))
+                ->sanitizingFileName(fn ($fileName) => strtolower(str_replace(['#', '/', '\\', ' '], '-', $fileName)))
                 ->toMediaCollection('avatars', 'public');
         }
 
@@ -136,7 +136,7 @@ class Profile extends Page implements HasForms
             ->schema([
                 DatePicker::make('birth_date')->maxDate(now()),
                 Select::make('gender')->options(UserGender::asSelectArray()),
-                SpatieMediaLibraryFileUpload::make('avatar')->collection('avatars')->columnSpanFull()
+                SpatieMediaLibraryFileUpload::make('avatar')->collection('avatars')->columnSpanFull(),
             ]),
             Section::make('Update Password')->columns()
                 ->schema([
@@ -165,8 +165,8 @@ class Profile extends Page implements HasForms
                             ->revealable()
                             ->copyable()
                             ->generatable(),
-                        ]),
                     ]),
-            ];
+                ]),
+        ];
     }
 }

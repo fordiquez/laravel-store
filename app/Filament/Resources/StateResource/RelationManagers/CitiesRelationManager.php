@@ -22,14 +22,14 @@ class CitiesRelationManager extends RelationManager
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxlength(50)
-                    ->hint(fn($state, $component) => 'left: ' . $component->getMaxLength() - strlen($state) . ' characters')
+                    ->hint(fn ($state, $component) => 'left: ' . $component->getMaxLength() - strlen($state) . ' characters')
                     ->reactive(),
                 Forms\Components\TextInput::make('old_name')->maxlength(50),
                 Forms\Components\Hidden::make('state_id')
                     ->default(fn (RelationManager $livewire) => $livewire->ownerRecord->id),
                 Forms\Components\TextInput::make('type')->nullable()->default('state')->maxLength(25),
                 Forms\Components\TextInput::make('uuid')->required()->uuid()->default(fake()->uuid),
-                Forms\Components\Toggle::make('is_active')->required()->default(true)
+                Forms\Components\Toggle::make('is_active')->required()->default(true),
             ]);
     }
 
@@ -81,7 +81,7 @@ class CitiesRelationManager extends RelationManager
         $name = $column->getName();
 
         $record->update([
-            $name => !$record->$name
+            $name => !$record->$name,
         ]);
     }
 }

@@ -5,8 +5,8 @@ namespace App\Filament\Resources;
 use App\Enums\UserGender;
 use App\Enums\UserStatus;
 use App\Filament\Resources\UserResource\Pages;
-use App\Filament\Resources\UserResource\RelationManagers\OrderRecipientsRelationManager;
 use App\Filament\Resources\UserResource\RelationManagers\AddressesRelationManager;
+use App\Filament\Resources\UserResource\RelationManagers\OrderRecipientsRelationManager;
 use App\Filament\Resources\UserResource\RelationManagers\ReviewsRelationManager;
 use App\Filament\Resources\UserResource\RelationManagers\SocialsRelationManager;
 use App\Filament\Resources\UserResource\Widgets\UsersOverview;
@@ -82,26 +82,29 @@ class UserResource extends Resource
                     ->revealable()
                     ->copyable()
                     ->generatable()
-                    ->required(fn(Page $livewire) => $livewire instanceof CreateRecord)
+                    ->required(fn (Page $livewire) => $livewire instanceof CreateRecord)
                     ->same('passwordConfirmation')
-                    ->dehydrated(fn($state) => filled($state))
-                    ->dehydrateStateUsing(fn($state) => bcrypt($state)),
+                    ->dehydrated(fn ($state) => filled($state))
+                    ->dehydrateStateUsing(fn ($state) => bcrypt($state)),
                 Password::make('passwordConfirmation')
                     ->password()
                     ->revealable()
                     ->copyable()
                     ->generatable()
                     ->label('Password Confirmation')
-                    ->required(fn(Page $livewire): bool => $livewire instanceof CreateRecord)
+                    ->required(fn (Page $livewire): bool => $livewire instanceof CreateRecord)
                     ->minLength(8)
                     ->dehydrated(false),
                 CheckboxList::make('roles')
                     ->columnSpan('full')
                     ->reactive()
-                    ->relationship('roles', 'name',
-                        fn(Builder $query) => !auth()->user()->hasRole('super_admin') ?
-                            $query->where('name', '<>', 'super_admin') : $query)
-                    ->getOptionLabelFromRecordUsing(fn($record) => Str::of($record->name)->headline())
+                    ->relationship(
+                        'roles',
+                        'name',
+                        fn (Builder $query) => !auth()->user()->hasRole('super_admin') ?
+                            $query->where('name', '<>', 'super_admin') : $query
+                    )
+                    ->getOptionLabelFromRecordUsing(fn ($record) => Str::of($record->name)->headline())
                     ->columns(4),
             ])->columns(),
             Section::make('Permissions')
@@ -112,19 +115,19 @@ class UserResource extends Resource
                     Tabs::make('Permissions')
                         ->tabs([
                             Tab::make(__('filament-shield::filament-shield.resources'))
-                                ->visible(fn(): bool => Utils::isResourceEntityEnabled())
+                                ->visible(fn (): bool => Utils::isResourceEntityEnabled())
                                 ->reactive()
                                 ->schema(static::getResourceEntitiesSchema()),
                             Tab::make(__('filament-shield::filament-shield.pages'))
-                                ->visible(fn(): bool => Utils::isPageEntityEnabled() && count(FilamentShield::getPages()) > 0)
+                                ->visible(fn (): bool => Utils::isPageEntityEnabled() && count(FilamentShield::getPages()) > 0)
                                 ->reactive()
                                 ->schema(static::getPageEntityPermissionsSchema()),
                             Tab::make(__('filament-shield::filament-shield.widgets'))
-                                ->visible(fn(): bool => Utils::isWidgetEntityEnabled() && count(FilamentShield::getWidgets()) > 0)
+                                ->visible(fn (): bool => Utils::isWidgetEntityEnabled() && count(FilamentShield::getWidgets()) > 0)
                                 ->reactive()
                                 ->schema(static::getWidgetEntityPermissionSchema()),
                             Tab::make(__('filament-shield::filament-shield.custom'))
-                                ->visible(fn(): bool => Utils::isCustomPermissionEntityEnabled())
+                                ->visible(fn (): bool => Utils::isCustomPermissionEntityEnabled())
                                 ->reactive()
                                 ->schema(static::getCustomEntitiesPermissionsSchema()),
                         ])
@@ -152,7 +155,7 @@ class UserResource extends Resource
                     ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email_verified_at')->dateTime()->sortable()->toggleable(),
-                Tables\Columns\TextColumn::make('roles.name')->formatStateUsing(fn($state) => Str::of($state)->headline()),
+                Tables\Columns\TextColumn::make('roles.name')->formatStateUsing(fn ($state) => Str::of($state)->headline()),
                 Tables\Columns\TextColumn::make('birth_date')->date()->sortable()->toggleable(),
                 Tables\Columns\TextColumn::make('gender')->enum(UserGender::getValues())->sortable()->toggleable(),
                 Tables\Columns\TextColumn::make('status')->enum(UserStatus::getValues())->sortable(),
@@ -160,16 +163,16 @@ class UserResource extends Resource
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
                 Tables\Filters\Filter::make('Verified email')
-                    ->query(fn(Builder $query): Builder => $query->where('email_verified_at', '!=', null)),
+                    ->query(fn (Builder $query): Builder => $query->where('email_verified_at', '!=', null)),
                 Tables\Filters\Filter::make('Unverified email')
-                    ->query(fn(Builder $query): Builder => $query->where('email_verified_at', null)),
+                    ->query(fn (Builder $query): Builder => $query->where('email_verified_at', null)),
                 Tables\Filters\SelectFilter::make('roles')->relationship('roles', 'name'),
                 Tables\Filters\SelectFilter::make('gender')->options(UserGender::asSelectArray()),
                 Tables\Filters\SelectFilter::make('status')->options(UserStatus::asSelectArray()),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make()
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
@@ -282,7 +285,7 @@ class UserResource extends Resource
 
                     static::refreshSelectAllStateViaEntities($set, $get);
                 })
-                ->dehydrated(fn($state): bool => $state);
+                ->dehydrated(fn ($state): bool => $state);
 
             return $permissions;
         }, collect())
@@ -292,15 +295,15 @@ class UserResource extends Resource
     protected static function refreshSelectAllStateViaEntities(Closure $set, Closure $get): void
     {
         $entitiesStates = collect(FilamentShield::getResources())
-            ->when(Utils::isPageEntityEnabled(), fn($entities) => $entities->merge(FilamentShield::getPages()))
-            ->when(Utils::isWidgetEntityEnabled(), fn($entities) => $entities->merge(FilamentShield::getWidgets()))
-            ->when(Utils::isCustomPermissionEntityEnabled(), fn($entities) => $entities->merge(static::getCustomEntities()))
+            ->when(Utils::isPageEntityEnabled(), fn ($entities) => $entities->merge(FilamentShield::getPages()))
+            ->when(Utils::isWidgetEntityEnabled(), fn ($entities) => $entities->merge(FilamentShield::getWidgets()))
+            ->when(Utils::isCustomPermissionEntityEnabled(), fn ($entities) => $entities->merge(static::getCustomEntities()))
             ->map(function ($entity) use ($get) {
                 if (is_array($entity)) {
-                    return (bool)$get($entity['resource']);
+                    return (bool) $get($entity['resource']);
                 }
 
-                return (bool)$get($entity);
+                return (bool) $get($entity);
             });
 
         if ($entitiesStates->containsStrict(false) === false) {
@@ -344,7 +347,7 @@ class UserResource extends Resource
     {
         $permissionStates = collect(Utils::getGeneralResourcePermissionPrefixes())
             ->map(function ($permission) use ($get, $entity) {
-                return (bool)$get($permission . '_' . $entity);
+                return (bool) $get($permission . '_' . $entity);
             });
 
         if ($permissionStates->containsStrict(false) === false) {
@@ -414,7 +417,7 @@ class UserResource extends Resource
 
                             static::refreshSelectAllStateViaEntities($set, $get);
                         })
-                        ->dehydrated(fn($state): bool => $state),
+                        ->dehydrated(fn ($state): bool => $state),
                 ])
                 ->columns(1)
                 ->columnSpan(1);
@@ -448,7 +451,7 @@ class UserResource extends Resource
 
                             static::refreshSelectAllStateViaEntities($set, $get);
                         })
-                        ->dehydrated(fn($state): bool => $state),
+                        ->dehydrated(fn ($state): bool => $state),
                 ])
                 ->columns(1)
                 ->columnSpan(1);
@@ -462,7 +465,7 @@ class UserResource extends Resource
         $resourcePermissions = collect();
         collect(FilamentShield::getResources())->each(function ($entity) use ($resourcePermissions) {
             collect(Utils::getGeneralResourcePermissionPrefixes())->map(function ($permission) use ($resourcePermissions, $entity) {
-                $resourcePermissions->push((string)Str::of($permission . '_' . $entity['resource']));
+                $resourcePermissions->push((string) Str::of($permission . '_' . $entity['resource']));
             });
         });
 
@@ -499,7 +502,7 @@ class UserResource extends Resource
 
                             static::refreshSelectAllStateViaEntities($set, $get);
                         })
-                        ->dehydrated(fn($state): bool => $state),
+                        ->dehydrated(fn ($state): bool => $state),
                 ])
                 ->columns(1)
                 ->columnSpan(1);

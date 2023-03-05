@@ -32,9 +32,11 @@ class SettingResource extends Resource
                 Forms\Components\TextInput::make('key')
                     ->required()
                     ->maxLength(50)
-                    ->unique(Setting::class,
+                    ->unique(
+                        Setting::class,
                         callback: fn (Unique $rule, Closure $get) => $rule->where('key', $get('key'))->where('section', $get('section')),
-                        ignoreRecord: true),
+                        ignoreRecord: true
+                    ),
                 Forms\Components\Textarea::make('value')
                     ->required()
                     ->maxLength(65535),
@@ -57,7 +59,7 @@ class SettingResource extends Resource
             ->filters([
                 Tables\Filters\SelectFilter::make('section')
                     ->options(fn () => Setting::all()->pluck('section', 'section')->toArray())
-                    ->multiple()
+                    ->multiple(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

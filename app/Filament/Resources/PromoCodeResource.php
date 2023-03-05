@@ -45,7 +45,7 @@ class PromoCodeResource extends Resource
                         ->minDate(fn (Closure $get) => $get('start_date')),
                     Forms\Components\Toggle::make('is_active')->required()->default(true),
                     Forms\Components\Toggle::make('is_public')->required(),
-                ])->columns()
+                ])->columns(),
             ]);
     }
 

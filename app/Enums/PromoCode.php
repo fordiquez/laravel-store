@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Enums;
 
@@ -6,7 +8,7 @@ use BenSampo\Enum\Enum;
 
 final class PromoCode extends Enum
 {
-    const FIXED = 'fixed';
+    public const FIXED = 'fixed';
 
-    const PERCENTAGE = 'percentage';
+    public const PERCENTAGE = 'percentage';
 }

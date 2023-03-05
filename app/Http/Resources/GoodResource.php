@@ -35,6 +35,7 @@ class GoodResource extends JsonResource
             'category_id' => $this->category_id,
             'brand_id' => $this->brand_id,
 
+            'brand' => new BrandResource($this->whenLoaded('brand')),
             'category' => new CategoryResource($this->whenLoaded('category')),
         ];
     }

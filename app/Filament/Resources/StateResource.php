@@ -30,21 +30,21 @@ class StateResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxlength(50)
-                    ->hint(fn($state, $component) => 'left: ' . $component->getMaxLength() - strlen($state) . ' characters')
+                    ->hint(fn ($state, $component) => 'left: ' . $component->getMaxLength() - strlen($state) . ' characters')
                     ->reactive(),
                 Forms\Components\TextInput::make('old_name')->maxlength(50),
                 Forms\Components\Select::make('country_id')
                     ->required()
                     ->reactive()
                     ->options(Country::all()->pluck('name', 'id')->toArray())
-                    ->afterStateUpdated(fn(callable $set) => $set('parent_id', null)),
+                    ->afterStateUpdated(fn (callable $set) => $set('parent_id', null)),
                 Forms\Components\Select::make('parent_id')
                     ->reactive()
-                    ->options(fn(callable $get) => State::whereCountryId($get('country_id'))?->pluck('name', 'id')->toArray())
-                    ->disabled(fn(callable $get) => !$get('country_id')),
+                    ->options(fn (callable $get) => State::whereCountryId($get('country_id'))?->pluck('name', 'id')->toArray())
+                    ->disabled(fn (callable $get) => !$get('country_id')),
                 Forms\Components\TextInput::make('uuid')->required()->uuid()->default(fake()->uuid),
                 Forms\Components\TextInput::make('type')->nullable()->default('state')->maxLength(25),
-                Forms\Components\Toggle::make('is_active')->required()->default(true)
+                Forms\Components\Toggle::make('is_active')->required()->default(true),
             ]);
     }
 
@@ -68,17 +68,17 @@ class StateResource extends Resource
                         $name = $column->getName();
 
                         $record->update([
-                            $name => !$record->$name
+                            $name => !$record->$name,
                         ]);
                     }),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('country')->form([
                     Forms\Components\Select::make('country_id')->label('Country')
-                    ->options(fn () => Country::all()->pluck('name', "id")->toArray()),
+                    ->options(fn () => Country::all()->pluck('name', 'id')->toArray()),
                     Forms\Components\Select::make('parent_id')->label('Parent State')
                     ->options(fn (callable $get) => Country::find($get('country_id'))?->states->pluck('name', 'id')->toArray())
-                    ->disabled(fn (callable $get) => empty($get('country_id')))
+                    ->disabled(fn (callable $get) => empty($get('country_id'))),
                 ])->query(function (Builder $query, array $data) {
                     $countryId = (int) $data['country_id'];
                     $parentId = (int) $data['parent_id'];
@@ -92,13 +92,13 @@ class StateResource extends Resource
                     }
                 }),
                 Tables\Filters\Filter::make('inactive')
-                    ->query(fn(Builder $query): Builder => $query->where('is_active', false))
+                    ->query(fn (Builder $query): Builder => $query->where('is_active', false))
                     ->label('Only inactive'),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make()
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),

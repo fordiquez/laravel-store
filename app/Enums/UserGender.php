@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Enums;
 
@@ -6,6 +8,7 @@ use BenSampo\Enum\Enum;
 
 final class UserGender extends Enum
 {
-    const MALE = 'male';
-    const FEMALE = 'female';
+    public const MALE = 'male';
+
+    public const FEMALE = 'female';
 }

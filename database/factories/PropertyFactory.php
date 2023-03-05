@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 
 /**
  * @extends Factory
@@ -19,7 +18,7 @@ class PropertyFactory extends Factory
     {
         return [
             'name' => fake()->unique()->sentence(5),
-            'slug' => fn(array $attributes) => str($attributes['name'])->slug(),
+            'slug' => fn (array $attributes) => str($attributes['name'])->slug(),
         ];
     }
 }

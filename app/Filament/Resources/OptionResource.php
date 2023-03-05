@@ -35,15 +35,15 @@ class OptionResource extends Resource
                         slugRuleUniqueParameters: [
                             'table' => 'options',
                             'column' => 'slug',
-                            'ignoreRecord' => true
+                            'ignoreRecord' => true,
                         ]
                     ),
                 ]),
                 Forms\Components\Card::make()->schema([
                     Forms\Components\Repeater::make('optionValues')->relationship()->schema([
-                        Forms\Components\TextInput::make('value')->required()->maxLength(100)
-                    ])
-                ])
+                        Forms\Components\TextInput::make('value')->required()->maxLength(100),
+                    ]),
+                ]),
             ]);
     }
 

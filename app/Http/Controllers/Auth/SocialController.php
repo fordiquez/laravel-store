@@ -35,7 +35,7 @@ class SocialController extends Controller
 
             $user->socials()->updateOrCreate([
                 'provider' => $provider,
-                'provider_id' => $socialUser->getId()
+                'provider_id' => $socialUser->getId(),
             ], [
                 'provider_token' => $socialUser->token,
             ]);
@@ -43,9 +43,9 @@ class SocialController extends Controller
             $user->addAvatarMedia($socialUser->getAvatar());
 
             Auth::login($user);
-
         } catch (\Exception $exception) {
             Log::error($exception->getMessage());
+
             return redirect(RouteServiceProvider::HOME);
         }
 

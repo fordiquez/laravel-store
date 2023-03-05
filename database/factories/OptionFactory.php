@@ -18,7 +18,7 @@ class OptionFactory extends Factory
     {
         return [
             'name' => fake()->unique()->colorName(),
-            'slug' => fn(array $attributes) => str($attributes['name'])->slug(),
+            'slug' => fn (array $attributes) => str($attributes['name'])->slug(),
         ];
     }
 }

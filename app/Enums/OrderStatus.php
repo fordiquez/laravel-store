@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Enums;
 
@@ -6,23 +8,23 @@ use BenSampo\Enum\Enum;
 
 final class OrderStatus extends Enum
 {
-    const UNPAID = 'unpaid';
+    public const UNPAID = 'unpaid';
 
-    const PAID = 'paid';
+    public const PAID = 'paid';
 
-    const UNDER_PROCESS = 'under_process';
+    public const UNDER_PROCESS = 'under_process';
 
-    const PROCESSING = 'processing';
+    public const PROCESSING = 'processing';
 
-    const FINISHED = 'finished';
+    public const FINISHED = 'finished';
 
-    const REJECTED = 'rejected';
+    public const REJECTED = 'rejected';
 
-    const CANCELED = 'canceled';
+    public const CANCELED = 'canceled';
 
-    const REFUNDED_REQUEST = 'refunded_request';
+    public const REFUNDED_REQUEST = 'refunded_request';
 
-    const REFUNDED = 'refunded';
+    public const REFUNDED = 'refunded';
 
-    const RETURNED = 'returned';
+    public const RETURNED = 'returned';
 }

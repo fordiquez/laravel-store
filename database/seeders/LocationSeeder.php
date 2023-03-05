@@ -15,8 +15,6 @@ class LocationSeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
     public function run(): void
     {
@@ -56,13 +54,13 @@ class LocationSeeder extends Seeder
                 if ($state['country_code'] === Country::DEFAULT_COUNTRY) {
                     $stateCode = $state['state_code'];
                     $cities = Http::acceptJson()->withHeaders([
-                        'X-CSCAPI-KEY' => config('services.csc.key')
+                        'X-CSCAPI-KEY' => config('services.csc.key'),
                     ])->get(config('services.csc.url') . Country::DEFAULT_COUNTRY . "/states/$stateCode/cities")->json();
 
                     foreach ($cities as $city) {
                         CityFactory::new()->has(StreetFactory::new()->count(rand(1, 3)))->create([
                             'name' => $city['name'],
-                            'state_id' => State::whereName($state['name'])->value('id')
+                            'state_id' => State::whereName($state['name'])->value('id'),
                         ]);
                     }
                 }

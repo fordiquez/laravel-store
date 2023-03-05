@@ -27,7 +27,7 @@ class StatesRelationManager extends RelationManager
                     ->options(fn (RelationManager $livewire): array => $livewire->ownerRecord->states()->pluck('name', 'id')->toArray())
                     ->searchable(),
                 Forms\Components\TextInput::make('type')->nullable()->default('state')->maxLength(25),
-                Forms\Components\Toggle::make('is_active')->required()->default(true)
+                Forms\Components\Toggle::make('is_active')->required()->default(true),
             ]);
     }
 
@@ -46,11 +46,11 @@ class StatesRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('type')->sortable(),
                 Tables\Columns\IconColumn::make('is_active')->boolean()->toggleable()
                     ->tooltip('Toggle value')
-                    ->action(function($record, $column) {
+                    ->action(function ($record, $column) {
                         $name = $column->getName();
 
                         $record->update([
-                            $name => !$record->$name
+                            $name => !$record->$name,
                         ]);
                     }),
             ])

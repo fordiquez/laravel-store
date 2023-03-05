@@ -40,21 +40,24 @@ class CountryResource extends Resource
             ->schema([
                 Forms\Components\Card::make()->schema([
                     TextInput::make('name')
-                        ->suffixAction(fn($state, Closure $get, Closure $set) => Action::make('search-action')
+                        ->suffixAction(
+                            fn ($state, Closure $get, Closure $set) => Action::make('search-action')
                             ->icon('heroicon-o-search')
                             ->tooltip('Find country by ISO alpha-2 code and filled data')
                             ->action(function () use ($state, $get, $set) {
                                 if (blank($state)) {
                                     Filament::notify('danger', 'Please enter a country ISO alpha-2 code');
+
                                     return;
                                 }
 
                                 try {
                                     $countryData = Http::acceptJson()->withHeaders([
-                                        'X-CSCAPI-KEY' => config('services.csc.key')
+                                        'X-CSCAPI-KEY' => config('services.csc.key'),
                                     ])->get(config('services.csc.url') . $get('name'))->throw()->json();
                                 } catch (RequestException) {
                                     Filament::notify('danger', 'Unable to find the country, please enter a valid ISO alpha-2 code');
+
                                     return;
                                 }
                                 $set('name', $countryData['name'] ?? null);
@@ -71,12 +74,12 @@ class CountryResource extends Resource
                         ->required()
                         ->maxLength(50)
                         ->placeholder('Country name or country ISO alpha-2 code')
-                        ->dehydrateStateUsing(fn($state) => ucfirst($state))
-                        ->helperText(fn() => new HtmlString('<a href="https://www.iban.com/country-codes" target="_blank">Click here if you need to find the country ISO codes</a>')),
+                        ->dehydrateStateUsing(fn ($state) => ucfirst($state))
+                        ->helperText(fn () => new HtmlString('<a href="https://www.iban.com/country-codes" target="_blank">Click here if you need to find the country ISO codes</a>')),
                     Forms\Components\TextInput::make('short_name')
                         ->nullable()
                         ->maxLength(25)
-                        ->dehydrateStateUsing(fn($state) => $state ? ucfirst($state) : null),
+                        ->dehydrateStateUsing(fn ($state) => $state ? ucfirst($state) : null),
                     Forms\Components\TextInput::make('capital')
                         ->required()
                         ->maxLength(255),
@@ -84,12 +87,12 @@ class CountryResource extends Resource
                         ->required()
                         ->unique(Country::class, ignoreRecord: true)
                         ->length(2)
-                        ->dehydrateStateUsing(fn($state) => strtoupper($state)),
+                        ->dehydrateStateUsing(fn ($state) => strtoupper($state)),
                     Forms\Components\TextInput::make('iso3')
                         ->required()
                         ->unique(Country::class, ignoreRecord: true)
                         ->length(3)
-                        ->dehydrateStateUsing(fn($state) => strtoupper($state)),
+                        ->dehydrateStateUsing(fn ($state) => strtoupper($state)),
                     Forms\Components\TextInput::make('phone_code')
                         ->tel()
                         ->required()
@@ -97,27 +100,27 @@ class CountryResource extends Resource
                     Forms\Components\TextInput::make('currency')
                         ->required()
                         ->length(3)
-                        ->dehydrateStateUsing(fn($state) => strtoupper($state)),
+                        ->dehydrateStateUsing(fn ($state) => strtoupper($state)),
                     Forms\Components\TextInput::make('tld')
                         ->required()
                         ->length(3)
-                        ->dehydrateStateUsing(fn($state) => strtolower($state)),
+                        ->dehydrateStateUsing(fn ($state) => strtolower($state)),
                     Forms\Components\Select::make('region')
                         ->required()
                         ->reactive()
                         ->options(Country::getRegions(true))
-                        ->afterStateUpdated(fn(callable $set) => $set('subregion', null)),
+                        ->afterStateUpdated(fn (callable $set) => $set('subregion', null)),
                     Forms\Components\Select::make('subregion')
                         ->nullable()
                         ->reactive()
                         ->options(fn (callable $get) => $get('region') ? Country::getSubregions($get('region'), true) : Country::getSubregions(withNamedKeys: true))
-                        ->disabled(fn(callable $get) => !$get('region')),
+                        ->disabled(fn (callable $get) => !$get('region')),
                     SpatieMediaLibraryFileUpload::make('flag')->collection('flags')
-                        ->when(fn(Page $livewire) => !$livewire instanceof CreateRecord),
+                        ->when(fn (Page $livewire) => !$livewire instanceof CreateRecord),
                     Forms\Components\Toggle::make('is_active')
                         ->default(true)
                         ->required(),
-                ])->columns()
+                ])->columns(),
             ]);
     }
 
@@ -139,11 +142,11 @@ class CountryResource extends Resource
                 Tables\Columns\TextColumn::make('subregion')->sortable()->wrap(),
                 Tables\Columns\IconColumn::make('is_active')->boolean()->toggleable()
                     ->tooltip('Toggle value')
-                    ->action(function($record, $column) {
+                    ->action(function ($record, $column) {
                         $name = $column->getName();
 
                         $record->update([
-                            $name => !$record->$name
+                            $name => !$record->$name,
                         ]);
                     }),
             ])
@@ -157,7 +160,7 @@ class CountryResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make()
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),

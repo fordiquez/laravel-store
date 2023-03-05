@@ -35,15 +35,15 @@ class PropertyResource extends Resource
                         slugRuleUniqueParameters: [
                             'table' => 'properties',
                             'column' => 'slug',
-                            'ignoreRecord' => true
+                            'ignoreRecord' => true,
                         ]
                     ),
                 ]),
                 Forms\Components\Card::make()->schema([
                     Forms\Components\Repeater::make('propertyValues')->relationship()->schema([
-                        Forms\Components\TextInput::make('value')->required()->maxLength(100)
-                    ])
-                ])
+                        Forms\Components\TextInput::make('value')->required()->maxLength(100),
+                    ]),
+                ]),
             ]);
     }
 

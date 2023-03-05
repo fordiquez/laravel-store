@@ -5,7 +5,6 @@ namespace Database\Factories;
 use App\Enums\OrderDelivery;
 use App\Enums\OrderPayment;
 use App\Enums\OrderStatus;
-use App\Models\Order;
 use App\Models\User;
 use App\Models\UserAddress;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -30,7 +29,7 @@ class OrderFactory extends Factory
             'payment_method' => OrderPayment::getRandomValue(),
             'goods_cost' => fake()->numberBetween(100, 10000),
             'delivery_cost' => fake()->numberBetween(0, 100),
-            'total_cost' => fn(array $attributes) => $attributes['goods_cost'] + $attributes['delivery_cost'],
+            'total_cost' => fn (array $attributes) => $attributes['goods_cost'] + $attributes['delivery_cost'],
             'status' => OrderStatus::getRandomValue(),
         ];
     }

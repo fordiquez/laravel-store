@@ -61,9 +61,9 @@ class OrderResource extends Resource
                 Forms\Components\Card::make()->schema([
                     Forms\Components\Grid::make()->schema([
                         Forms\Components\Placeholder::make('Goods cost')
-                            ->content(fn(callable $get) => self::getMoneyFormat($get('goods_cost'))),
+                            ->content(fn (callable $get) => self::getMoneyFormat($get('goods_cost'))),
                         Forms\Components\Placeholder::make('Total cost')
-                            ->content(fn(callable $get) => self::getMoneyFormat($get('total_cost')))
+                            ->content(fn (callable $get) => self::getMoneyFormat($get('total_cost'))),
                     ]),
                 ]),
                 Forms\Components\Card::make()->schema([
@@ -85,7 +85,7 @@ class OrderResource extends Resource
                                     if ($good) {
                                         $set('unit_price', $good->price);
                                         $set('price', number_format($good->price * intval($get('quantity')), 2));
-                                        $goodsCost = collect($get('../../orderItems'))->reduce(fn(?float $carry, array $item) => $carry + (floatval($item['unit_price'])) * $item['quantity']);
+                                        $goodsCost = collect($get('../../orderItems'))->reduce(fn (?float $carry, array $item) => $carry + (floatval($item['unit_price'])) * $item['quantity']);
                                         $set('../../goods_cost', $goodsCost);
                                         $set('../../total_cost', floatval($get('../../delivery_cost')) + $goodsCost);
                                     }
@@ -94,11 +94,11 @@ class OrderResource extends Resource
                             Forms\Components\TextInput::make('quantity')
                                 ->numeric()
                                 ->default(1)
-                                ->disabled(fn(callable $get) => !$get('good_id'))
+                                ->disabled(fn (callable $get) => !$get('good_id'))
                                 ->reactive()
                                 ->afterStateUpdated(function ($state, callable $get, callable $set) {
                                     $set('price', number_format($get('unit_price') * intval($state), 2));
-                                    $goodsCost = collect($get('../../orderItems'))->reduce(fn(?float $carry, array $item) => $carry + (floatval($item['unit_price'])) * $item['quantity']);
+                                    $goodsCost = collect($get('../../orderItems'))->reduce(fn (?float $carry, array $item) => $carry + (floatval($item['unit_price'])) * $item['quantity']);
                                     $set('../../goods_cost', $goodsCost);
                                     $set('../../total_cost', floatval($get('../../delivery_cost')) + $goodsCost);
                                 })
@@ -111,11 +111,11 @@ class OrderResource extends Resource
                                 ->disabled()
                                 ->dehydrated(false)
                                 ->postfix(Setting::where('key', 'currency')->value('value'))
-                                ->columnSpan(2)
+                                ->columnSpan(2),
                         ])->defaultItems(1)->columnSpanFull()->columns([
-                            'md' => 10
-                        ])
-                ])
+                            'md' => 10,
+                        ]),
+                ]),
             ]);
     }
 
