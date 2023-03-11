@@ -11,8 +11,7 @@ use Illuminate\Queue\SerializesModels;
 
 class PasswordMail extends Mailable implements ShouldQueue
 {
-    use Queueable;
-    use SerializesModels;
+    use Queueable, SerializesModels;
 
     public string $password;
 

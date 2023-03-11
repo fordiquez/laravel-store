@@ -18,7 +18,7 @@ defineProps({
 const isDark = useDark();
 const toggleDark = useToggle(isDark);
 
-const { user, categories, breadcrumbs, title } = reactive(usePage().props);
+const { user, categories, breadcrumbs } = reactive(usePage().props);
 
 const showingNavigationDropdown = ref(false);
 const showingResponsiveCategories = ref(false);
@@ -57,6 +57,25 @@ const closeResponsiveCategories = () => (showingResponsiveCategories.value = fal
                         </div>
                     </div>
 
+                    <form action="#" method="GET" class="hidden lg:flex lg:pl-2">
+                        <label for="topbar-search" class="sr-only">Search</label>
+                        <div class="relative self-center lg:w-96">
+                            <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                                <font-awesome-icon
+                                    icon="fa-solid fa-magnifying-glass"
+                                    class="text-gray-500 dark:text-gray-400"
+                                />
+                            </div>
+                            <input
+                                type="text"
+                                name="email"
+                                id="topbar-search"
+                                class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 pl-10 text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500 sm:text-sm"
+                                placeholder="Search"
+                            />
+                        </div>
+                    </form>
+
                     <div class="hidden sm:ml-6 sm:flex sm:items-center">
                         <!-- Toggle dark mode -->
                         <div
@@ -64,7 +83,7 @@ const closeResponsiveCategories = () => (showingResponsiveCategories.value = fal
                             role="tooltip"
                             class="tooltip invisible absolute z-10 inline-block rounded-lg bg-gray-900 px-3 py-2 text-sm font-medium text-white opacity-0 shadow-sm transition-opacity duration-300 dark:bg-gray-700"
                         >
-                            <span>Toggle dark mode</span>
+                            <span>Toggle {{ isDark ? 'light' : 'dark' }} mode</span>
                             <div class="tooltip-arrow" data-popper-arrow></div>
                         </div>
                         <button
@@ -207,7 +226,7 @@ const closeResponsiveCategories = () => (showingResponsiveCategories.value = fal
                 <li v-for="breadcrumb in breadcrumbs" :key="breadcrumb.id" class="hidden sm:block">
                     <div class="flex items-center">
                         <Link
-                            :href="route('index.content', breadcrumb.slug)"
+                            :href="route('index.category', breadcrumb.slug)"
                             class="mr-2 text-sm font-medium text-gray-700 hover:text-purple-600 dark:text-gray-400 dark:hover:text-white"
                         >
                             {{ breadcrumb.title }}
@@ -224,24 +243,23 @@ const closeResponsiveCategories = () => (showingResponsiveCategories.value = fal
                     </div>
                 </li>
                 <li class="text-sm">
-                    <p v-if="route().current('index.content')" class="font-medium text-gray-500 dark:text-gray-500">
+                    <!--                    <Link-->
+                    <!--                        aria-current="page"-->
+                    <!--                        class="text-sm font-medium text-gray-700 hover:text-purple-600 dark:text-gray-400 dark:hover:text-white"-->
+                    <!--                        :href="route('index.category', category)"-->
+                    <!--                    >-->
+                    <!--                        {{ category.title }}-->
+                    <!--                    </Link>-->
+                    <p class="font-medium text-gray-500 dark:text-gray-500">
                         {{ category.title }}
                     </p>
-                    <Link
-                        v-else
-                        aria-current="page"
-                        class="text-sm font-medium text-gray-700 hover:text-purple-600 dark:text-gray-400 dark:hover:text-white"
-                        :href="route('index.content', category)"
-                    >
-                        {{ category.title }}
-                    </Link>
                 </li>
             </ol>
         </nav>
 
         <!-- Page Heading -->
-        <div class="mx-auto max-w-9xl px-4 pt-6 pb-10 sm:px-6 lg:px-8" v-if="title">
-            <h2 class="text-3xl font-bold text-gray-800 dark:text-gray-200">{{ title }}</h2>
+        <div class="mx-auto max-w-9xl px-4 pt-6 pb-10 sm:px-6 lg:px-8" v-if="category">
+            <h1 class="text-3xl font-bold text-gray-800 dark:text-gray-200">{{ category.title }}</h1>
         </div>
 
         <!-- Page Content -->

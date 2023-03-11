@@ -16,10 +16,7 @@ use Illuminate\Support\Facades\Redis;
 
 class StoreUserJob implements ShouldQueue
 {
-    use Dispatchable;
-    use InteractsWithQueue;
-    use Queueable;
-    use SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public array $data;
 

@@ -48,6 +48,19 @@ class Good extends Model implements HasMedia
         });
     }
 
+    public function scopeSorted(Builder $query)
+    {
+        $query->when(request('sort'), function (Builder $q) {
+            $column = request()->str('sort');
+
+            if ($column->contains(['price', 'created_at'])) {
+                $direction = $column->contains('-') ? 'DESC' : 'ASC';
+
+                $q->orderBy((string) $column->remove('-'), $direction);
+            }
+        });
+    }
+
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
