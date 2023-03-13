@@ -12,8 +12,8 @@ import { Head, Link, usePage } from '@inertiajs/vue3';
         </template>
 
         <div class="py-12">
-            <div class="mx-auto max-w-9xl sm:px-6 lg:px-8">
-                <div class="overflow-hidden bg-white shadow-sm dark:bg-gray-800 sm:rounded-lg">
+            <div class="mx-auto max-w-9xl px-4 sm:px-6 lg:px-8">
+                <div class="overflow-hidden rounded-lg bg-white shadow-sm dark:bg-gray-800">
                     <div
                         class="p-6 text-center text-xl font-semibold uppercase tracking-wider text-gray-900 dark:text-gray-100"
                     >
@@ -21,7 +21,7 @@ import { Head, Link, usePage } from '@inertiajs/vue3';
                     </div>
                     <div class="flex flex-wrap">
                         <div
-                            class="flex flex-col p-4 sm:w-1/2 lg:w-1/3 xl:w-1/4"
+                            class="flex basis-full flex-col p-4 sm:basis-1/2 md:basis-1/3 lg:basis-1/4 xl:basis-1/5 2xl:basis-1/6"
                             v-for="category in usePage().props.categories"
                             :key="category.id"
                         >

@@ -61,6 +61,13 @@ class Good extends Model implements HasMedia
         });
     }
 
+    public function scopeSearched(Builder $query)
+    {
+        $query->when(request('search'), function (Builder $q) {
+            $q->whereFullText(['title', 'description'], request('search'));
+        });
+    }
+
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);

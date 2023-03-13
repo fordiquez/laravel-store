@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 Route::controller(IndexController::class)->group(function () {
     Route::get('', 'dashboard')->name('index.dashboard');
     Route::get('category/{category}', 'category')->name('index.category');
+    Route::get('goods/search', 'search')->name('index.search');
     Route::get('goods/{category}', 'goods')->name('index.goods');
     Route::get('good/{good}', 'good')->name('index.good');
 });

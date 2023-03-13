@@ -9,6 +9,7 @@ use App\Http\Resources\GoodResource;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Good;
+use Illuminate\Http\Request;
 
 class IndexController extends Controller
 {
@@ -36,6 +37,24 @@ class IndexController extends Controller
         return inertia('Index/Goods', [
             'category' => new CategoryResource($category),
             'breadcrumbs' => Category::breadcrumbs($category),
+            'brands' => BrandResource::collection(Brand::whereIn('id', $goods->pluck('brand_id')->all())->get()),
+            // TODO: unwrap filters
+            'filters' => [
+                'prices' => [
+                    'min' => intval($goods->get()->min('price')),
+                    'max' => intval($goods->get()->max('price')),
+                ],
+            ],
+            'goods' => GoodResource::collection($goods->filtered()->sorted()->paginate(10)->withQueryString()),
+        ]);
+    }
+
+    public function search(Request $request)
+    {
+        $goods = Good::searched();
+
+        return inertia('Index/Goods', [
+            'title' => $request->get('search'),
             'brands' => BrandResource::collection(Brand::whereIn('id', $goods->pluck('brand_id')->all())->get()),
             // TODO: unwrap filters
             'filters' => [

@@ -1,35 +1,39 @@
 <script setup>
-import { computed, onMounted, reactive, ref, defineProps } from 'vue';
-import { Link, usePage } from '@inertiajs/vue3';
+import { computed, onMounted, reactive, ref } from 'vue';
+import { Link, useForm, usePage } from '@inertiajs/vue3';
 import { useDark, useToggle } from '@vueuse/core';
 import { initTooltips } from 'flowbite';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
-import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import ResponsiveCategories from '@/Components/ResponsiveCategories.vue';
 import Categories from '@/Components/Categories.vue';
 
 defineProps({
-    category: Object,
+    title: String,
 });
+
+const { user, categories, breadcrumbs } = reactive(usePage().props);
 
 const isDark = useDark();
 const toggleDark = useToggle(isDark);
 
-const { user, categories, breadcrumbs } = reactive(usePage().props);
-
 const showingNavigationDropdown = ref(false);
 const showingResponsiveCategories = ref(false);
+const search = ref(null);
 
-onMounted(() => {
-    initTooltips();
-});
+onMounted(() => initTooltips());
 
 const fullName = computed(() => (user ? `${user.first_name} ${user.last_name}` : null));
 
 const closeResponsiveCategories = () => (showingResponsiveCategories.value = false);
+
+const searchGoods = () => {
+    useForm({
+        search: search.value,
+    }).get(route('index.search'));
+};
 </script>
 
 <template>
@@ -49,16 +53,23 @@ const closeResponsiveCategories = () => (showingResponsiveCategories.value = fal
                         </div>
 
                         <!-- Navigation Links -->
-                        <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                            <NavLink :href="route('index.dashboard')" :active="route().current('index.dashboard')">
-                                Dashboard
-                            </NavLink>
+                        <div class="hidden space-x-8 sm:flex">
                             <categories :categories="categories" />
+                            <button
+                                @click="showingResponsiveCategories = true"
+                                :class="[
+                                    showingResponsiveCategories
+                                        ? 'border-indigo-400 text-gray-900 focus:border-indigo-700 dark:border-indigo-600 dark:text-gray-100'
+                                        : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 focus:border-gray-300 focus:text-gray-700 dark:text-gray-400 dark:hover:border-gray-700 dark:hover:text-gray-300 dark:focus:border-gray-700 dark:focus:text-gray-300',
+                                    'relative inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium leading-5 transition duration-150 ease-in-out focus:outline-none lg:hidden',
+                                ]"
+                            >
+                                <span>Categories</span>
+                            </button>
                         </div>
                     </div>
 
-                    <form action="#" method="GET" class="hidden lg:flex lg:pl-2">
-                        <label for="topbar-search" class="sr-only">Search</label>
+                    <form @submit.prevent="searchGoods" class="hidden items-center md:flex lg:pl-2">
                         <div class="relative self-center lg:w-96">
                             <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
                                 <font-awesome-icon
@@ -67,16 +78,27 @@ const closeResponsiveCategories = () => (showingResponsiveCategories.value = fal
                                 />
                             </div>
                             <input
+                                v-model="search"
                                 type="text"
-                                name="email"
-                                id="topbar-search"
+                                id="goods-search"
                                 class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 pl-10 text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500 sm:text-sm"
-                                placeholder="Search"
+                                placeholder="I'm looking for..."
                             />
+                        </div>
+                        <div class="ml-2">
+                            <button
+                                class="group relative inline-flex items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-purple-600 to-blue-500 p-0.5 font-medium text-gray-900 hover:text-white focus:outline-none focus:ring-4 focus:ring-blue-300 group-hover:from-purple-600 group-hover:to-blue-500 dark:text-white dark:focus:ring-blue-800"
+                            >
+                                <span
+                                    class="rounded-md bg-white px-4 py-2 uppercase tracking-wider transition-all duration-150 ease-in group-hover:bg-opacity-0 dark:bg-gray-900"
+                                >
+                                    Find
+                                </span>
+                            </button>
                         </div>
                     </form>
 
-                    <div class="hidden sm:ml-6 sm:flex sm:items-center">
+                    <div class="ml-auto mr-4 flex items-center sm:ml-0">
                         <!-- Toggle dark mode -->
                         <div
                             id="theme-toggle"
@@ -110,7 +132,7 @@ const closeResponsiveCategories = () => (showingResponsiveCategories.value = fal
                             </svg>
                         </button>
                         <!-- Settings Dropdown -->
-                        <div v-if="user" class="relative ml-3">
+                        <div v-if="user" class="relative ml-3 hidden sm:flex">
                             <Dropdown align="right" width="48">
                                 <template #trigger>
                                     <span class="inline-flex rounded-md">
@@ -132,7 +154,7 @@ const closeResponsiveCategories = () => (showingResponsiveCategories.value = fal
                                 </template>
                             </Dropdown>
                         </div>
-                        <div v-else>
+                        <div class="hidden sm:flex" v-else>
                             <Link
                                 :href="route('register')"
                                 class="mx-2 inline-flex items-center justify-center rounded-lg bg-gray-50 px-3 py-2.5 text-sm font-semibold uppercase tracking-wider text-gray-500 hover:bg-gray-100 hover:text-gray-900 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
@@ -146,7 +168,7 @@ const closeResponsiveCategories = () => (showingResponsiveCategories.value = fal
                                 Log In
                             </Link>
                         </div>
-                        <div v-if="user?.avatar" class="ml-2 h-9 w-9">
+                        <div v-if="user?.avatar" class="ml-2 hidden h-9 w-9 sm:flex">
                             <img :src="user.avatar" :alt="fullName" :title="fullName" class="rounded-full" />
                         </div>
                     </div>
@@ -187,11 +209,16 @@ const closeResponsiveCategories = () => (showingResponsiveCategories.value = fal
 
                 <!-- Responsive Settings Options -->
                 <div v-if="user" class="border-t border-gray-200 pt-4 pb-1 dark:border-gray-600">
-                    <div class="px-4">
-                        <div class="text-base font-medium text-gray-800 dark:text-gray-200">
-                            {{ fullName }}
+                    <div class="flex items-center">
+                        <div v-if="user?.avatar" class="ml-2 h-9 w-9">
+                            <img :src="user.avatar" :alt="fullName" :title="fullName" class="rounded-full" />
                         </div>
-                        <div class="text-sm font-medium text-gray-500">{{ user.email }}</div>
+                        <div class="px-4">
+                            <div class="text-base font-medium text-gray-800 dark:text-gray-200">
+                                {{ fullName }}
+                            </div>
+                            <div class="text-sm font-medium text-gray-500">{{ user.email }}</div>
+                        </div>
                     </div>
 
                     <div class="mt-3 space-y-1">
@@ -201,11 +228,19 @@ const closeResponsiveCategories = () => (showingResponsiveCategories.value = fal
                         </ResponsiveNavLink>
                     </div>
                 </div>
+
+                <div v-else class="border-t border-gray-200 pt-4 pb-1 dark:border-gray-600">
+                    <ResponsiveNavLink :href="route('register')"> Sign Up</ResponsiveNavLink>
+                    <ResponsiveNavLink :href="route('login')"> Log In</ResponsiveNavLink>
+                </div>
             </div>
         </header>
 
-        <nav aria-label="Breadcrumb" v-if="category">
-            <ol role="list" class="mt-6 flex max-w-2xl items-center space-x-2 px-4 sm:px-6 lg:max-w-9xl lg:px-8">
+        <nav aria-label="Breadcrumbs" v-if="breadcrumbs">
+            <ol
+                role="list"
+                class="mx-auto mt-6 flex max-w-2xl items-center space-x-2 px-4 sm:px-6 lg:max-w-9xl lg:px-8"
+            >
                 <li class="flex items-center">
                     <Link
                         :href="route('index.dashboard')"
@@ -242,7 +277,7 @@ const closeResponsiveCategories = () => (showingResponsiveCategories.value = fal
                         </svg>
                     </div>
                 </li>
-                <li class="text-sm">
+                <li class="text-sm" v-if="title">
                     <!--                    <Link-->
                     <!--                        aria-current="page"-->
                     <!--                        class="text-sm font-medium text-gray-700 hover:text-purple-600 dark:text-gray-400 dark:hover:text-white"-->
@@ -251,15 +286,15 @@ const closeResponsiveCategories = () => (showingResponsiveCategories.value = fal
                     <!--                        {{ category.title }}-->
                     <!--                    </Link>-->
                     <p class="font-medium text-gray-500 dark:text-gray-500">
-                        {{ category.title }}
+                        {{ title }}
                     </p>
                 </li>
             </ol>
         </nav>
 
         <!-- Page Heading -->
-        <div class="mx-auto max-w-9xl px-4 pt-6 pb-10 sm:px-6 lg:px-8" v-if="category">
-            <h1 class="text-3xl font-bold text-gray-800 dark:text-gray-200">{{ category.title }}</h1>
+        <div class="mx-auto max-w-9xl px-4 py-6 sm:px-6 lg:px-8" v-if="title">
+            <h1 class="text-3xl font-bold text-gray-800 dark:text-gray-200">{{ title }}</h1>
         </div>
 
         <!-- Page Content -->

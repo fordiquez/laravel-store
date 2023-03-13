@@ -109,7 +109,7 @@ const trimPageRange = (pageRange) => {
                 <font-awesome-icon icon="fa-solid fa-arrow-right-long" class="ml-2 h-4 w-4" />
             </button>
         </div>
-        <p v-else class="mb-0 text-sm leading-5 text-gray-700 sm:hidden">
+        <p v-else class="mb-0 text-sm leading-5 text-gray-700 dark:text-gray-400 sm:hidden">
             No results found <span class="font-mono">¯\_(ツ)_/¯</span>
         </p>
 

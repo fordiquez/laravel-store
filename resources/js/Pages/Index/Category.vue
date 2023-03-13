@@ -10,9 +10,9 @@ const props = defineProps({
 <template>
     <Head :title="category.title" />
 
-    <AuthenticatedLayout :category="category">
-        <section v-if="category.subcategories" class="bg-gray-100 px-4 text-gray-400 dark:bg-gray-900 sm:px-6 lg:px-8">
-            <div class="overflow-hidden bg-white shadow-sm dark:bg-gray-800 sm:rounded-lg">
+    <AuthenticatedLayout :title="category.title">
+        <section v-if="category.subcategories" class="bg-gray-100 p-4 text-gray-400 dark:bg-gray-900 sm:px-6 lg:px-8">
+            <div class="overflow-hidden rounded-lg bg-white shadow-sm dark:bg-gray-800">
                 <div class="flex flex-wrap">
                     <div
                         class="flex w-full flex-col p-4 sm:w-1/2 lg:w-1/3 xl:w-1/4 2xl:w-1/5"
