@@ -9,6 +9,8 @@ use App\Http\Resources\GoodResource;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Good;
+use App\Models\OptionValue;
+use App\Models\GoodProperty;
 use Illuminate\Http\Request;
 
 class IndexController extends Controller
@@ -32,7 +34,21 @@ class IndexController extends Controller
 
     public function goods(Category $category)
     {
-        $goods = Good::whereCategoryId($category->id);
+        $goods = Good::whereCategoryId($category->id)->with(['propertyValues']);
+
+        $properties = collect();
+
+        $goods->each(function (Good $good, int $key) use ($properties) {
+            $good->load(['propertyValues.property']);
+
+            $goodProperties = $good->propertyValues->mapToGroups(fn (GoodProperty $propertyValue) => [$propertyValue->property->name => $propertyValue->value]);
+
+            $goodProperties->each(function ($item, $key) use ($properties) {
+                $properties->put($key, $item->all());
+            });
+        });
+
+        dd($properties->all());
 
         return inertia('Index/Goods', [
             'category' => new CategoryResource($category),

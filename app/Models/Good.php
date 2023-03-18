@@ -83,9 +83,9 @@ class Good extends Model implements HasMedia
         return $this->belongsToMany(Tag::class, 'good_tag', 'good_id', 'tag_id');
     }
 
-    public function propertyValues(): BelongsToMany
+    public function properties(): BelongsToMany
     {
-        return $this->belongsToMany(PropertyValue::class);
+        return $this->belongsToMany(Property::class)->withPivot('value');
     }
 
     public function optionValues(): BelongsToMany

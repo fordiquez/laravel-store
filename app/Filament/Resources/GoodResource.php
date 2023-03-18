@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Enums\GoodStatus;
 use App\Filament\Resources\GoodResource\Pages;
+use App\Filament\Resources\GoodResource\RelationManagers\PropertiesRelationManager;
 use App\Filament\Resources\GoodResource\RelationManagers\ReviewsRelationManager;
 use App\Models\Good;
 use App\Models\Setting;
@@ -79,10 +80,6 @@ class GoodResource extends Resource
                         ->relationship('tags', 'name')
                         ->preload()
                         ->columnSpanFull(),
-                    Forms\Components\Select::make('propertyValues')
-                        ->multiple()
-                        ->relationship('propertyValues', 'value')
-                        ->preload(),
                     Forms\Components\Select::make('optionValues')
                         ->multiple()
                         ->relationship('optionValues', 'value')
@@ -116,7 +113,7 @@ class GoodResource extends Resource
                     ->searchable()
                     ->copyable()
                     ->tooltip('Click to copy')
-                ->toggleable(),
+                    ->toggleable(),
                 Tables\Columns\SpatieMediaLibraryImageColumn::make('preview')
                     ->collection('goods')
                     ->toggleable(),
@@ -158,6 +155,7 @@ class GoodResource extends Resource
     {
         return [
             ReviewsRelationManager::class,
+            PropertiesRelationManager::class,
         ];
     }
 

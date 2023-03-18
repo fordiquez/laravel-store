@@ -10,10 +10,10 @@ class Property extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'slug'];
+    protected $fillable = ['category_id', 'filterable', 'name', 'slug'];
 
-    public function propertyValues(): HasMany
+    public function goods(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->hasMany(PropertyValue::class);
+        return $this->belongsToMany(Good::class)->withPivot('value');
     }
 }
