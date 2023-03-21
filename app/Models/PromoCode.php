@@ -22,5 +22,13 @@ class PromoCode extends Model
         'is_public',
     ];
 
-    public static array $types = ['fixed', 'percentage'];
+    protected $casts = [
+        'type' => \App\Enums\PromoCode::class,
+        'used_times' => 'integer',
+        'start_date' => 'datetime',
+        'expire_date' => 'datetime',
+        'greater_than' => 'float',
+        'is_active' => 'boolean',
+        'is_public' => 'boolean',
+    ];
 }

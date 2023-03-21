@@ -31,7 +31,7 @@ class PromoCodeResource extends Resource
                     Forms\Components\TextInput::make('key')
                         ->required()
                         ->maxLength(50)
-                        ->unique()
+                        ->unique(ignoreRecord: true)
                         ->default(Str::random(8)),
                     Forms\Components\Radio::make('type')
                         ->required()

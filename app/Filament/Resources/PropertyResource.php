@@ -29,7 +29,7 @@ class PropertyResource extends Resource
                     TitleWithSlugInput::make(
                         fieldTitle: 'name',
                         fieldSlug: 'slug',
-                        urlHostVisible: false,
+                        urlVisitLinkVisible: false,
                         titleLabel: 'Name',
                         slugLabel: 'Slug',
                         slugRuleUniqueParameters: [
@@ -38,6 +38,13 @@ class PropertyResource extends Resource
                             'ignoreRecord' => true,
                         ]
                     ),
+                    Forms\Components\Select::make('category_id')
+                        ->required()
+                        ->label('Category')
+                        ->relationship('category', 'title')
+                        ->preload()
+                        ->searchable(),
+                    Forms\Components\Toggle::make('filterable')->required(),
                 ]),
             ]);
     }
@@ -52,11 +59,17 @@ class PropertyResource extends Resource
                 Tables\Columns\TextColumn::make('id')->sortable(),
                 Tables\Columns\TextColumn::make('name')->limit(50)->sortable()->searchable(),
                 Tables\Columns\TextColumn::make('slug')->limit(25)->sortable(),
-                Tables\Columns\TextColumn::make('created_at')->dateTime()->sortable()->toggleable(),
-                Tables\Columns\TextColumn::make('updated_at')->dateTime()->sortable()->toggleable(),
+                Tables\Columns\TextColumn::make('category.title')->limit(25)->sortable()->toggleable(),
+                Tables\Columns\IconColumn::make('filterable')->boolean()->toggleable(),
+                Tables\Columns\TextColumn::make('created_at')->dateTime()->sortable()->toggleable()->toggledHiddenByDefault(),
+                Tables\Columns\TextColumn::make('updated_at')->dateTime()->sortable()->toggleable()->toggledHiddenByDefault(),
             ])
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('category')
+                    ->relationship('category', 'title')
+                    ->multiple()
+                    ->searchable(),
+                Tables\Filters\TernaryFilter::make('filterable'),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

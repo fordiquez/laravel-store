@@ -27,6 +27,7 @@ return new class extends Migration {
             $table->unsignedDecimal('price');
             $table->unsignedInteger('quantity')->default(0);
             $table->enum('status', GoodStatus::getValues());
+            $table->json('options')->nullable();
             $table->timestamps();
 
             $table->softDeletes();

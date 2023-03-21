@@ -19,7 +19,7 @@ class GoodResource extends JsonResource
             'description' => $this->description,
             'short_description' => $this->short_description,
             'warning_description' => $this->warning_description,
-            'old_price' => $this->old_price ? number_format($this->old_price, thousands_separator: ' ') : null,
+            'old_price' => !$this->old_price ?: number_format($this->old_price, thousands_separator: ' '),
             'price' => number_format($this->price, thousands_separator: ' '),
             'quantity' => $this->quantity,
             'status' => $this->status,
@@ -28,7 +28,6 @@ class GoodResource extends JsonResource
             'preview' => $this->preview,
             'media_count' => $this->media_count,
             'option_values_count' => $this->option_values_count,
-            'property_values_count' => $this->property_values_count,
             'reviews_count' => $this->reviews_count,
             'tags_count' => $this->tags_count,
 
@@ -37,6 +36,7 @@ class GoodResource extends JsonResource
 
             'brand' => new BrandResource($this->whenLoaded('brand')),
             'category' => new CategoryResource($this->whenLoaded('category')),
+            'properties' => PropertyResource::collection($this->whenLoaded('properties')),
         ];
     }
 }

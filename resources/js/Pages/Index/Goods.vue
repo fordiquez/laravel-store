@@ -11,27 +11,30 @@ import Filters from '@/Components/Filters.vue';
 const props = defineProps({
     title: String,
     category: Object,
-    goods: Object,
     brands: Array,
-    filters: Object,
+    properties: Object,
+    prices: Object,
+    goods: Object,
 });
 
 onMounted(() => {
     initDropdowns();
     if (props.goods.data) {
         const queries = qs.parse(window.location.search.substring(1));
-        form.brands = queries?.brands?.map((brand) => Number.parseInt(brand)) ?? [];
-        [rangePrices.min, rangePrices.max] = [props.filters.prices.min, props.filters.prices.max];
-        form.prices = queries?.prices
+        filters.brands = queries?.brands?.map((brand) => Number.parseInt(brand)) ?? [];
+        [rangePrices.min, rangePrices.max] = [props.prices.min, props.prices.max];
+        filters.prices = queries?.prices
             ? Object.values(queries.prices).map((value) => Number.parseInt(value))
             : Object.values(rangePrices);
+        queries.properties ? filters.properties.push(...queries?.properties) : null;
         sort.value = queries?.sort;
     }
 });
 
-const form = useForm({
+const filters = useForm({
     brands: [],
     prices: [0, 100000],
+    properties: [],
 });
 
 const rangePrices = reactive({
@@ -42,56 +45,55 @@ const rangePrices = reactive({
 const formRoute = computed(() => (props.category ? route('index.goods', props.category) : route('index.search')));
 
 const brandFilter = (brand) => {
-    const brandIndex = form.brands.indexOf(brand);
-    brandIndex === -1 ? form.brands.push(brand) : form.brands.splice(brandIndex, 1);
-    form.transform((data) => ({
-        ...data,
-        prices: {
-            from: form.prices[0],
-            to: form.prices[1],
-        },
-        sort: sort.value,
-        search: props.title ?? '',
-    })).get(formRoute.value);
-};
-
-const sort = ref('rating');
-
-const goodsSort = (key) => {
-    form.transform((data) => ({
-        ...data,
-        prices: {
-            from: form.prices[0],
-            to: form.prices[1],
-        },
-        sort: key,
-        search: props.title ?? '',
-    })).get(formRoute.value);
-};
-
-const clearFilters = () => {
-    form.transform(() => ({
-        brands: [],
-        prices: {
-            from: rangePrices.min,
-            to: rangePrices.max,
-        },
-        sort: sort.value,
-        search: props.title ?? '',
-    })).get(formRoute.value);
+    const brandIndex = filters.brands.indexOf(brand);
+    brandIndex === -1 ? filters.brands.push(brand) : filters.brands.splice(brandIndex, 1);
+    filters
+        .transform((data) => ({
+            ...data,
+            prices: {
+                from: filters.prices[0],
+                to: filters.prices[1],
+            },
+            sort: sort.value,
+            search: props.title ?? '',
+        }))
+        .get(formRoute.value);
 };
 
 const priceFilter = () => {
-    form.transform((data) => ({
-        ...data,
-        prices: {
-            from: form.prices[0],
-            to: form.prices[1],
-        },
-        sort: sort.value,
-        search: props.title ?? '',
-    })).get(formRoute.value);
+    filters
+        .transform((data) => ({
+            ...data,
+            prices: {
+                from: filters.prices[0],
+                to: filters.prices[1],
+            },
+            sort: sort.value,
+            search: props.title ?? '',
+        }))
+        .get(formRoute.value);
 };
+
+const propertyFilter = (value) => {
+    filters.properties.push(value);
+    filters.get(formRoute.value);
+};
+
+const clearFilters = () => {
+    filters
+        .transform(() => ({
+            brands: [],
+            prices: {
+                from: rangePrices.min,
+                to: rangePrices.max,
+            },
+            sort: sort.value,
+            search: props.title ?? '',
+        }))
+        .get(formRoute.value);
+};
+
+const sort = ref('rating');
 
 const sortOptions = [
     // {name: 'Best Rating', key: 'rating'},
@@ -99,6 +101,20 @@ const sortOptions = [
     { name: 'Price: Low to High', key: 'price' },
     { name: 'Price: High to Low', key: '-price' },
 ];
+
+const goodsSort = (key) => {
+    filters
+        .transform((data) => ({
+            ...data,
+            prices: {
+                from: filters.prices[0],
+                to: filters.prices[1],
+            },
+            sort: key,
+            search: props.title ?? '',
+        }))
+        .get(formRoute.value);
+};
 </script>
 
 <template>
@@ -114,10 +130,12 @@ const sortOptions = [
                         <FiltersDrawer
                             v-if="goods.data.length"
                             :brands="brands"
-                            :form="form"
+                            :properties="properties"
+                            :filters="filters"
                             :range-prices="rangePrices"
                             @brand-filter="brandFilter"
                             @price-filter="priceFilter"
+                            @property-filter="propertyFilter"
                         />
                         <h6
                             v-if="goods.data.length"
@@ -128,16 +146,16 @@ const sortOptions = [
 
                         <div class="hidden lg:block">
                             <button
-                                v-if="form.brands.length"
+                                v-if="filters.brands.length || filters.properties.length"
                                 @click="clearFilters"
-                                class="mx-1 rounded-full bg-purple-700 px-2 text-center text-sm font-medium text-white hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900"
+                                class="mx-1 rounded-full bg-purple-700 px-2 text-center text-sm font-medium text-white focus:outline-none focus:ring-4 focus:ring-purple-300 hover:bg-purple-800 dark:bg-purple-600 dark:focus:ring-purple-900 dark:hover:bg-purple-700"
                             >
                                 <span>Clear</span>
                             </button>
 
                             <template v-for="brand in brands">
                                 <button
-                                    v-if="form.brands?.includes(brand.id)"
+                                    v-if="filters.brands?.includes(brand.id)"
                                     :key="brand.id"
                                     @click.prevent="brandFilter(brand.id)"
                                     class="mx-1 rounded-full bg-purple-100 px-2.5 py-0.5 text-xs font-medium text-purple-800 dark:bg-purple-900 dark:text-purple-300"
@@ -146,6 +164,19 @@ const sortOptions = [
                                     <font-awesome-icon icon="fa-solid fa-xmark" class="ml-1" />
                                 </button>
                             </template>
+
+                            <template v-for="(property, i) in properties" :key="i">
+                                <template v-for="value in property.values">
+                                    <button
+                                        v-if="filters.properties?.includes(value)"
+                                        :key="value"
+                                        class="mx-1 rounded-full bg-purple-100 px-2.5 py-0.5 text-xs font-medium text-purple-800 dark:bg-purple-900 dark:text-purple-300"
+                                    >
+                                        <span class="mr-1">{{ value }}</span>
+                                        <font-awesome-icon icon="fa-solid fa-xmark" class="ml-1" />
+                                    </button>
+                                </template>
+                            </template>
                         </div>
                     </div>
 
@@ -153,7 +184,7 @@ const sortOptions = [
                         <button
                             id="dropdownNavbarButton"
                             data-dropdown-toggle="dropdownNavbar"
-                            class="flex w-full items-center justify-between py-2 pl-3 pr-4 font-medium text-gray-700 hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:text-white md:w-auto md:p-0 md:hover:bg-transparent md:hover:text-blue-700 md:dark:hover:bg-transparent"
+                            class="flex w-full items-center justify-between py-2 pl-3 pr-4 font-medium text-gray-700 hover:bg-gray-50 dark:text-gray-400 dark:focus:text-white dark:hover:bg-gray-700 dark:hover:text-white md:w-auto md:p-0 md:hover:bg-transparent md:hover:text-blue-700 md:dark:hover:bg-transparent"
                         >
                             Sort
                             <font-awesome-icon icon="fa-solid fa-chevron-down" class="ml-2" />
@@ -189,10 +220,12 @@ const sortOptions = [
                         <Filters
                             v-if="goods.data.length"
                             :brands="brands"
-                            :form="form"
+                            :filters="filters"
+                            :properties="properties"
                             :range-prices="rangePrices"
                             @brand-filter="brandFilter"
                             @price-filter="priceFilter"
+                            @property-filter="propertyFilter"
                         />
 
                         <div class="lg:col-span-3">

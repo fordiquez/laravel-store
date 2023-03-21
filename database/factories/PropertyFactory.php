@@ -20,7 +20,7 @@ class PropertyFactory extends Factory
         return [
             'category_id' => Category::inRandomOrder()->value('id'),
             'filterable' => fake()->boolean(77),
-            'name' => fake()->unique()->sentence(5),
+            'name' => fake()->unique()->sentence(rand(1, 5)),
             'slug' => fn (array $attributes) => str($attributes['name'])->slug(),
         ];
     }

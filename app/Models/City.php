@@ -13,6 +13,12 @@ class City extends Model
 
     protected $fillable = ['uuid', 'state_id', 'name', 'old_name', 'type', 'is_state_center', 'big_city', 'is_active'];
 
+    protected $casts = [
+        'is_state_center' => 'boolean',
+        'big_city' => 'boolean',
+        'is_active' => 'boolean',
+    ];
+
     public function state(): BelongsTo
     {
         return $this->belongsTo(State::class);

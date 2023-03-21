@@ -13,6 +13,10 @@ class State extends Model
 
     protected $fillable = ['uuid', 'name', 'old_name', 'country_id', 'parent_id', 'type', 'is_active'];
 
+    protected $casts = [
+        'is_active' => 'boolean',
+    ];
+
     public static array $types = [
         'state',
         'province',

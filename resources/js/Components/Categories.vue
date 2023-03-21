@@ -25,7 +25,7 @@ const onCategory = (category) => (hoveredCategoryId.value = category.id);
                         :class="[
                             popover
                                 ? 'border-indigo-400 text-gray-900 focus:border-indigo-700 dark:border-indigo-600 dark:text-gray-100'
-                                : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 focus:border-gray-300 focus:text-gray-700 dark:text-gray-400 dark:hover:border-gray-700 dark:hover:text-gray-300 dark:focus:border-gray-700 dark:focus:text-gray-300',
+                                : 'border-transparent text-gray-500 focus:border-gray-300 focus:text-gray-700 hover:border-gray-300 hover:text-gray-700 dark:text-gray-400 dark:focus:border-gray-700 dark:focus:text-gray-300 dark:hover:border-gray-700 dark:hover:text-gray-300',
                             'relative inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium leading-5 transition duration-150 ease-in-out focus:outline-none',
                         ]"
                     >
@@ -78,7 +78,7 @@ const onCategory = (category) => (hoveredCategoryId.value = category.id);
                                             <li class="flex flex-col">
                                                 <Link
                                                     :id="subcategory.slug"
-                                                    class="text-base font-medium text-gray-600 hover:text-gray-900 focus:text-gray-700 dark:text-gray-300 dark:hover:text-gray-100 dark:focus:text-gray-100"
+                                                    class="text-base font-medium text-gray-600 focus:text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:focus:text-gray-100 dark:hover:text-gray-100"
                                                     :href="route('index.category', subcategory)"
                                                 >
                                                     {{ subcategory.title }}
@@ -91,7 +91,7 @@ const onCategory = (category) => (hoveredCategoryId.value = category.id);
                                                     >
                                                         <Link
                                                             :href="route('index.category', item)"
-                                                            class="text-sm text-gray-500 hover:text-gray-900 focus:text-gray-700 dark:text-gray-400 dark:hover:text-gray-100 dark:focus:text-gray-100"
+                                                            class="text-sm text-gray-500 focus:text-gray-700 hover:text-gray-900 dark:text-gray-400 dark:focus:text-gray-100 dark:hover:text-gray-100"
                                                         >
                                                             {{ item.title }}
                                                         </Link>
@@ -114,14 +114,14 @@ const onCategory = (category) => (hoveredCategoryId.value = category.id);
                                                 />
                                             </div>
                                             <Link
-                                                class="text-base font-medium text-gray-600 hover:text-gray-900 focus:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100 dark:focus:text-gray-100"
+                                                class="text-base font-medium text-gray-600 focus:text-gray-900 hover:text-gray-900 dark:text-gray-300 dark:focus:text-gray-100 dark:hover:text-gray-100"
                                                 :href="route('index.category', hoveredCategory)"
                                             >
                                                 <span class="absolute inset-0 z-20" />
                                                 {{ hoveredCategory.title }}
                                             </Link>
                                             <p
-                                                class="mt-1 text-sm text-gray-500 hover:text-gray-900 focus:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 dark:focus:text-gray-100"
+                                                class="mt-1 text-sm text-gray-500 focus:text-gray-900 hover:text-gray-900 dark:text-gray-400 dark:focus:text-gray-100 dark:hover:text-gray-100"
                                             >
                                                 Shop now
                                             </p>

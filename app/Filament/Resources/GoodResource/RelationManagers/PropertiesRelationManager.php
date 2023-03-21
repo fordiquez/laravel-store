@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\GoodResource\RelationManagers;
 
-use App\Models\Property;
 use Filament\Forms;
 use Filament\Resources\Form;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -22,26 +21,33 @@ class PropertiesRelationManager extends RelationManager
             ->schema([
                 Forms\Components\TextInput::make('value')
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(100),
             ]);
     }
 
+    /**
+     * @throws \Exception
+     */
     public static function table(Table $table): Table
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('id')->sortable(),
+                Tables\Columns\TextColumn::make('name')->sortable(),
+                Tables\Columns\TextColumn::make('category.title')->sortable()->toggleable(),
                 Tables\Columns\TextColumn::make('value'),
             ])
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('category')
+                    ->multiple()
+                    ->relationship('category', 'title'),
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make(),
                 AttachAction::make()->preloadRecordSelect()
                     ->form(fn (AttachAction $action): array => [
                         $action->getRecordSelect(),
                         Forms\Components\TextInput::make('value')->required(),
-                    ])
+                    ]),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

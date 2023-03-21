@@ -1,11 +1,13 @@
 <script setup>
-import { defineProps } from 'vue';
+import { computed, defineProps } from 'vue';
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue';
 
 defineProps({
     title: String,
     classes: String,
 });
+
+const defaultClass = computed(() => 'mt-6 p-1 max-h-96 dark:[color-scheme:dark]');
 </script>
 
 <template>
@@ -14,7 +16,9 @@ defineProps({
             <DisclosureButton
                 class="group flex w-full items-center justify-between pb-3 text-gray-900 dark:text-gray-300"
             >
-                <span class="font-medium group-hover:text-purple-600 dark:group-hover:text-gray-50">{{ title }}</span>
+                <span class="text-left font-medium group-hover:text-purple-600 dark:group-hover:text-gray-50">
+                    {{ title }}
+                </span>
                 <span class="ml-6 flex items-center group-hover:text-purple-600 dark:group-hover:text-gray-50">
                     <font-awesome-icon :icon="['fa-solid', !open ? 'fa-plus' : 'fa-minus']" size="lg" />
                 </span>
@@ -28,7 +32,7 @@ defineProps({
             leave-from-class="transform scale-100 opacity-100"
             leave-to-class="transform scale-95 opacity-0"
         >
-            <DisclosurePanel :class="classes ? [classes, 'pt-6'] : 'pt-6'">
+            <DisclosurePanel :class="classes ? [classes, defaultClass] : defaultClass">
                 <slot />
             </DisclosurePanel>
         </transition>

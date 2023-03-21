@@ -37,7 +37,7 @@ import { Head, Link, usePage } from '@inertiajs/vue3';
                                     />
                                 </div>
                                 <Link
-                                    class="text-center text-base font-medium text-gray-600 hover:text-gray-900 focus:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100 dark:focus:text-gray-100"
+                                    class="text-center text-base font-medium text-gray-600 focus:text-gray-900 hover:text-gray-900 dark:text-gray-300 dark:focus:text-gray-100 dark:hover:text-gray-100"
                                     :href="route('index.category', category)"
                                 >
                                     <span class="absolute inset-0 z-10" />
@@ -46,7 +46,7 @@ import { Head, Link, usePage } from '@inertiajs/vue3';
                                     </h2>
                                 </Link>
                                 <p
-                                    class="mt-1 text-center text-sm text-gray-500 hover:text-gray-900 focus:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 dark:focus:text-gray-100"
+                                    class="mt-1 text-center text-sm text-gray-500 focus:text-gray-900 hover:text-gray-900 dark:text-gray-400 dark:focus:text-gray-100 dark:hover:text-gray-100"
                                 >
                                     Shop now
                                 </p>

@@ -60,7 +60,7 @@ const searchGoods = () => {
                                 :class="[
                                     showingResponsiveCategories
                                         ? 'border-indigo-400 text-gray-900 focus:border-indigo-700 dark:border-indigo-600 dark:text-gray-100'
-                                        : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 focus:border-gray-300 focus:text-gray-700 dark:text-gray-400 dark:hover:border-gray-700 dark:hover:text-gray-300 dark:focus:border-gray-700 dark:focus:text-gray-300',
+                                        : 'border-transparent text-gray-500 focus:border-gray-300 focus:text-gray-700 hover:border-gray-300 hover:text-gray-700 dark:text-gray-400 dark:focus:border-gray-700 dark:focus:text-gray-300 dark:hover:border-gray-700 dark:hover:text-gray-300',
                                     'relative inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium leading-5 transition duration-150 ease-in-out focus:outline-none lg:hidden',
                                 ]"
                             >
@@ -87,7 +87,7 @@ const searchGoods = () => {
                         </div>
                         <div class="ml-2">
                             <button
-                                class="group relative inline-flex items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-purple-600 to-blue-500 p-0.5 font-medium text-gray-900 hover:text-white focus:outline-none focus:ring-4 focus:ring-blue-300 group-hover:from-purple-600 group-hover:to-blue-500 dark:text-white dark:focus:ring-blue-800"
+                                class="group relative inline-flex items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-purple-600 to-blue-500 p-0.5 font-medium text-gray-900 focus:outline-none focus:ring-4 focus:ring-blue-300 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white dark:focus:ring-blue-800"
                             >
                                 <span
                                     class="rounded-md bg-white px-4 py-2 uppercase tracking-wider transition-all duration-150 ease-in group-hover:bg-opacity-0 dark:bg-gray-900"
@@ -110,7 +110,7 @@ const searchGoods = () => {
                         </div>
                         <button
                             id="theme-toggle"
-                            class="rounded-lg p-2.5 text-sm text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-700"
+                            class="rounded-lg p-2.5 text-sm text-gray-500 focus:outline-none focus:ring-4 focus:ring-gray-200 hover:bg-gray-100 dark:text-gray-400 dark:focus:ring-gray-700 dark:hover:bg-gray-700"
                             data-tooltip-target="theme-toggle"
                             type="button"
                             @click="toggleDark()"
@@ -138,7 +138,7 @@ const searchGoods = () => {
                                     <span class="inline-flex rounded-md">
                                         <button
                                             type="button"
-                                            class="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none dark:bg-gray-800 dark:hover:text-gray-300"
+                                            class="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out focus:outline-none hover:text-gray-700 dark:bg-gray-800 dark:hover:text-gray-300"
                                         >
                                             {{ fullName }}
                                             <font-awesome-icon icon="fa-solid fa-angle-down" class="ml-2 -mr-0.5" />
@@ -163,7 +163,7 @@ const searchGoods = () => {
                             </Link>
                             <Link
                                 :href="route('login')"
-                                class="rounded-lg bg-gradient-to-br from-purple-600 to-blue-500 px-3 py-2.5 text-center text-sm font-medium font-semibold uppercase tracking-wider text-white hover:bg-gradient-to-bl focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800"
+                                class="rounded-lg bg-gradient-to-br from-purple-600 to-blue-500 px-3 py-2.5 text-center text-sm font-medium font-semibold uppercase tracking-wider text-white focus:outline-none focus:ring-4 focus:ring-blue-300 hover:bg-gradient-to-bl dark:focus:ring-blue-800"
                             >
                                 Log In
                             </Link>
@@ -177,7 +177,7 @@ const searchGoods = () => {
                     <div class="-mr-2 flex items-center sm:hidden">
                         <button
                             @click="showingNavigationDropdown = !showingNavigationDropdown"
-                            class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 transition duration-150 ease-in-out hover:bg-gray-100 hover:text-gray-500 focus:bg-gray-100 focus:text-gray-500 focus:outline-none dark:text-gray-500 dark:hover:bg-gray-900 dark:hover:text-gray-400 dark:focus:bg-gray-900 dark:focus:text-gray-400"
+                            class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 transition duration-150 ease-in-out focus:bg-gray-100 focus:text-gray-500 focus:outline-none hover:bg-gray-100 hover:text-gray-500 dark:text-gray-500 dark:focus:bg-gray-900 dark:focus:text-gray-400 dark:hover:bg-gray-900 dark:hover:text-gray-400"
                         >
                             <font-awesome-icon
                                 :icon="['fa-solid', showingNavigationDropdown ? 'fa-xmark' : 'fa-bars']"
@@ -199,7 +199,7 @@ const searchGoods = () => {
                         :class="[
                             showingResponsiveCategories
                                 ? 'border-indigo-400 bg-indigo-50 text-indigo-700 dark:border-indigo-600 dark:bg-indigo-900 dark:text-indigo-300'
-                                : 'border-transparent text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800 focus:border-gray-300 focus:bg-gray-50 focus:text-gray-800 dark:text-gray-400 dark:hover:border-gray-600 dark:hover:bg-gray-700 dark:hover:text-gray-200 dark:focus:border-gray-600 dark:focus:bg-gray-700 dark:focus:text-gray-200',
+                                : 'border-transparent text-gray-600 focus:border-gray-300 focus:bg-gray-50 focus:text-gray-800 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800 dark:text-gray-400 dark:focus:border-gray-600 dark:focus:bg-gray-700 dark:focus:text-gray-200 dark:hover:border-gray-600 dark:hover:bg-gray-700 dark:hover:text-gray-200',
                             'block w-full border-l-4 py-2 pl-3 pr-4 text-left text-base font-medium transition duration-150 ease-in-out focus:outline-none',
                         ]"
                     >
@@ -237,10 +237,7 @@ const searchGoods = () => {
         </header>
 
         <nav aria-label="Breadcrumbs" v-if="breadcrumbs">
-            <ol
-                role="list"
-                class="mx-auto mt-6 flex max-w-2xl items-center space-x-2 px-4 sm:px-6 lg:max-w-9xl lg:px-8"
-            >
+            <ol role="list" class="mt-6 flex max-w-2xl items-center space-x-2 px-4 sm:px-6 lg:max-w-9xl lg:px-8">
                 <li class="flex items-center">
                     <Link
                         :href="route('index.dashboard')"

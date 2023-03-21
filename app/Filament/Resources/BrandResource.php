@@ -32,7 +32,7 @@ class BrandResource extends Resource
                     TitleWithSlugInput::make(
                         fieldTitle: 'name',
                         fieldSlug: 'slug',
-                        urlHostVisible: false,
+                        urlVisitLinkVisible: false,
                         titleLabel: 'Name',
                         titleRules: ['required', 'max:100'],
                         slugLabel: 'Slug',

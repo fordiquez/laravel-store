@@ -22,6 +22,11 @@ class Review extends Model
         'ip_address',
     ];
 
+    protected $casts = [
+        'is_buyer' => 'boolean',
+        'rating' => 'integer',
+    ];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

@@ -10,6 +10,7 @@ use App\Models\Good;
 use App\Models\Setting;
 use Camya\Filament\Forms\Components\TitleWithSlugInput;
 use Filament\Forms;
+use Filament\Forms\Components\MarkdownEditor;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
@@ -50,7 +51,7 @@ class GoodResource extends Resource
                     TitleWithSlugInput::make(
                         fieldTitle: 'title',
                         fieldSlug: 'slug',
-                        urlHostVisible: false,
+                        urlVisitLinkVisible: false,
                         titleLabel: 'Title',
                         titleRules: ['required', 'max:100'],
                         slugLabel: 'Slug',
@@ -66,8 +67,9 @@ class GoodResource extends Resource
                         ->multiple()
                         ->responsiveImages()
                         ->columnSpanFull(),
-                    Forms\Components\Textarea::make('description')
+                    MarkdownEditor::make('description')
                         ->maxLength(65535)
+                        ->disableToolbarButtons(['attachFiles'])
                         ->columnSpanFull(),
                     Forms\Components\Textarea::make('short_description')
                         ->maxLength(65535)
@@ -80,10 +82,6 @@ class GoodResource extends Resource
                         ->relationship('tags', 'name')
                         ->preload()
                         ->columnSpanFull(),
-                    Forms\Components\Select::make('optionValues')
-                        ->multiple()
-                        ->relationship('optionValues', 'value')
-                        ->preload(),
                     Forms\Components\TextInput::make('old_price')
                         ->numeric()
                         ->suffix(Setting::where('key', 'currency')->value('value')),
@@ -96,6 +94,10 @@ class GoodResource extends Resource
                     Forms\Components\Select::make('status')
                         ->required()
                         ->options(GoodStatus::asSelectArray()),
+                    Forms\Components\KeyValue::make('options')
+                        ->keyPlaceholder('Option name')
+                        ->valuePlaceholder('Option value')
+                        ->columnSpanFull(),
                 ])->columns(),
             ]);
     }

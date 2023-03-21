@@ -275,7 +275,7 @@ const selectedSize = ref(product.sizes[2]);
                                                             ? 'cursor-pointer bg-white text-gray-900 shadow-sm'
                                                             : 'cursor-not-allowed bg-gray-50 text-gray-200',
                                                         active ? 'ring-2 ring-indigo-500' : '',
-                                                        'group relative flex items-center justify-center rounded-md border py-3 px-4 text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none sm:flex-1 sm:py-6',
+                                                        'group relative flex items-center justify-center rounded-md border py-3 px-4 text-sm font-medium uppercase focus:outline-none hover:bg-gray-50 sm:flex-1 sm:py-6',
                                                     ]"
                                                 >
                                                     <RadioGroupLabel as="span">{{ size.name }}</RadioGroupLabel>
@@ -316,7 +316,7 @@ const selectedSize = ref(product.sizes[2]);
 
                                 <button
                                     type="submit"
-                                    class="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 py-3 px-8 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                                    class="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 py-3 px-8 text-base font-medium text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 hover:bg-indigo-700"
                                 >
                                     Add to bag
                                 </button>

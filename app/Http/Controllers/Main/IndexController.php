@@ -9,8 +9,6 @@ use App\Http\Resources\GoodResource;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Good;
-use App\Models\OptionValue;
-use App\Models\GoodProperty;
 use Illuminate\Http\Request;
 
 class IndexController extends Controller
@@ -34,33 +32,17 @@ class IndexController extends Controller
 
     public function goods(Category $category)
     {
-        $goods = Good::whereCategoryId($category->id)->with(['propertyValues']);
-
-        $properties = collect();
-
-        $goods->each(function (Good $good, int $key) use ($properties) {
-            $good->load(['propertyValues.property']);
-
-            $goodProperties = $good->propertyValues->mapToGroups(fn (GoodProperty $propertyValue) => [$propertyValue->property->name => $propertyValue->value]);
-
-            $goodProperties->each(function ($item, $key) use ($properties) {
-                $properties->put($key, $item->all());
-            });
-        });
-
-        dd($properties->all());
+        $goods = Good::with('properties')->whereCategoryId($category->id);
 
         return inertia('Index/Goods', [
             'category' => new CategoryResource($category),
             'breadcrumbs' => Category::breadcrumbs($category),
             'brands' => BrandResource::collection(Brand::whereIn('id', $goods->pluck('brand_id')->all())->get()),
-            // TODO: unwrap filters
-            'filters' => [
-                'prices' => [
-                    'min' => intval($goods->get()->min('price')),
-                    'max' => intval($goods->get()->max('price')),
-                ],
+            'prices' => [
+                'min' => intval($goods->get()->min('price')),
+                'max' => intval($goods->get()->max('price')),
             ],
+            'properties' => Good::getFilterableProperties($goods->get())->toArray(),
             'goods' => GoodResource::collection($goods->filtered()->sorted()->paginate(10)->withQueryString()),
         ]);
     }
@@ -72,13 +54,11 @@ class IndexController extends Controller
         return inertia('Index/Goods', [
             'title' => $request->get('search'),
             'brands' => BrandResource::collection(Brand::whereIn('id', $goods->pluck('brand_id')->all())->get()),
-            // TODO: unwrap filters
-            'filters' => [
-                'prices' => [
-                    'min' => intval($goods->get()->min('price')),
-                    'max' => intval($goods->get()->max('price')),
-                ],
+            'prices' => [
+                'min' => intval($goods->get()->min('price')),
+                'max' => intval($goods->get()->max('price')),
             ],
+            'properties' => Good::getFilterableProperties($goods->get())->toArray(),
             'goods' => GoodResource::collection($goods->filtered()->sorted()->paginate(10)->withQueryString()),
         ]);
     }

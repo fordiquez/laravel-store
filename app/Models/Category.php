@@ -19,6 +19,11 @@ class Category extends Model implements HasMedia
 
     protected $appends = ['thumbnail'];
 
+    protected $casts = [
+        'is_active' => 'boolean',
+        'is_navigational' => 'boolean',
+    ];
+
     protected static function boot()
     {
         parent::boot();

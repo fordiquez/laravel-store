@@ -29,7 +29,7 @@ class TagResource extends Resource
                     TitleWithSlugInput::make(
                         fieldTitle: 'name',
                         fieldSlug: 'slug',
-                        urlHostVisible: false,
+                        urlVisitLinkVisible: false,
                         titleLabel: 'Name',
                         slugLabel: 'Slug',
                         slugRuleUniqueParameters: [

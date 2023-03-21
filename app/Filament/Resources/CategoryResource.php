@@ -34,7 +34,7 @@ class CategoryResource extends Resource
                     TitleWithSlugInput::make(
                         fieldTitle: 'title',
                         fieldSlug: 'slug',
-                        urlHostVisible: false,
+                        urlVisitLinkVisible: false,
                         titleLabel: 'Title',
                         titleRules: ['required', 'max:100'],
                         slugLabel: 'Slug',
