@@ -11,7 +11,10 @@ const props = defineProps({
     <Head :title="category.title" />
 
     <AuthenticatedLayout :title="category.title">
-        <section v-if="category.subcategories" class="bg-gray-100 p-4 text-gray-400 dark:bg-gray-900 sm:px-6 lg:px-8">
+        <section
+            v-if="category.subcategories"
+            class="bg-gray-100 p-4 text-gray-900 dark:bg-gray-900 dark:text-gray-400 sm:p-6 lg:p-8"
+        >
             <div class="overflow-hidden rounded-lg bg-white shadow-sm dark:bg-gray-800">
                 <div class="flex flex-wrap">
                     <div

@@ -10,6 +10,7 @@ Route::controller(IndexController::class)->group(function () {
     Route::get('goods/search', 'search')->name('index.search');
     Route::get('goods/{category}', 'goods')->name('index.goods');
     Route::get('good/{good}', 'good')->name('index.good');
+    Route::get('good/{good}/properties', 'goodProperties')->name('index.good.properties');
 });
 
 Route::middleware('auth')->group(function () {

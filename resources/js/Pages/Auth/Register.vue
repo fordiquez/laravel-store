@@ -110,14 +110,14 @@ const submit = () => {
                     class="inline-flex items-center justify-center rounded-lg bg-[#24292F] px-5 py-2.5 text-center text-sm font-medium text-white focus:outline-none focus:ring-4 focus:ring-[#24292F]/50 hover:bg-[#24292F]/90 dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30"
                 >
                     <font-awesome-icon icon="fa-brands fa-github" size="lg" class="mr-2 -ml-1" />
-                    Sign in with Github
+                    Sign up with Github
                 </a>
                 <a
                     :href="route('social', 'google')"
                     class="dark:focus:ring-[#4285F4]/55 inline-flex items-center justify-center rounded-lg bg-[#4285F4] px-5 py-2.5 text-center text-sm font-medium text-white focus:outline-none focus:ring-4 focus:ring-[#4285F4]/50 hover:bg-[#4285F4]/90"
                 >
                     <font-awesome-icon icon="fa-brands fa-google" size="lg" class="mr-2 -ml-1" />
-                    Sign in with Google
+                    Sign up with Google
                 </a>
             </div>
 

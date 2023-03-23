@@ -121,7 +121,10 @@ const goodsSort = (key) => {
     <Head :title="category?.title ?? title" />
 
     <AuthenticatedLayout :title="category?.title ?? title">
-        <section v-if="goods?.data" class="bg-gray-100 p-4 text-gray-400 dark:bg-gray-900 sm:px-6 lg:px-8">
+        <section
+            v-if="goods?.data"
+            class="bg-gray-100 p-4 text-gray-900 dark:bg-gray-900 dark:text-gray-400 sm:p-6 lg:p-8"
+        >
             <div class="overflow-hidden bg-white px-4 shadow-sm dark:bg-gray-800 sm:rounded-lg sm:px-6 lg:px-8">
                 <div
                     class="flex items-baseline justify-between border-b border-gray-200 pt-5 pb-6 dark:border-gray-600"
@@ -264,7 +267,7 @@ const goodsSort = (key) => {
                                                     good.old_price
                                                         ? 'text-red-600 dark:text-rose-600'
                                                         : 'text-gray-900 dark:text-gray-300',
-                                                    'text-xl font-medium',
+                                                    'text-2xl font-medium',
                                                 ]"
                                             >
                                                 {{ good.price }} ₴

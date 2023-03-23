@@ -237,54 +237,48 @@ const searchGoods = () => {
         </header>
 
         <nav aria-label="Breadcrumbs" v-if="breadcrumbs">
-            <ol role="list" class="mt-6 flex max-w-2xl items-center space-x-2 px-4 sm:px-6 lg:max-w-9xl lg:px-8">
+            <ol
+                role="list"
+                class="mx-auto mt-6 flex max-w-2xl items-center space-x-2 px-4 sm:px-6 lg:max-w-9xl lg:px-8"
+            >
                 <li class="flex items-center">
                     <Link
                         :href="route('index.dashboard')"
-                        class="mr-2 text-gray-700 hover:text-purple-600 dark:text-gray-400 dark:hover:text-white"
+                        class="text-gray-700 hover:text-purple-600 dark:text-gray-400 dark:hover:text-white"
                     >
                         <font-awesome-icon icon="fa-solid fa-house-chimney" />
                     </Link>
-                    <svg
-                        width="16"
-                        height="20"
-                        viewBox="0 0 16 20"
-                        fill="currentColor"
-                        class="text-gray-400 dark:text-gray-300"
-                    >
-                        <path d="M5.697 4.34L8.98 16.532h1.327L7.025 4.341H5.697z" />
-                    </svg>
                 </li>
-                <li v-for="breadcrumb in breadcrumbs" :key="breadcrumb.id" class="hidden sm:block">
+                <li
+                    v-for="(breadcrumb, i) in breadcrumbs"
+                    :key="breadcrumb.id"
+                    :class="{ 'hidden sm:block': i !== breadcrumbs.length - 2 }"
+                >
                     <div class="flex items-center">
-                        <Link
-                            :href="route('index.category', breadcrumb.slug)"
-                            class="mr-2 text-sm font-medium text-gray-700 hover:text-purple-600 dark:text-gray-400 dark:hover:text-white"
-                        >
-                            {{ breadcrumb.title }}
-                        </Link>
                         <svg
                             width="16"
                             height="20"
                             viewBox="0 0 16 20"
                             fill="currentColor"
-                            class="text-gray-400 dark:text-gray-300"
+                            class="mr-2 text-gray-400 dark:text-gray-300"
                         >
                             <path d="M5.697 4.34L8.98 16.532h1.327L7.025 4.341H5.697z" />
                         </svg>
+                        <Link
+                            v-if="
+                                i !== breadcrumbs.length - 1 ||
+                                route().current('index.good') ||
+                                route().current('index.good.properties')
+                            "
+                            :href="route('index.category', breadcrumb.slug)"
+                            class="text-sm font-medium text-gray-700 hover:text-purple-600 dark:text-gray-400 dark:hover:text-white"
+                        >
+                            {{ breadcrumb.title }}
+                        </Link>
+                        <p v-else class="text-sm font-medium text-gray-500 dark:text-gray-500">
+                            {{ breadcrumb.title }}
+                        </p>
                     </div>
-                </li>
-                <li class="text-sm" v-if="title">
-                    <!--                    <Link-->
-                    <!--                        aria-current="page"-->
-                    <!--                        class="text-sm font-medium text-gray-700 hover:text-purple-600 dark:text-gray-400 dark:hover:text-white"-->
-                    <!--                        :href="route('index.category', category)"-->
-                    <!--                    >-->
-                    <!--                        {{ category.title }}-->
-                    <!--                    </Link>-->
-                    <p class="font-medium text-gray-500 dark:text-gray-500">
-                        {{ title }}
-                    </p>
                 </li>
             </ol>
         </nav>

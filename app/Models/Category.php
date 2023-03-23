@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Arr;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
@@ -60,8 +61,12 @@ class Category extends Model implements HasMedia
 
     public static function breadcrumbs(Category $category, array $breadcrumbs = []): array
     {
+        if (!count($breadcrumbs)) {
+            $breadcrumbs[] = $category;
+        }
+
         if ($category->parent) {
-            array_unshift($breadcrumbs, $category->parent);
+            $breadcrumbs = Arr::prepend($breadcrumbs, $category->parent);
 
             return self::breadcrumbs($category->parent, $breadcrumbs);
         }

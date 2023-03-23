@@ -65,10 +65,21 @@ class IndexController extends Controller
 
     public function good(Good $good)
     {
-        return inertia('Index/Good', [
-            'good' => new GoodResource($good),
-            'breadcrumbs' => Category::breadcrumbs($good->category),
+        return inertia('Good/Index', [
             'title' => $good->title,
+            'breadcrumbs' => Category::breadcrumbs($good->category),
+            'good' => new GoodResource($good),
+        ]);
+    }
+
+    public function goodProperties(Good $good)
+    {
+        $good->load('properties');
+
+        return inertia('Good/Properties', [
+            'title' => $good->title,
+            'breadcrumbs' => Category::breadcrumbs($good->category),
+            'good' => new GoodResource($good),
         ]);
     }
 }
