@@ -16,14 +16,14 @@ defineProps({
             <div class="overflow-hidden bg-white px-4 shadow-sm dark:bg-gray-800 sm:rounded-lg sm:px-6 lg:px-8">
                 <tabs :good="good.slug" />
 
-                <div class="container mx-auto py-12 sm:rounded-lg" v-if="good?.properties?.length">
+                <div class="container mx-auto pt-12" v-if="good?.properties?.length">
                     <dl class="rounded-lg">
                         <div
                             v-for="(property, i) in good.properties"
                             :key="property.id"
                             :class="[
                                 'flex flex-col px-4 py-5 font-medium sm:flex-row sm:px-6',
-                                i % 2 === 0 ? 'bg-white dark:bg-gray-900' : 'bg-gray-50 dark:bg-gray-800',
+                                i % 2 === 0 ? 'bg-gray-100 dark:bg-gray-900' : 'bg-white dark:bg-gray-800',
                                 { 'rounded-t-lg': i === 0 },
                                 { 'rounded-b-lg': i === good.properties.length - 1 },
                             ]"
@@ -41,6 +41,8 @@ defineProps({
                         </div>
                     </dl>
                 </div>
+
+                <p class="pt-6 pb-12 font-italic text-gray-700 dark:text-gray-400">* {{ good.warning_description }}</p>
             </div>
         </section>
     </AuthenticatedLayout>

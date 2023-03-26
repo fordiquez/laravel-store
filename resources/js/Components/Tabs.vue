@@ -16,39 +16,41 @@ const classes = reactive({
         active: 'text-purple-600 dark:text-purple-500',
     },
 });
+
+const tabs = reactive([
+    {
+        title: 'General',
+        route: 'index.good',
+        icon: ['fas', 'bag-shopping'],
+    },
+    {
+        title: 'Properties',
+        route: 'index.good.properties',
+        icon: ['fas', 'clipboard-list'],
+    },
+    {
+        title: 'Reviews',
+        route: 'index.good.reviews',
+        icon: ['fas', 'comments'],
+    },
+]);
 </script>
 
 <template>
     <div class="border-b border-gray-200 dark:border-gray-700">
         <ul class="-mb-px flex flex-wrap text-center text-sm font-medium text-gray-600 dark:text-gray-400">
-            <li class="mr-2">
+            <li class="mr-2" v-for="tab in tabs" :key="tab.title">
                 <Link
-                    :href="route('index.good', good)"
-                    :class="route().current('index.good') ? classes.link.active : classes.link.default"
+                    :href="route(tab.route, good)"
+                    :class="route().current(tab.route) ? classes.link.active : classes.link.default"
                     class="group inline-flex rounded-t-lg border-b-2 p-4"
                 >
                     <font-awesome-icon
-                        :icon="['fas', 'bag-shopping']"
+                        :icon="tab.icon"
                         size="lg"
-                        :class="['mr-2', route().current('index.good') ? classes.icon.active : classes.icon.default]"
+                        :class="['mr-2', route().current(tab.route) ? classes.icon.active : classes.icon.default]"
                     />
-                    <span>General</span>
-                </Link>
-            </li>
-            <li class="mr-2">
-                <Link
-                    :href="route('index.good.properties', good)"
-                    :class="route().current('index.good.properties') ? classes.link.active : classes.link.default"
-                    class="group inline-flex rounded-t-lg border-b-2 p-4"
-                    aria-current="page"
-                >
-                    <font-awesome-icon
-                        :icon="['fas', 'clipboard-list']"
-                        size="lg"
-                        class="mr-2"
-                        :class="route().current('index.good.properties') ? classes.icon.active : classes.icon.default"
-                    />
-                    <span>Properties</span>
+                    <span>{{ tab.title }}</span>
                 </Link>
             </li>
         </ul>

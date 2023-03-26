@@ -49,6 +49,8 @@ class IndexController extends Controller
 
     public function search(Request $request)
     {
+        $request->validate(['search' => ['required', 'string', 'min:2']]);
+
         $goods = Good::searched();
 
         return inertia('Index/Goods', [
@@ -77,6 +79,17 @@ class IndexController extends Controller
         $good->load('properties');
 
         return inertia('Good/Properties', [
+            'title' => $good->title,
+            'breadcrumbs' => Category::breadcrumbs($good->category),
+            'good' => new GoodResource($good),
+        ]);
+    }
+
+    public function goodReviews(Good $good)
+    {
+        $good->load('reviews');
+
+        return inertia('Good/Reviews', [
             'title' => $good->title,
             'breadcrumbs' => Category::breadcrumbs($good->category),
             'good' => new GoodResource($good),

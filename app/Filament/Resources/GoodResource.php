@@ -62,7 +62,7 @@ class GoodResource extends Resource
                             'ignoreRecord' => true,
                         ]
                     ),
-                    Forms\Components\SpatieMediaLibraryFileUpload::make('thumbnails')
+                    Forms\Components\SpatieMediaLibraryFileUpload::make('preview')
                         ->collection('goods')
                         ->multiple()
                         ->responsiveImages()

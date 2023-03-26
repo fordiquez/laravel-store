@@ -10,6 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
 import { fab } from '@fortawesome/free-brands-svg-icons';
+import VueSplide from '@splidejs/vue-splide';
 
 library.add(fas, far, fab);
 dom.watch();
@@ -24,6 +25,7 @@ createInertiaApp({
             .component('font-awesome-icon', FontAwesomeIcon)
             .use(plugin)
             .use(ZiggyVue, Ziggy)
+            .use(VueSplide)
             .mount(el);
     },
     progress: {

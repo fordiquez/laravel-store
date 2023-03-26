@@ -22,12 +22,10 @@ class ReviewsRelationManager extends RelationManager
                         ->relationship('user', 'email')
                         ->required()
                         ->searchable()
-                        ->preload(),
-                    Forms\Components\Select::make('good_id')
-                        ->relationship('good', 'title')
-                        ->required()
-                        ->searchable()
-                        ->preload(),
+                        ->preload()
+                        ->columnSpanFull(),
+                    Forms\Components\Hidden::make('good_id')
+                        ->default(fn (RelationManager $livewire) => $livewire->ownerRecord->id),
                     Forms\Components\Toggle::make('is_buyer')->default(true)->required(),
                     Rating::make('rating')->required(),
                     Forms\Components\Textarea::make('content')
@@ -57,16 +55,10 @@ class ReviewsRelationManager extends RelationManager
             ->columns([
                 Tables\Columns\TextColumn::make('id')->sortable(),
                 Tables\Columns\TextColumn::make('user.email')->sortable()->searchable(),
-                Tables\Columns\TextColumn::make('good.title')->sortable()->searchable(),
                 Tables\Columns\IconColumn::make('is_buyer')->boolean()->toggleable(),
                 Tables\Columns\TextColumn::make('rating')
                     ->sortable()
                     ->formatStateUsing(fn (string $state) => self::ratingState($state)),
-                Tables\Columns\TextColumn::make('video_src')
-                    ->searchable()
-                    ->toggleable()
-                    ->copyable()
-                    ->tooltip('Click to copy'),
                 Tables\Columns\TextColumn::make('ip_address')->sortable()->searchable()->toggleable(),
                 Tables\Columns\TextColumn::make('created_at')->dateTime()->sortable()->toggleable(),
                 Tables\Columns\TextColumn::make('updated_at')->dateTime()->sortable()->toggleable(),

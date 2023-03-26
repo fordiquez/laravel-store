@@ -90,9 +90,14 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser, Has
         return $this->email === $this::ADMIN_EMAIL && $this->hasVerifiedEmail();
     }
 
-    public function getFilamentName(): string
+    public function fullName(): string
     {
         return "$this->first_name $this->last_name";
+    }
+
+    public function getFilamentName(): string
+    {
+        return $this->fullName();
     }
 
     public function avatar(): Attribute

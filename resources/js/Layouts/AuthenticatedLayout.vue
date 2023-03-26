@@ -21,19 +21,20 @@ const toggleDark = useToggle(isDark);
 
 const showingNavigationDropdown = ref(false);
 const showingResponsiveCategories = ref(false);
+
+const form = useForm({
+    search: '',
+});
 const search = ref(null);
 
 onMounted(() => initTooltips());
 
 const fullName = computed(() => (user ? `${user.first_name} ${user.last_name}` : null));
+const breadcrumbsRoutes = computed(() => route().current('index.good') || route().current('index.good.properties') || route().current('index.good.reviews'))
 
 const closeResponsiveCategories = () => (showingResponsiveCategories.value = false);
 
-const searchGoods = () => {
-    useForm({
-        search: search.value,
-    }).get(route('index.search'));
-};
+const searchGoods = () => form.get(route('index.search'));
 </script>
 
 <template>
@@ -78,7 +79,7 @@ const searchGoods = () => {
                                 />
                             </div>
                             <input
-                                v-model="search"
+                                v-model="form.search"
                                 type="text"
                                 id="goods-search"
                                 class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 pl-10 text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500 sm:text-sm"
@@ -265,11 +266,7 @@ const searchGoods = () => {
                             <path d="M5.697 4.34L8.98 16.532h1.327L7.025 4.341H5.697z" />
                         </svg>
                         <Link
-                            v-if="
-                                i !== breadcrumbs.length - 1 ||
-                                route().current('index.good') ||
-                                route().current('index.good.properties')
-                            "
+                            v-if="i !== breadcrumbs.length - 1 || breadcrumbsRoutes"
                             :href="route('index.category', breadcrumb.slug)"
                             class="text-sm font-medium text-gray-700 hover:text-purple-600 dark:text-gray-400 dark:hover:text-white"
                         >
