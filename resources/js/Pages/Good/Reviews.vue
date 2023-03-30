@@ -1,9 +1,11 @@
 <script setup>
-import { Head } from '@inertiajs/vue3';
+import { Head, useForm } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import Tabs from '@/Components/Tabs.vue';
-import { reactive, ref } from 'vue';
+import { ref } from 'vue';
 import Modal from '@/Components/Modal.vue';
+import Rating from '@/Components/Rating.vue';
+import InputLabel from '@/Components/InputLabel.vue';
 
 defineProps({
     good: Object,
@@ -11,11 +13,16 @@ defineProps({
 
 const reviewModal = ref(false);
 
-const stars = reactive(['far', 'far', 'far', 'far', 'far']);
+const form = useForm({
+    rating: null,
+    advantages: '',
+    disadvantages: '',
+    comment: '',
+});
 
-const starRating = (number, remove = false) => {
-    stars[number - 1] = remove ? 'far' : 'fas';
-};
+const setRating = (stars) => (form.rating = stars);
+
+const closeReviewModal = () => (reviewModal.value = false);
 </script>
 
 <template>
@@ -27,15 +34,15 @@ const starRating = (number, remove = false) => {
                 <tabs :good="good.slug" />
 
                 <div class="container mx-auto py-12">
-                    <div class="flex items-center space-x-6 rounded-xl border border-gray-200 p-4 dark:border-gray-700">
+                    <div class="flex flex-col md:flex-row items-center space-x-6 rounded-xl border border-gray-200 p-4 dark:border-gray-700">
                         <h1
-                            class="bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-3xl font-bold text-transparent md:text-5xl lg:text-3xl"
+                            class="bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-3xl font-bold text-transparent"
                         >
                             Leave your review about this product
                         </h1>
                         <button
                             @click="reviewModal = true"
-                            class="group relative inline-flex items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-purple-600 to-blue-500 p-0.5 text-sm font-medium uppercase tracking-wider text-gray-900 focus:outline-none focus:ring-4 focus:ring-blue-300 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white dark:focus:ring-blue-800"
+                            class="mt-4 md:mt-0 group relative inline-flex items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-purple-600 to-blue-500 p-0.5 text-sm font-medium uppercase tracking-wider text-gray-900 focus:outline-none focus:ring-4 focus:ring-blue-300 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white dark:focus:ring-blue-800"
                         >
                             <span
                                 class="relative rounded-md bg-white px-4 py-2.5 transition-all duration-150 ease-in group-hover:bg-opacity-0 dark:bg-gray-900"
@@ -45,53 +52,68 @@ const starRating = (number, remove = false) => {
                         </button>
                     </div>
 
-                    <Modal :show="reviewModal" @close="reviewModal = false">
+                    <Modal :show="reviewModal" @close="closeReviewModal">
                         <div class="p-6">
-                            <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                                Are you sure you want to delete your account?
-                            </h2>
+                            <div class="flex justify-between text-gray-900 dark:text-white">
+                                <h5 class="text-xl font-medium">New review</h5>
+                                <font-awesome-icon
+                                    :icon="['fas', 'xmark']"
+                                    size="xl"
+                                    class="cursor-pointer"
+                                    @click="closeReviewModal"
+                                />
+                            </div>
 
-                            <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                                Once your account is deleted, all of its resources and data will be permanently deleted.
-                                Please enter your password to confirm you would like to permanently delete your account.
-                            </p>
+                            <Rating class="mt-4" @rating="setRating" />
 
-                            <div>
-                                <font-awesome-icon
-                                    :icon="[stars[0], 'star']"
-                                    size="2xl"
-                                    @mouseenter="starRating(1)"
-                                    @mouseleave="starRating(1, true)"
-                                    class="text-purple-600 dark:text-purple-400"
+                            <div class="mb-4">
+                                <InputLabel for="advantages" value="Advantages" class="mb-2" />
+                                <input
+                                    v-model="form.advantages"
+                                    type="text"
+                                    id="advantages"
+                                    class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500 sm:text-sm"
                                 />
-                                <font-awesome-icon
-                                    :icon="[stars[1], 'star']"
-                                    size="2xl"
-                                    @mouseenter="starRating(2)"
-                                    @mouseleave="starRating(2, true)"
-                                    class="text-purple-600 dark:text-purple-400"
+                            </div>
+
+                            <div class="mb-4">
+                                <InputLabel for="disadvantages" value="Disadvantages" class="mb-2" />
+                                <input
+                                    v-model="form.disadvantages"
+                                    type="text"
+                                    id="disadvantages"
+                                    class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500 sm:text-sm"
                                 />
-                                <font-awesome-icon
-                                    :icon="[stars[2], 'star']"
-                                    @mouseenter="starRating(3)"
-                                    @mouseleave="starRating(3, true)"
-                                    size="2xl"
-                                    class="text-purple-600 dark:text-purple-400"
-                                />
-                                <font-awesome-icon
-                                    :icon="[stars[3], 'star']"
-                                    size="2xl"
-                                    @mouseenter="starRating(4)"
-                                    @mouseleave="starRating(4, true)"
-                                    class="text-purple-600 dark:text-purple-400"
-                                />
-                                <font-awesome-icon
-                                    :icon="[stars[4], 'star']"
-                                    @mouseenter="starRating(5)"
-                                    @mouseleave="starRating(5, true)"
-                                    size="2xl"
-                                    class="text-purple-600 dark:text-purple-400"
-                                />
+                            </div>
+
+                            <div class="mb-8">
+                                <InputLabel for="comment" value="Your comment" class="mb-2" />
+                                <textarea
+                                    id="comment"
+                                    v-model="form.comment"
+                                    rows="4"
+                                    class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-purple-500 focus:ring-purple-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-purple-500 dark:focus:ring-purple-500"
+                                    placeholder="Write your thoughts here..."
+                                ></textarea>
+                            </div>
+
+                            <div class="flex space-x-4">
+                                <button
+                                    @click="closeReviewModal"
+                                    class="group inline-flex w-full items-center justify-center rounded-lg bg-gradient-to-br from-purple-600 to-blue-500 p-0.5 text-sm font-medium uppercase tracking-wider text-gray-900 focus:outline-none focus:ring-4 focus:ring-blue-300 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white dark:focus:ring-blue-800"
+                                >
+                                    <span
+                                        class="w-full rounded-md bg-white px-4 py-2.5 transition-all duration-150 ease-in group-hover:bg-opacity-0 dark:bg-gray-900"
+                                    >
+                                        Cancel
+                                    </span>
+                                </button>
+                                <button
+                                    type="button"
+                                    class="w-full rounded-lg bg-gradient-to-br from-purple-600 to-blue-500 px-5 py-2.5 text-center text-sm font-medium uppercase tracking-wider text-white focus:outline-none focus:ring-4 focus:ring-blue-300 hover:bg-gradient-to-bl dark:focus:ring-blue-800"
+                                >
+                                    Submit review
+                                </button>
                             </div>
                         </div>
                     </Modal>
@@ -115,11 +137,9 @@ const starRating = (number, remove = false) => {
                                 </span>
                                 <div class="ml-4">
                                     <h6 class="text-lg font-bold dark:text-white">{{ review.username }}</h6>
-                                    <span
-                                        v-if="review.is_buyer"
-                                        class="text-sm font-medium uppercase tracking-wide text-gray-500"
-                                        >Buyer</span
-                                    >
+                                    <span class="text-sm font-medium uppercase tracking-wide text-gray-500">{{
+                                        review.is_buyer ? 'Buyer' : 'Commentator'
+                                    }}</span>
                                 </div>
                             </div>
                             <div class="flex items-center">

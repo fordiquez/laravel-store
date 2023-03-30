@@ -18,7 +18,10 @@ const props = defineProps({
 
 const emit = defineEmits(['close']);
 
-watch(() => props.show, () => document.body.style.overflow = props.show ? 'hidden' : null)
+watch(
+    () => props.show,
+    () => (document.body.style.overflow = props.show ? 'hidden' : null),
+);
 
 const close = () => {
     if (props.closeable) {

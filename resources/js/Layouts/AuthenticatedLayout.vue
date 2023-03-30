@@ -9,18 +9,21 @@ import DropdownLink from '@/Components/DropdownLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import ResponsiveCategories from '@/Components/ResponsiveCategories.vue';
 import Categories from '@/Components/Categories.vue';
+import Modal from "@/Components/Modal.vue";
+import Cart from "@/Components/Cart.vue";
 
 defineProps({
     title: String,
 });
 
-const { user, categories, breadcrumbs } = reactive(usePage().props);
+const { user, categories, breadcrumbs, cart } = reactive(usePage().props);
 
 const isDark = useDark();
 const toggleDark = useToggle(isDark);
 
 const showingNavigationDropdown = ref(false);
 const showingResponsiveCategories = ref(false);
+const cartModal = ref(false)
 
 const form = useForm({
     search: '',
@@ -30,7 +33,12 @@ const search = ref(null);
 onMounted(() => initTooltips());
 
 const fullName = computed(() => (user ? `${user.first_name} ${user.last_name}` : null));
-const breadcrumbsRoutes = computed(() => route().current('index.good') || route().current('index.good.properties') || route().current('index.good.reviews'))
+const breadcrumbsRoutes = computed(
+    () =>
+        route().current('index.good') ||
+        route().current('index.good.properties') ||
+        route().current('index.good.reviews'),
+);
 
 const closeResponsiveCategories = () => (showingResponsiveCategories.value = false);
 
@@ -132,6 +140,19 @@ const searchGoods = () => form.get(route('index.search'));
                                 ></path>
                             </svg>
                         </button>
+
+                        <button
+                            type="button"
+                            @click="cartModal = true"
+                            class="relative mx-2 rounded-lg p-2.5 text-sm text-gray-500 focus:outline-none focus:ring-4 focus:ring-gray-200 hover:bg-gray-100 dark:text-gray-400 dark:focus:ring-gray-700 dark:hover:bg-gray-700"
+                        >
+                            <font-awesome-icon :icon="['fas', 'cart-shopping']" size="lg" />
+                            <span
+                                class="absolute -top-1 -right-2 inline-flex h-6 w-6 items-center justify-center rounded-full bg-purple-500 text-xs font-bold text-white"
+                                >22</span
+                            >
+                        </button>
+
                         <!-- Settings Dropdown -->
                         <div v-if="user" class="relative ml-3 hidden sm:flex">
                             <Dropdown align="right" width="48">
@@ -289,6 +310,8 @@ const searchGoods = () => form.get(route('index.search'));
         <main class="mx-auto max-w-9xl">
             <slot />
         </main>
+
+        <cart :show="cartModal" :count="cart.count" :total="cart.total" :items="cart.items" @close="cartModal = false" />
 
         <responsive-categories
             v-if="showingResponsiveCategories"
