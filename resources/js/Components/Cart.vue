@@ -1,7 +1,9 @@
 <script setup>
-import Modal from "@/Components/Modal.vue";
+import { Link, router } from '@inertiajs/vue3';
+import Modal from '@/Components/Modal.vue';
+import { useFormat } from '@/composables/format';
 
-defineProps({
+const props = defineProps({
     show: {
         type: Boolean,
         default: false,
@@ -9,99 +11,171 @@ defineProps({
     count: Number,
     total: Number,
     items: Array,
-})
+    goods: Array,
+});
 
-defineEmits(['close'])
+defineEmits(['close']);
+
+const { formatMoney } = useFormat();
+
+const itemId = (id) => props.items.findIndex((item) => item.good_id === id);
+
+const update = (good, quantity) =>
+    router.patch(route('cart.update', good), {
+        quantity,
+    });
+
+const remove = (good) => router.delete(route('cart.delete', good));
+
+const bulkDelete = () => router.delete(route('cart.bulk-delete'));
 </script>
 
 <template>
     <Modal :show="show" @close="$emit('close')">
-        <div class="">
-            <div
-                class="modal__header flex items-center justify-between h-14 px-4 md:px-6 border-b border-slate-100">
-                <h3 class="text-2xl sm:text-3xl text-slate-900">Cart</h3>
-                <button @click="$emit('close')">
-                    <font-awesome-icon :icon="['fas', 'xmark']" size="xl" />
-                </button>
-            </div>
-            <div class="modal__content max-h-[80vh] p-4 md:p-6 overflow-y-auto">
-                <div v-if="items.length">
-                    <div class="flex justify-end mb-4">
-                        <button @click="$emit('bulk-delete')"
-                                class="text-white uppercase bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">
-                            <span>Clear all</span>
-                        </button>
-                    </div>
-                    <ul class="cart-list md:mb-6">
-                        <li class="cart-list__item mt-6 pt-6 border-t border-slate-100"
-                            :class="i === 0 ? 'mt-0 pt-0 border-none' : null" v-for="(item, i) in items"
-                            :key="item.id">
-                            <div class="cart-product">
-                                <div class="cart-product__body relative flex">
-                            <span
-                                class="promo-label text-xs leading-6 px-2 bg-red-600 top-0 left-0 absolute">−20%</span>
-                                    <a class="flex shrink-0 items-center justify-center mr-4 w-32 h-32">
-                                        <img v-if="item.preview" :src="item.preview"
-                                             class="h-full w-full object-cover object-center rounded-lg" loading="lazy"
-                                             :alt="item.title" :title="item.title">
-                                    </a>
-                                    <div class="cart-product__main grow">
-                                        <a class="block mb-2" href="" :title="item.title">
-                                            <span class="text-sm text-gray-500">{{ item.title }}</span>
-                                        </a>
-                                    </div>
-                                    <div>
-                                        <button @click="$emit('remove', item)">
-                                            <font-awesome-icon :icon="['fas', 'trash-can']" />
-                                        </button>
-                                    </div>
-                                </div>
-                                <div
-                                    class="cart-product__footer flex row flex-wrap justify-between md:justify-end py-4 md:py-0 md:pl-28">
-                                    <div class="cart-product__counter">
-                                        <div class="flex items-center">
-                                            <font-awesome-icon :icon="['fas', 'minus']" @click="$emit('update', item, item.quantity - 1)" />
-                                            <input type="number" v-model="item.quantity" @input="$emit('update', item, item.quantity)"
-                                                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm text-center font-medium rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-14 p-2.5">
-                                            <font-awesome-icon :icon="['fas', 'minus']" class="ml-2 text-indigo-600 cursor-pointer" @click="$emit('update', item, item.quantity + 1)" />
-                                        </div>
-                                    </div>
-                                    <div
-                                        class="cart-product__coast flex flex-col justify-center text-right ml-auto md:ml-0 md:w-1/4">
-                                        <p class="text-sm leading-4 line-through text-gray-500">{{ item.oldPrice }}&nbsp;₴</p>
-                                        <p class="text-xl text-red-600 whitespace-nowrap">{{ item.price }}&nbsp;<small>₴</small></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                    <div class="cart-footer sticky -bottom-4 md:-mb-4 flex flex-wrap items-center py-4 bg-inherit bg-white">
-                        <button @click="$emit('close-cart')"
-                                class="relative inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300">
+        <div
+            class="flex items-center justify-between border-b border-gray-200 py-3 px-4 text-gray-800 dark:border-gray-700 dark:text-gray-200 md:px-6"
+        >
+            <h3 class="text-2xl sm:text-3xl">Cart</h3>
+            <button class="hover:opacity-70" @click="$emit('close')">
+                <font-awesome-icon :icon="['fas', 'xmark']" size="xl" />
+            </button>
+        </div>
+        <div
+            class="max-h-[80vh] overflow-y-auto p-4 scrollbar-thin scrollbar-track-purple-300 scrollbar-thumb-purple-600 md:p-6"
+        >
+            <template v-if="items.length">
+                <div class="mb-4 flex flex-col justify-between space-y-4 sm:flex-row sm:space-y-0">
+                    <button
+                        @click="$emit('close')"
+                        class="group relative inline-flex items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-purple-600 to-blue-500 p-0.5 font-medium text-gray-900 focus:outline-none focus:ring-4 focus:ring-blue-300 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white dark:focus:ring-blue-800"
+                    >
                         <span
-                            class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white rounded-md group-hover:bg-opacity-0">Continue shopping</span>
-                        </button>
-                        <div
-                            class="flex flex-col md:flex-row items-center w-full md:w-auto p-4 md:p-6 md:ml-auto rounded bg-purple-50 border border-slate-300">
-                            <div class="cart-receipt__sum flex flex-row items-center justify-between w-full md:w-auto mb-4 md:mr-6 md:mb-0">
-                                <p class="cart-receipt__sum-label text-xl md:hidden">Total</p>
-                                <div class="cart-receipt__sum-price ml-auto text-2xl md:text-4xl"><span>{{ total }}</span>&nbsp;<span
-                                    class="cart-receipt__sum-currency text-base md:text-lg">₴</span>
-                                </div>
+                            class="relative w-full rounded-md bg-white px-4 py-2 uppercase tracking-wider transition-all duration-300 ease-in-out group-hover:bg-opacity-0 dark:bg-gray-900"
+                        >
+                            <font-awesome-icon :icon="['fas', 'cart-plus']" class="mr-1" />
+                            Continue shopping
+                        </span>
+                    </button>
+                    <button
+                        @click.prevent="bulkDelete"
+                        class="group relative inline-flex items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-purple-600 to-blue-500 p-0.5 font-medium text-gray-900 focus:outline-none focus:ring-4 focus:ring-blue-300 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white dark:focus:ring-blue-800"
+                    >
+                        <span
+                            class="relative w-full rounded-md bg-white px-4 py-2 uppercase tracking-wider transition-all duration-300 ease-in-out group-hover:bg-opacity-0 dark:bg-gray-900"
+                        >
+                            <font-awesome-icon :icon="['fas', 'trash-can']" class="mr-1" />
+                            Clear all
+                        </span>
+                    </button>
+                </div>
+                <ul class="md:mb-6">
+                    <li
+                        :class="['border-t border-gray-200 py-6 dark:border-gray-700', { 'border-none': i === 0 }]"
+                        v-for="(good, i) in goods"
+                        :key="good.id"
+                    >
+                        <div class="relative flex">
+                            <span
+                                class="absolute top-0 left-0 bg-red-600 px-2 text-xs font-medium leading-6 text-gray-100"
+                            >
+                                −20%
+                            </span>
+                            <Link
+                                :href="route('goods.good.general', good)"
+                                class="mr-4 flex h-32 w-32 shrink-0 items-center justify-center"
+                            >
+                                <img
+                                    v-if="good.preview"
+                                    :src="good.preview"
+                                    :alt="good.title"
+                                    :title="good.title"
+                                    class="h-full w-full rounded-lg object-cover object-center"
+                                    loading="lazy"
+                                />
+                            </Link>
+                            <div class="grow">
+                                <Link :href="route('goods.index', good)" class="mb-2" :title="good.title">
+                                    <span class="text-sm text-gray-900 dark:text-gray-200">{{ good.title }}</span>
+                                </Link>
                             </div>
-                            <button @click="$emit('checkout')"
-                                    class="text-white uppercase bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
-                                <span>Proceed to checkout</span>
-                            </button>
+                            <font-awesome-icon
+                                :icon="['fas', 'trash-can']"
+                                class="cursor-pointer text-gray-800 hover:opacity-70 dark:text-gray-100"
+                                @click.prevent="remove(good)"
+                            />
                         </div>
+                        <div class="row flex flex-wrap justify-between py-4 md:justify-end md:py-0 md:pl-28">
+                            <div class="flex items-center">
+                                <button
+                                    :class="[
+                                        'mr-3',
+                                        items[itemId(good.id)].quantity > 1
+                                            ? 'cursor-pointer text-purple-600'
+                                            : 'cursor-not-allowed text-gray-300 dark:text-gray-500',
+                                    ]"
+                                    :disabled="items[itemId(good.id)].quantity <= 1"
+                                    @click.prevent="update(good, items[itemId(good.id)].quantity - 1)"
+                                >
+                                    <font-awesome-icon :icon="['fas', 'minus']" />
+                                </button>
+                                <input
+                                    type="number"
+                                    class="w-14 rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-center text-sm text-gray-900 focus:border-purple-500 focus:ring-purple-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-purple-500 dark:focus:ring-purple-500"
+                                    v-model="items[itemId(good.id)].quantity"
+                                    @input="update(good, items[itemId(good.id)].quantity)"
+                                />
+                                <font-awesome-icon
+                                    :icon="['fas', 'plus']"
+                                    class="ml-3 cursor-pointer text-purple-600"
+                                    @click.prevent="update(good, items[itemId(good.id)].quantity + 1)"
+                                />
+                            </div>
+                            <div class="ml-auto flex flex-col justify-center text-right md:ml-0 md:w-1/4">
+                                <p v-if="good.old_price" class="text-sm leading-4 text-gray-400 line-through">
+                                    {{ formatMoney(good.old_price) }}
+                                </p>
+                                <p class="whitespace-nowrap text-xl font-medium text-red-600">
+                                    {{ formatMoney(good.price) }}
+                                </p>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <div class="sticky -bottom-4 flex flex-wrap items-center py-4 md:-mb-4">
+                    <div
+                        class="flex w-full flex-col items-center rounded border border-slate-300 bg-purple-50 p-4 dark:border-slate-500 dark:bg-gray-700 md:ml-auto md:w-auto md:flex-row md:p-6"
+                    >
+                        <div class="mb-4 flex w-full flex-row items-center justify-between md:mr-6 md:mb-0 md:w-auto">
+                            <p class="text-xl text-gray-900 dark:text-gray-200 md:hidden">Total</p>
+                            <div class="ml-auto text-2xl text-gray-900 dark:text-gray-200 md:text-4xl">
+                                <span>{{ formatMoney(total) }}</span>
+                            </div>
+                        </div>
+                        <button
+                            type="button"
+                            @click="$emit('checkout')"
+                            class="self-end rounded-lg bg-gradient-to-br from-purple-600 to-blue-500 px-5 py-2.5 text-center text-sm font-medium uppercase tracking-wider text-white focus:outline-none focus:ring-4 focus:ring-blue-300 hover:bg-gradient-to-bl dark:focus:ring-blue-800"
+                        >
+                            <font-awesome-icon :icon="['fas', 'credit-card']" class="mr-2" />
+                            <span>Proceed to checkout</span>
+                        </button>
                     </div>
                 </div>
-                <div v-else class="cart-dummy flex flex-col justify-center items-center">
-                    <img loading="lazy" alt="Cart" title="Cart" class="cart-dummy__illustration w-full mb-12 max-w-xs"
-                         src="@/assets/modal-cart-dummy.svg">
-                    <h4 class="cart-dummy__heading md:text-2xl text-xl mb-4">Cart is empty</h4>
-                    <p class="cart-dummy__caption text-sm text-gray-500">But it's never too late to fix it :)</p>
-                </div>
+            </template>
+            <div v-else class="flex flex-col items-center justify-center">
+                <img
+                    loading="lazy"
+                    alt="Cart"
+                    title="Cart"
+                    class="mb-12 w-full max-w-xs"
+                    src="@/assets/modal-cart-dummy.svg"
+                />
+                <h4
+                    class="mb-4 text-xl font-medium uppercase tracking-wide text-gray-900 dark:text-gray-200 md:text-2xl"
+                >
+                    Cart is empty
+                </h4>
+                <p class="text-sm text-gray-800 dark:text-gray-400">But it's never too late to fix it :)</p>
             </div>
         </div>
     </Modal>

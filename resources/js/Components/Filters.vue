@@ -12,7 +12,7 @@ const props = defineProps({
 
 defineEmits(['brandFilter', 'priceFilter', 'propertyFilter']);
 
-const sliderFormat = (value) => `${Math.round(value)} ₴`;
+const sliderFormat = (value) => `${Math.round(value)} $`;
 </script>
 
 <template>

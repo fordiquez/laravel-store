@@ -7,6 +7,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import Pagination from '@/Components/Pagination.vue';
 import FiltersDrawer from '@/Components/FiltersDrawer.vue';
 import Filters from '@/Components/Filters.vue';
+import {useFormat} from "@/composables/format";
 
 const props = defineProps({
     title: String,
@@ -16,6 +17,8 @@ const props = defineProps({
     prices: Object,
     goods: Object,
 });
+
+const {formatMoney} = useFormat()
 
 onMounted(() => {
     initDropdowns();
@@ -42,7 +45,7 @@ const rangePrices = reactive({
     max: 100000,
 });
 
-const formRoute = computed(() => (props.category ? route('index.goods', props.category) : route('index.search')));
+const formRoute = computed(() => (props.category ? route('goods.index', props.category) : route('goods.search')));
 
 const brandFilter = (brand) => {
     const brandIndex = filters.brands.indexOf(brand);
@@ -164,7 +167,7 @@ const goodsSort = (key) => {
                                     class="mx-1 rounded-full bg-purple-100 px-2.5 py-0.5 text-xs font-medium text-purple-800 dark:bg-purple-900 dark:text-purple-300"
                                 >
                                     <span class="mr-1">{{ brand.name }}</span>
-                                    <font-awesome-icon icon="fa-solid fa-xmark" class="ml-1" />
+                                    <font-awesome-icon :icon="['fas', 'xmark']" class="ml-1" />
                                 </button>
                             </template>
 
@@ -176,7 +179,7 @@ const goodsSort = (key) => {
                                         class="mx-1 rounded-full bg-purple-100 px-2.5 py-0.5 text-xs font-medium text-purple-800 dark:bg-purple-900 dark:text-purple-300"
                                     >
                                         <span class="mr-1">{{ value }}</span>
-                                        <font-awesome-icon icon="fa-solid fa-xmark" class="ml-1" />
+                                        <font-awesome-icon :icon="['fas', 'xmark']" class="ml-1" />
                                     </button>
                                 </template>
                             </template>
@@ -190,7 +193,7 @@ const goodsSort = (key) => {
                             class="flex w-full items-center justify-between py-2 pl-3 pr-4 font-medium text-gray-700 hover:bg-gray-50 dark:text-gray-400 dark:focus:text-white dark:hover:bg-gray-700 dark:hover:text-white md:w-auto md:p-0 md:hover:bg-transparent md:hover:text-blue-700 md:dark:hover:bg-transparent"
                         >
                             Sort
-                            <font-awesome-icon icon="fa-solid fa-chevron-down" class="ml-2" />
+                            <font-awesome-icon :icon="['fas', 'chevron-down']" class="ml-2" />
                         </button>
                         <!-- Sort menu -->
                         <div
@@ -249,7 +252,7 @@ const goodsSort = (key) => {
                                     </div>
                                     <div class="mt-4 flex flex-col">
                                         <h3 class="text-gray-700 dark:text-gray-200">
-                                            <Link :href="route('index.good', good)">
+                                            <Link :href="route('goods.good.general', good)">
                                                 <span aria-hidden="true" class="absolute inset-0" />
                                                 {{ good.title }}
                                             </Link>
@@ -259,8 +262,7 @@ const goodsSort = (key) => {
                                                 v-if="good.old_price"
                                                 class="mt-1 text-sm font-medium text-gray-500 dark:text-gray-300"
                                             >
-                                                <span class="line-through">{{ good.old_price }}</span>
-                                                <span class="ml-1">₴</span>
+                                                <span class="line-through">{{ formatMoney(good.old_price) }}</span>
                                             </p>
                                             <p
                                                 :class="[
@@ -270,7 +272,7 @@ const goodsSort = (key) => {
                                                     'text-2xl font-medium',
                                                 ]"
                                             >
-                                                {{ good.price }} ₴
+                                                {{ formatMoney(good.price) }}
                                             </p>
                                         </div>
                                     </div>

@@ -5,7 +5,6 @@ namespace App\Http\Middleware;
 use App\Http\Resources\CartResource;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category;
-use App\Models\Good;
 use App\Support\Cart;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
@@ -42,8 +41,8 @@ class HandleInertiaRequests extends Middleware
                     'location' => $request->url(),
                 ]);
             },
-            'categories' => !$request->routeIs('livewire.message') ? CategoryResource::collection(Category::whereParentId(null)->get()) : null,
-            'cart' => new CartResource(Cart::getGoodsAndCartItems())
+            'categories' => $request->routeIs('livewire.message') ?: CategoryResource::collection(Category::whereParentId(null)->get()),
+            'cart' => new CartResource(Cart::getGoodsAndCartItems()),
         ]);
     }
 }

@@ -18,3 +18,4 @@ yarn-error.log
 /.idea
 /.vscode
 /app/Policies
+/docker/mysql

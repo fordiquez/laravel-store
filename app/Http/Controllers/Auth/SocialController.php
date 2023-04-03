@@ -7,15 +7,18 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\UserSocial;
 use App\Providers\RouteServiceProvider;
+use App\Support\Cart;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
+use Inertia\Inertia;
 use Laravel\Socialite\Facades\Socialite;
 
 class SocialController extends Controller
 {
     public function social(string $provider)
     {
-        return Socialite::driver($provider)->redirect();
+        return Inertia::location(Socialite::driver($provider)->redirect());
     }
 
     public function callback(string $provider)
@@ -43,10 +46,13 @@ class SocialController extends Controller
             $user->addAvatarMedia($socialUser->getAvatar());
 
             Auth::login($user);
+
+            Session::regenerate();
+
+            Cart::saveCookieCartItems();
+
         } catch (\Exception $exception) {
             Log::error($exception->getMessage());
-
-            return redirect(RouteServiceProvider::HOME);
         }
 
         return redirect(RouteServiceProvider::HOME);

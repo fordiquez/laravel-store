@@ -1,0 +1,74 @@
+version: '3.5'
+services:
+    nginx:
+        image: nginx:1.23.4-alpine
+        container_name: ${APP_NAME}_nginx
+        working_dir: /var/www/html
+        restart: unless-stopped
+        volumes:
+            - ./:/var/www/html
+            - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+            - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
+        depends_on:
+            - database
+            - redis
+        ports:
+            - '80:80'
+            - '443:443'
+        networks:
+            - brandford
+
+    app:
+        container_name: ${APP_NAME}_app
+        build:
+            args:
+                user: ${APP_NAME}
+                uid: 1000
+            context: docker/php
+            dockerfile: Dockerfile
+        environment:
+            APP_NAME: ${APP_NAME}
+        volumes:
+            - ./:/var/www/html
+        working_dir: /var/www/html
+        ports:
+            - '9000:9000'
+            - ${LARAVEL_WEBSOCKETS_PORT}:6001
+        links:
+            - database
+        depends_on:
+            - database
+        networks:
+            - brandford
+
+    redis:
+        image: redis:7.0.10-alpine
+        container_name: ${APP_NAME}_redis
+        restart: unless-stopped
+        ports:
+            - '6379:6379'
+        networks:
+            - brandford
+
+    database:
+        image: mysql:latest
+        container_name: ${APP_NAME}_db
+        restart: always
+        volumes:
+            - ./docker/mysql:/var/lib/mysql
+        environment:
+            MYSQL_DATABASE: ${DB_DATABASE}
+            MYSQL_USERNAME: ${DB_USERNAME}
+            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+        ports:
+            - '3306:3306'
+        command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
+        networks:
+            - brandford
+
+volumes:
+    database:
+        driver: local
+networks:
+    brandford:
+        driver: bridge

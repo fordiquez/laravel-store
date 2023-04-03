@@ -9,21 +9,20 @@ import DropdownLink from '@/Components/DropdownLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import ResponsiveCategories from '@/Components/ResponsiveCategories.vue';
 import Categories from '@/Components/Categories.vue';
-import Modal from "@/Components/Modal.vue";
-import Cart from "@/Components/Cart.vue";
+import Cart from '@/Components/Cart.vue';
 
 defineProps({
     title: String,
 });
 
-const { user, categories, breadcrumbs, cart } = reactive(usePage().props);
+const { user, categories, breadcrumbs } = reactive(usePage().props);
 
 const isDark = useDark();
 const toggleDark = useToggle(isDark);
 
 const showingNavigationDropdown = ref(false);
 const showingResponsiveCategories = ref(false);
-const cartModal = ref(false)
+const cartModal = ref(false);
 
 const form = useForm({
     search: '',
@@ -32,17 +31,18 @@ const search = ref(null);
 
 onMounted(() => initTooltips());
 
+const cart = computed(() => usePage().props.cart);
 const fullName = computed(() => (user ? `${user.first_name} ${user.last_name}` : null));
 const breadcrumbsRoutes = computed(
     () =>
-        route().current('index.good') ||
-        route().current('index.good.properties') ||
-        route().current('index.good.reviews'),
+        route().current('goods.good.general') ||
+        route().current('goods.good.properties') ||
+        route().current('goods.good.reviews'),
 );
 
 const closeResponsiveCategories = () => (showingResponsiveCategories.value = false);
 
-const searchGoods = () => form.get(route('index.search'));
+const searchGoods = () => form.get(route('goods.search'));
 </script>
 
 <template>
@@ -124,7 +124,7 @@ const searchGoods = () => form.get(route('index.search'));
                             type="button"
                             @click="toggleDark()"
                         >
-                            <font-awesome-icon icon="fa-solid fa-moon" size="xl" :class="{ hidden: isDark }" />
+                            <font-awesome-icon :icon="['fas', 'moon']" size="xl" :class="{ hidden: isDark }" />
                             <svg
                                 aria-hidden="true"
                                 id="theme-toggle-light-icon"
@@ -149,8 +149,9 @@ const searchGoods = () => form.get(route('index.search'));
                             <font-awesome-icon :icon="['fas', 'cart-shopping']" size="lg" />
                             <span
                                 class="absolute -top-1 -right-2 inline-flex h-6 w-6 items-center justify-center rounded-full bg-purple-500 text-xs font-bold text-white"
-                                >22</span
                             >
+                                {{ cart.count }}
+                            </span>
                         </button>
 
                         <!-- Settings Dropdown -->
@@ -163,7 +164,7 @@ const searchGoods = () => form.get(route('index.search'));
                                             class="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out focus:outline-none hover:text-gray-700 dark:bg-gray-800 dark:hover:text-gray-300"
                                         >
                                             {{ fullName }}
-                                            <font-awesome-icon icon="fa-solid fa-angle-down" class="ml-2 -mr-0.5" />
+                                            <font-awesome-icon :icon="['fas', 'angle-down']" class="ml-2 -mr-0.5" />
                                         </button>
                                     </span>
                                 </template>
@@ -268,7 +269,7 @@ const searchGoods = () => form.get(route('index.search'));
                         :href="route('index.dashboard')"
                         class="text-gray-700 hover:text-purple-600 dark:text-gray-400 dark:hover:text-white"
                     >
-                        <font-awesome-icon icon="fa-solid fa-house-chimney" />
+                        <font-awesome-icon :icon="['fas', 'house-chimney']" />
                     </Link>
                 </li>
                 <li
@@ -311,7 +312,14 @@ const searchGoods = () => form.get(route('index.search'));
             <slot />
         </main>
 
-        <cart :show="cartModal" :count="cart.count" :total="cart.total" :items="cart.items" @close="cartModal = false" />
+        <cart
+            :show="cartModal"
+            :count="cart.count"
+            :total="cart.total"
+            :items="cart.items"
+            :goods="cart.goods"
+            @close="cartModal = false"
+        />
 
         <responsive-categories
             v-if="showingResponsiveCategories"

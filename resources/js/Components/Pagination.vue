@@ -81,7 +81,7 @@ const trimPageRange = (pageRange) => {
                 :href="prevPage"
                 class="mr-3 inline-flex items-center rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
             >
-                <font-awesome-icon icon="fa-solid fa-arrow-left-long" class="mr-2 h-4 w-4" />
+                <font-awesome-icon :icon="['fas', 'arrow-left-long']" class="mr-2 h-4 w-4" />
                 Previous
             </Link>
             <button
@@ -89,7 +89,7 @@ const trimPageRange = (pageRange) => {
                 class="mr-3 inline-flex cursor-not-allowed items-center rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400"
                 disabled
             >
-                <font-awesome-icon icon="fa-solid fa-arrow-left-long" class="mr-2 h-4 w-4" />
+                <font-awesome-icon :icon="['fas', 'arrow-left-long']" class="mr-2 h-4 w-4" />
                 Previous
             </button>
             <Link
@@ -98,7 +98,7 @@ const trimPageRange = (pageRange) => {
                 class="inline-flex items-center rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
             >
                 Next
-                <font-awesome-icon icon="fa-solid fa-arrow-right-long" class="ml-2 h-4 w-4" />
+                <font-awesome-icon :icon="['fas', 'arrow-right-long']" class="ml-2 h-4 w-4" />
             </Link>
             <button
                 v-else
@@ -106,7 +106,7 @@ const trimPageRange = (pageRange) => {
                 disabled
             >
                 Next
-                <font-awesome-icon icon="fa-solid fa-arrow-right-long" class="ml-2 h-4 w-4" />
+                <font-awesome-icon :icon="['fas', 'arrow-right-long']" class="ml-2 h-4 w-4" />
             </button>
         </div>
         <p v-else class="mb-0 text-sm leading-5 text-gray-700 dark:text-gray-400 sm:hidden">
@@ -135,7 +135,7 @@ const trimPageRange = (pageRange) => {
                             class="inline-flex h-10 items-center rounded-l-lg border border-gray-300 bg-white px-3 py-2 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
                             aria-label="Previous"
                         >
-                            <font-awesome-icon icon="fa-solid fa-angle-left" class="h-4 w-4" />
+                            <font-awesome-icon :icon="['fas', 'angle-left']" class="h-4 w-4" />
                         </Link>
 
                         <button
@@ -144,7 +144,7 @@ const trimPageRange = (pageRange) => {
                             aria-label="Previous"
                             disabled
                         >
-                            <font-awesome-icon icon="fa-solid fa-angle-left" class="h-4 w-4" />
+                            <font-awesome-icon :icon="['fas', 'angle-left']" class="h-4 w-4" />
                         </button>
                     </li>
                     <li v-for="link in pageLinks" :key="link.url">
@@ -167,7 +167,7 @@ const trimPageRange = (pageRange) => {
                             class="inline-flex h-10 items-center rounded-r-lg border border-gray-300 bg-white px-3 py-2 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
                             aria-label="Next"
                         >
-                            <font-awesome-icon icon="fa-solid fa-angle-right" class="h-4 w-4" />
+                            <font-awesome-icon :icon="['fas', 'angle-right']" class="h-4 w-4" />
                         </Link>
 
                         <button
@@ -176,7 +176,7 @@ const trimPageRange = (pageRange) => {
                             aria-label="Next"
                             disabled
                         >
-                            <font-awesome-icon icon="fa-solid fa-angle-right" class="h-4 w-4" />
+                            <font-awesome-icon :icon="['fas', 'angle-right']" class="h-4 w-4" />
                         </button>
                     </li>
                 </ul>

@@ -1,10 +1,11 @@
 <script setup>
-import { Head } from '@inertiajs/vue3';
+import { Head, router } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import Tabs from '@/Components/Tabs.vue';
 import { computed, onMounted, reactive, ref } from 'vue';
 import '@splidejs/vue-splide/css/sea-green';
 import { initTooltips } from 'flowbite';
+import { useFormat } from '@/composables/format';
 
 const props = defineProps({
     good: Object,
@@ -37,6 +38,7 @@ const thumbsOptions = reactive({
 
 const main = ref();
 const thumbs = ref();
+const { formatMoney } = useFormat();
 
 onMounted(() => {
     initTooltips();
@@ -57,6 +59,8 @@ const ratingStars = computed(() =>
             : ['far', 'star'],
     ),
 );
+
+const store = () => router.post(route('cart.store', props.good));
 </script>
 
 <template>
@@ -125,8 +129,7 @@ const ratingStars = computed(() =>
                                     v-if="good.old_price"
                                     class="mt-1 text-sm font-medium text-gray-500 dark:text-gray-300"
                                 >
-                                    <span class="line-through">{{ good.old_price }}</span>
-                                    <span class="ml-1">₴</span>
+                                    <span class="line-through">{{ formatMoney(good.old_price) }}</span>
                                 </p>
                                 <p
                                     :class="[
@@ -136,11 +139,11 @@ const ratingStars = computed(() =>
                                         'text-3xl font-medium',
                                     ]"
                                 >
-                                    {{ good.price }} ₴
+                                    {{ formatMoney(good.price) }}
                                 </p>
                             </div>
                             <button
-                                type="button"
+                                @click.prevent="store"
                                 class="self-end rounded-lg bg-gradient-to-br from-purple-600 to-blue-500 px-5 py-2.5 text-center text-sm font-medium uppercase tracking-wider text-white focus:outline-none focus:ring-4 focus:ring-blue-300 hover:bg-gradient-to-bl dark:focus:ring-blue-800"
                             >
                                 <font-awesome-icon :icon="['fas', 'cart-plus']" class="mr-2" />

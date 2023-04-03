@@ -34,7 +34,9 @@ const closeReviewModal = () => (reviewModal.value = false);
                 <tabs :good="good.slug" />
 
                 <div class="container mx-auto py-12">
-                    <div class="flex flex-col md:flex-row items-center space-x-6 rounded-xl border border-gray-200 p-4 dark:border-gray-700">
+                    <div
+                        class="flex flex-col items-center space-x-6 rounded-xl border border-gray-200 p-4 dark:border-gray-700 md:flex-row"
+                    >
                         <h1
                             class="bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-3xl font-bold text-transparent"
                         >
@@ -42,7 +44,7 @@ const closeReviewModal = () => (reviewModal.value = false);
                         </h1>
                         <button
                             @click="reviewModal = true"
-                            class="mt-4 md:mt-0 group relative inline-flex items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-purple-600 to-blue-500 p-0.5 text-sm font-medium uppercase tracking-wider text-gray-900 focus:outline-none focus:ring-4 focus:ring-blue-300 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white dark:focus:ring-blue-800"
+                            class="group relative mt-4 inline-flex items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-purple-600 to-blue-500 p-0.5 text-sm font-medium uppercase tracking-wider text-gray-900 focus:outline-none focus:ring-4 focus:ring-blue-300 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white dark:focus:ring-blue-800 md:mt-0"
                         >
                             <span
                                 class="relative rounded-md bg-white px-4 py-2.5 transition-all duration-150 ease-in group-hover:bg-opacity-0 dark:bg-gray-900"

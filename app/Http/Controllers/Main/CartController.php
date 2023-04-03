@@ -2,36 +2,14 @@
 
 namespace App\Http\Controllers\Main;
 
-use App\Support\Cart;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\GoodResource;
 use App\Models\CartItem;
 use App\Models\Good;
+use App\Support\Cart;
 use Illuminate\Http\Request;
 
 class CartController extends Controller
 {
-    public function index()
-    {
-        list($goods, $cartItems) = Cart::getGoodsAndCartItems();
-        $total = 0;
-        foreach ($goods as $good) {
-            $total += $good->price * $cartItems[$good->id]['quantity'];
-        }
-
-        return response()->json([
-            'cartItems' => $cartItems,
-            'goods' => GoodResource::collection($goods),
-            'total' => $total,
-        ]);
-    }
-
-    public function count() {
-        return response([
-            'count' => Cart::getCartItemsCount()
-        ]);
-    }
-
     public function store(Request $request, Good $good) {
         $quantity = $request->post('quantity', 1);
         $user = $request->user();
@@ -39,19 +17,14 @@ class CartController extends Controller
             $cartItem = CartItem::where(['user_id' => $user->id, 'good_id' => $good->id])->first();
 
             if ($cartItem) {
-                $cartItem->quantity += $quantity;
-                $cartItem->update();
+                $cartItem->increment('quantity');
             } else {
-                $data = [
+                CartItem::create([
                     'user_id' => $user->id,
                     'good_id' => $good->id,
-                    'quantity' => $quantity
-                ];
-                CartItem::create($data);
+                    'quantity' => $quantity,
+                ]);
             }
-            return response([
-                'count' => Cart::getCartItemsCount()
-            ]);
         } else {
             $cartItems = Cart::getCookieCartItems();
             $isGoodExists = false;
@@ -68,27 +41,39 @@ class CartController extends Controller
                     'user_id' => null,
                     'good_id' => $good->id,
                     'quantity' => $quantity,
-                    'price' => $good->price
+                    'price' => $good->price,
                 ];
             }
             Cart::setCookieCartItems($cartItems);
-
-            return response([
-                'count' => Cart::getCountFromItems($cartItems),
-                'cartItems' => $cartItems
-            ]);
         }
+
+        return redirect()->back();
     }
 
-    public function remove(Request $request, Good $good) {
+    public function update(Request $request, Good $good) {
+        $quantity = $request->integer('quantity');
         $user = $request->user();
         if ($user) {
-            $cartItem = CartItem::query()->where(['user_id' => $user->id, 'good_id' => $good->id])->first();
-            $cartItem?->update();
+            CartItem::where(['user_id' => $user->id, 'good_id' => $good->id])->update(['quantity' => $quantity]);
+        } else {
+            $cartItems = Cart::getCookieCartItems();
+            foreach ($cartItems as &$item) {
+                if ($item['good_id'] === $good->id) {
+                    $item['quantity'] = $quantity;
+                    break;
+                }
+            }
 
-            return response([
-                'count' => Cart::getCartItemsCount()
-            ]);
+            Cart::setCookieCartItems($cartItems);
+        }
+
+        return redirect()->back();
+    }
+
+    public function delete(Request $request, Good $good) {
+        $user = $request->user();
+        if ($user) {
+            CartItem::query()->where(['user_id' => $user->id, 'good_id' => $good->id])->first()?->delete();
         } else {
             $cartItems = Cart::getCookieCartItems();
             foreach ($cartItems as $i => &$item) {
@@ -98,44 +83,15 @@ class CartController extends Controller
                 }
             }
             Cart::setCookieCartItems($cartItems);
-
-            return response([
-                'count' => Cart::getCountFromItems($cartItems)
-            ]);
         }
-    }
 
-    public function updateQuantity(Request $request, Good $good) {
-        $quantity = (int)$request->post('quantity');
-        $user = $request->user();
-        if ($user) {
-            CartItem::where(['user_id' => $user->id, 'good_id' => $good->id])->update(['quantity' => $quantity]);
-            return response([
-                'count' => Cart::getCartItemsCount(),
-            ]);
-        } else {
-            $cartItems = Cart::getCookieCartItems();
-            foreach ($cartItems as &$item) {
-                if ($item['good_id'] === $good->id) {
-                    $item['quantity'] = $quantity;
-                    break;
-                }
-            }
-            Cart::setCookieCartItems($cartItems);
-
-            return response([
-                'count' => Cart::getCountFromItems($cartItems)
-            ]);
-        }
+        return redirect()->back();
     }
 
     public function bulkDelete(Request $request) {
         $user = $request->user();
         if ($user) {
             CartItem::where('user_id', $user->id)->delete();
-            return response([
-                'count' => Cart::getCartItemsCount()
-            ]);
         } else {
             $cartItems = Cart::getCookieCartItems();
             foreach ($cartItems as $item) {
@@ -143,10 +99,8 @@ class CartController extends Controller
             }
             array_splice($cartItems, 0, count($cartItems));
             Cart::setCookieCartItems($cartItems);
-
-            return response([
-                'count' => Cart::getCountFromItems($cartItems)
-            ]);
         }
+
+        return redirect()->back();
     }
 }

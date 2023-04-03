@@ -10,27 +10,26 @@ use Illuminate\Support\Facades\Cookie;
 
 class Cart
 {
-    public static function getCartItemsCount(): int
+    public static function getCount(): int
     {
         $user = auth()->user();
-
         if ($user) {
             return CartItem::whereUserId($user->id)->sum('quantity');
-        } else {
-            $cartItems = self::getCookieCartItems();
-
-            return array_reduce($cartItems, fn($carry, $item) => $carry + $item['quantity'], 0);
         }
+
+        $cartItems = self::getCookieCartItems();
+
+        return array_reduce($cartItems, fn ($carry, $item) => $carry + $item['quantity'], 0);
     }
 
     public static function getCartItems(): Collection|array
     {
         $user = auth()->user();
         if ($user) {
-            return CartItem::whereUserId($user->id)->get()->map(fn($item) => ['good_id' => $item->good_id, 'quantity' => $item->quantity]);
-        } else {
-            return self::getCookieCartItems();
+            return CartItem::whereUserId($user->id)->get()->map(fn (CartItem $item) => ['good_id' => $item->good_id, 'quantity' => $item->quantity]);
         }
+
+        return self::getCookieCartItems();
     }
 
     public static function getCookieCartItems(): array
@@ -38,17 +37,17 @@ class Cart
         return json_decode(request()->cookie('cart_items', '[]'), true);
     }
 
-    public static function setCookieCartItems($cartItems): void
+    public static function setCookieCartItems(array $cartItems): void
     {
         Cookie::queue('cart_items', json_encode($cartItems), 60 * 24 * 30);
     }
 
-    public static function getCountFromItems($cartItems): int
+    public static function getCountFromItems(array $cartItems): int
     {
-        return array_reduce($cartItems, fn($carry, $item) => $carry + $item['quantity'], 0);
+        return array_reduce($cartItems, fn (int $carry, array $item) => $carry + $item['quantity'], 0);
     }
 
-    public static function addCookieSavedCartItems(): void
+    public static function saveCookieCartItems(): void
     {
         $user = auth()->user();
         $cartItems = self::getCookieCartItems();
@@ -57,12 +56,15 @@ class Cart
 
         foreach ($cartItems as $cartItem) {
             if (isset($userCartItems[$cartItem['good_id']])) {
+                $userCartItems[$cartItem['good_id']]->update(['quantity' => $cartItem['quantity']]);
+
                 continue;
             }
+
             $savedCartItems[] = [
                 'user_id' => $user->id,
                 'good_id' => $cartItem['good_id'],
-                'quantity' => $cartItem['quantity']
+                'quantity' => $cartItem['quantity'],
             ];
         }
 

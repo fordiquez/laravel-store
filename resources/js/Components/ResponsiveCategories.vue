@@ -71,7 +71,7 @@ const rollbackCategories = () => {
                                     @click="closeModal"
                                     class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 transition duration-150 ease-in-out focus:bg-gray-100 focus:text-gray-500 focus:outline-none hover:bg-gray-100 hover:text-gray-500 dark:text-gray-500 dark:focus:bg-gray-900 dark:focus:text-gray-400 dark:hover:bg-gray-900 dark:hover:text-gray-400"
                                 >
-                                    <font-awesome-icon icon="fa-solid fa-xmark" class="h-6 w-6" />
+                                    <font-awesome-icon :icon="['fas', 'xmark']" class="h-6 w-6" />
                                 </button>
                             </DialogTitle>
                             <div v-if="props.categories.length" class="mt-4">
@@ -83,11 +83,11 @@ const rollbackCategories = () => {
                                         class="flex cursor-pointer justify-between p-2 text-gray-600 transition duration-150 ease-in-out focus:bg-gray-50 focus:text-gray-800 hover:bg-gray-50 hover:text-gray-800 dark:text-gray-400 dark:focus:bg-gray-700 dark:focus:text-gray-200 dark:hover:bg-gray-700 dark:hover:text-gray-200"
                                     >
                                         <div class="inline-flex items-center font-medium">
-                                            <font-awesome-icon icon="fa-solid fa-ellipsis" class="h-6 w-6" />
+                                            <font-awesome-icon :icon="['fas', 'ellipsis']" class="h-6 w-6" />
                                             <span class="ml-2">{{ category.title }}</span>
                                         </div>
                                         <font-awesome-icon
-                                            icon="fa-solid fa-arrow-right-long"
+                                            :icon="['fas', 'arrow-right-long']"
                                             class="ml-auto h-6 w-6"
                                         />
                                     </li>
@@ -97,7 +97,7 @@ const rollbackCategories = () => {
                                         @click="rollbackCategories"
                                         class="flex w-full items-center justify-center rounded bg-indigo-600 py-2.5 text-gray-400 shadow-md transition duration-150 ease-in-out focus:bg-indigo-700 focus:shadow-lg focus:outline-none focus:ring-0 hover:bg-indigo-700 hover:shadow-lg active:bg-indigo-800 active:shadow-lg dark:text-gray-200"
                                     >
-                                        <font-awesome-icon icon="fa-solid fa-arrow-left-long" class="h-6 w-6" />
+                                        <font-awesome-icon :icon="['fas', 'arrow-left-long']" class="h-6 w-6" />
                                         <span class="ml-2 text-base font-semibold uppercase leading-6 tracking-widest"
                                             >Categories</span
                                         >

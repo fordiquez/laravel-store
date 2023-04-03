@@ -20,17 +20,17 @@ const classes = reactive({
 const tabs = reactive([
     {
         title: 'General',
-        route: 'index.good',
+        route: 'goods.good.general',
         icon: ['fas', 'bag-shopping'],
     },
     {
         title: 'Properties',
-        route: 'index.good.properties',
+        route: 'goods.good.properties',
         icon: ['fas', 'clipboard-list'],
     },
     {
         title: 'Reviews',
-        route: 'index.good.reviews',
+        route: 'goods.good.reviews',
         icon: ['fas', 'comments'],
     },
 ]);

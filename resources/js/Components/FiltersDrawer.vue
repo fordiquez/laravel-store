@@ -44,7 +44,7 @@ const propertyFilter = (value) => {
         <span
             class="relative rounded-md bg-white px-5 py-2 tracking-wider transition-all duration-150 ease-in group-hover:bg-opacity-0 dark:bg-gray-900"
         >
-            <font-awesome-icon icon="fa-solid fa-filter" class="mr-1" />
+            <font-awesome-icon :icon="['fas', 'filter']" class="mr-1" />
             FILTERS
         </span>
     </button>
@@ -60,7 +60,7 @@ const propertyFilter = (value) => {
             id="drawer-label"
             class="mb-4 inline-flex items-center text-lg font-medium text-gray-500 dark:text-gray-400"
         >
-            <font-awesome-icon icon="fa-solid fa-filter" class="mr-2" />
+            <font-awesome-icon :icon="['fas', 'filter']" class="mr-2" />
             Filters
         </h5>
         <button
@@ -68,7 +68,7 @@ const propertyFilter = (value) => {
             type="button"
             class="absolute top-2.5 right-2.5 inline-flex items-center rounded-lg bg-transparent p-2 text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white"
         >
-            <font-awesome-icon icon="fa-solid fa-xmark" size="xl" />
+            <font-awesome-icon :icon="['fas', 'xmark']" size="xl" />
         </button>
 
         <Filters

@@ -16,12 +16,13 @@ class CartResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        list($goods, $cartItems) = $this->resource;
+        [$goods, $cartItems] = $this->resource;
 
         return [
-            'count' => Cart::getCartItemsCount(),
+            'count' => Cart::getCount(),
             'total' => $goods->reduce(fn (?float $carry, Good $good) => $carry + $good->price * $cartItems[$good->id]['quantity']),
-            'items' => GoodResource::collection($goods)
+            'items' => $cartItems,
+            'goods' => GoodResource::collection($goods),
         ];
     }
 }
