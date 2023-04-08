@@ -2,6 +2,9 @@
 import { Link, router } from '@inertiajs/vue3';
 import Modal from '@/Components/Modal.vue';
 import { useFormat } from '@/composables/format';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
+import SecondaryButton from '@/Components/SecondaryButton.vue';
+import DangerButton from "@/Components/DangerButton.vue";
 
 const props = defineProps({
     show: {
@@ -45,28 +48,14 @@ const bulkDelete = () => router.delete(route('cart.bulk-delete'));
         >
             <template v-if="items.length">
                 <div class="mb-4 flex flex-col justify-between space-y-4 sm:flex-row sm:space-y-0">
-                    <button
-                        @click="$emit('close')"
-                        class="group relative inline-flex items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-purple-600 to-blue-500 p-0.5 font-medium text-gray-900 focus:outline-none focus:ring-4 focus:ring-blue-300 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white dark:focus:ring-blue-800"
-                    >
-                        <span
-                            class="relative w-full rounded-md bg-white px-4 py-2 uppercase tracking-wider transition-all duration-300 ease-in-out group-hover:bg-opacity-0 dark:bg-gray-900"
-                        >
-                            <font-awesome-icon :icon="['fas', 'cart-plus']" class="mr-1" />
-                            Continue shopping
-                        </span>
-                    </button>
-                    <button
-                        @click.prevent="bulkDelete"
-                        class="group relative inline-flex items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-purple-600 to-blue-500 p-0.5 font-medium text-gray-900 focus:outline-none focus:ring-4 focus:ring-blue-300 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white dark:focus:ring-blue-800"
-                    >
-                        <span
-                            class="relative w-full rounded-md bg-white px-4 py-2 uppercase tracking-wider transition-all duration-300 ease-in-out group-hover:bg-opacity-0 dark:bg-gray-900"
-                        >
-                            <font-awesome-icon :icon="['fas', 'trash-can']" class="mr-1" />
-                            Clear all
-                        </span>
-                    </button>
+                    <secondary-button @click="$emit('close')">
+                        <font-awesome-icon :icon="['fas', 'cart-plus']" class="mr-2" />
+                        Continue shopping
+                    </secondary-button>
+                    <danger-button @click="bulkDelete">
+                        <font-awesome-icon :icon="['fas', 'trash-can']" class="mr-2" />
+                        Clear all
+                    </danger-button>
                 </div>
                 <ul class="md:mb-6">
                     <li
@@ -76,9 +65,10 @@ const bulkDelete = () => router.delete(route('cart.bulk-delete'));
                     >
                         <div class="relative flex">
                             <span
+                                v-if="good.old_price"
                                 class="absolute top-0 left-0 bg-red-600 px-2 text-xs font-medium leading-6 text-gray-100"
                             >
-                                −20%
+                                {{ good.old_price }}
                             </span>
                             <Link
                                 :href="route('goods.good.general', good)"
@@ -151,14 +141,10 @@ const bulkDelete = () => router.delete(route('cart.bulk-delete'));
                                 <span>{{ formatMoney(total) }}</span>
                             </div>
                         </div>
-                        <button
-                            type="button"
-                            @click="$emit('checkout')"
-                            class="self-end rounded-lg bg-gradient-to-br from-purple-600 to-blue-500 px-5 py-2.5 text-center text-sm font-medium uppercase tracking-wider text-white focus:outline-none focus:ring-4 focus:ring-blue-300 hover:bg-gradient-to-bl dark:focus:ring-blue-800"
-                        >
+                        <primary-button class="self-end" type="button" @click="$emit('checkout')">
                             <font-awesome-icon :icon="['fas', 'credit-card']" class="mr-2" />
                             <span>Proceed to checkout</span>
-                        </button>
+                        </primary-button>
                     </div>
                 </div>
             </template>

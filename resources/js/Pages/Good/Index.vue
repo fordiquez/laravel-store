@@ -6,6 +6,7 @@ import { computed, onMounted, reactive, ref } from 'vue';
 import '@splidejs/vue-splide/css/sea-green';
 import { initTooltips } from 'flowbite';
 import { useFormat } from '@/composables/format';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
 
 const props = defineProps({
     good: Object,
@@ -142,13 +143,10 @@ const store = () => router.post(route('cart.store', props.good));
                                     {{ formatMoney(good.price) }}
                                 </p>
                             </div>
-                            <button
-                                @click.prevent="store"
-                                class="self-end rounded-lg bg-gradient-to-br from-purple-600 to-blue-500 px-5 py-2.5 text-center text-sm font-medium uppercase tracking-wider text-white focus:outline-none focus:ring-4 focus:ring-blue-300 hover:bg-gradient-to-bl dark:focus:ring-blue-800"
-                            >
+                            <primary-button class="self-end" @click.prevent="store">
                                 <font-awesome-icon :icon="['fas', 'cart-plus']" class="mr-2" />
                                 <span>Add to cart</span>
-                            </button>
+                            </primary-button>
                         </div>
                         <div class="mt-4 flex">
                             <div

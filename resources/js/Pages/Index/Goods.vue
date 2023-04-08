@@ -7,7 +7,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import Pagination from '@/Components/Pagination.vue';
 import FiltersDrawer from '@/Components/FiltersDrawer.vue';
 import Filters from '@/Components/Filters.vue';
-import {useFormat} from "@/composables/format";
+import { useFormat } from '@/composables/format';
 
 const props = defineProps({
     title: String,
@@ -18,7 +18,7 @@ const props = defineProps({
     goods: Object,
 });
 
-const {formatMoney} = useFormat()
+const { formatMoney } = useFormat();
 
 onMounted(() => {
     initDropdowns();
