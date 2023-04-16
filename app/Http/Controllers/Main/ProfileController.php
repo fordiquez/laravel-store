@@ -3,7 +3,11 @@
 namespace App\Http\Controllers\Main;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ProfileUpdateRequest;
+use App\Http\Requests\Profile\AddressRequest;
+use App\Http\Requests\Profile\ProfileUpdateRequest;
+use App\Http\Resources\UserAddressResource;
+use App\Models\Country;
+use App\Models\UserAddress;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -19,9 +23,15 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): Response
     {
-        return Inertia::render('Profile/Edit', [
+        return Inertia::render('Profile/PersonalInformation', [
             'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
             'status' => session('status'),
+            'badges' => [
+                'orders' => $request->user()->orders()->count(),
+                'reviews' => $request->user()->reviews()->count(),
+            ],
+            'addresses' => UserAddressResource::collection($request->user()->addresses),
+            'countries' => Country::query()->orderBy('name')->get()->setVisible(['id', 'name', 'iso2'])->toArray(),
         ]);
     }
 
@@ -38,7 +48,7 @@ class ProfileController extends Controller
 
         $request->user()->save();
 
-        return Redirect::route('profile.edit');
+        return Redirect::route('profile.personal-information.edit');
     }
 
     /**
@@ -59,6 +69,52 @@ class ProfileController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return Redirect::to('/');
+        return to_route('index.dashboard');
+    }
+
+    public function storeAddress(AddressRequest $request)
+    {
+        $request->user()->addresses()->create($request->validated());
+
+        return to_route('profile.personal-information.edit');
+    }
+
+    public function updateAddress(UserAddress $address, AddressRequest $request)
+    {
+        $address->update($request->validated());
+
+        return to_route('profile.personal-information.edit');
+    }
+
+    public function destroyAddress(UserAddress $address)
+    {
+        $address->delete();
+
+        return to_route('profile.personal-information.edit');
+    }
+
+    public function orders()
+    {
+        inertia('Profile/Form');
+    }
+
+    public function wishlist()
+    {
+        inertia('Profile/Edit');
+    }
+
+    public function wallet()
+    {
+        inertia('Profile/Edit');
+    }
+
+    public function reviews()
+    {
+        inertia('Profile/Edit');
+    }
+
+    public function messages()
+    {
+        inertia('Profile/Edit');
     }
 }

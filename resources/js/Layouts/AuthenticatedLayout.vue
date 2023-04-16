@@ -4,12 +4,12 @@ import { Link, useForm, usePage } from '@inertiajs/vue3';
 import { useDark, useToggle } from '@vueuse/core';
 import { initTooltips } from 'flowbite';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
-import Dropdown from '@/Components/Dropdown.vue';
-import DropdownLink from '@/Components/DropdownLink.vue';
-import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
-import ResponsiveCategories from '@/Components/ResponsiveCategories.vue';
 import Categories from '@/Components/Categories.vue';
 import Cart from '@/Components/Cart.vue';
+import Dropdown from '@/Components/Dropdown.vue';
+import DropdownLink from '@/Components/DropdownLink.vue';
+import ResponsiveCategories from '@/Components/ResponsiveCategories.vue';
+import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
 
 defineProps({
@@ -100,7 +100,7 @@ const searchGoods = () => form.get(route('goods.search'));
                         </div>
                     </form>
 
-                    <div class="ml-auto mr-4 flex items-center sm:ml-0">
+                    <div class="ml-auto flex items-center sm:ml-0">
                         <!-- Toggle dark mode -->
                         <div
                             id="theme-toggle"
@@ -148,28 +148,33 @@ const searchGoods = () => form.get(route('goods.search'));
                         </button>
 
                         <!-- Settings Dropdown -->
-                        <div v-if="user" class="relative ml-3 hidden sm:flex">
-                            <Dropdown align="right" width="48">
-                                <template #trigger>
-                                    <span class="inline-flex rounded-md">
-                                        <button
-                                            type="button"
-                                            class="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out focus:outline-none hover:text-gray-700 dark:bg-gray-800 dark:hover:text-gray-300"
-                                        >
-                                            {{ fullName }}
-                                            <font-awesome-icon :icon="['fas', 'angle-down']" class="ml-2 -mr-0.5" />
-                                        </button>
-                                    </span>
-                                </template>
+                        <Dropdown v-if="user" class="ml-4 hidden sm:flex">
+                            <template #trigger>
+                                <button class="inline-flex focus:outline-none" title="Profile">
+                                    <img
+                                        :src="user.avatar"
+                                        :alt="fullName"
+                                        :title="fullName"
+                                        class="h-10 w-10 rounded-full object-cover"
+                                    />
+                                </button>
+                            </template>
 
-                                <template #content>
-                                    <DropdownLink :href="route('profile.edit')"> Profile</DropdownLink>
-                                    <DropdownLink :href="route('logout')" method="post" as="button">
-                                        Log Out
-                                    </DropdownLink>
-                                </template>
-                            </Dropdown>
-                        </div>
+                            <template #content>
+                                <div class="px-4 py-2 text-xs">
+                                    <p class="truncate font-semibold text-gray-700 dark:text-gray-300">
+                                        {{ user.full_name }}
+                                    </p>
+                                    <p class="truncate text-gray-600 dark:text-gray-400">{{ user.email }}</p>
+                                </div>
+                                <DropdownLink :href="route('profile.personal-information.edit')">
+                                    Profile
+                                </DropdownLink>
+                                <div class="border-t border-gray-200 dark:border-gray-600" />
+                                <DropdownLink :href="route('logout')" method="post" as="button"> Log Out </DropdownLink>
+                            </template>
+                        </Dropdown>
+
                         <div class="hidden sm:flex" v-else>
                             <Link
                                 :href="route('register')"
@@ -179,13 +184,10 @@ const searchGoods = () => form.get(route('goods.search'));
                             </Link>
                             <Link
                                 :href="route('login')"
-                                class="rounded-lg bg-gradient-to-br from-purple-600 to-blue-500 px-3 py-2.5 text-center text-sm font-medium font-semibold uppercase tracking-wider text-white focus:outline-none focus:ring-4 focus:ring-blue-300 hover:bg-gradient-to-bl dark:focus:ring-blue-800"
+                                class="rounded-lg bg-gradient-to-br from-purple-600 to-blue-500 px-3 py-2.5 text-center text-sm font-semibold uppercase tracking-wider text-white focus:outline-none focus:ring-4 focus:ring-blue-300 hover:bg-gradient-to-bl dark:focus:ring-blue-800"
                             >
                                 Log In
                             </Link>
-                        </div>
-                        <div v-if="user?.avatar" class="ml-2 hidden h-9 w-9 sm:flex">
-                            <img :src="user.avatar" :alt="fullName" :title="fullName" class="rounded-full" />
                         </div>
                     </div>
 
@@ -238,7 +240,9 @@ const searchGoods = () => form.get(route('goods.search'));
                     </div>
 
                     <div class="mt-3 space-y-1">
-                        <ResponsiveNavLink :href="route('profile.edit')"> Profile</ResponsiveNavLink>
+                        <ResponsiveNavLink :href="route('profile.personal-information.edit')">
+                            Profile
+                        </ResponsiveNavLink>
                         <ResponsiveNavLink :href="route('logout')" method="post" as="button">
                             Log Out
                         </ResponsiveNavLink>
@@ -246,8 +250,8 @@ const searchGoods = () => form.get(route('goods.search'));
                 </div>
 
                 <div v-else class="border-t border-gray-200 pt-4 pb-1 dark:border-gray-600">
-                    <ResponsiveNavLink :href="route('register')"> Sign Up</ResponsiveNavLink>
-                    <ResponsiveNavLink :href="route('login')"> Log In</ResponsiveNavLink>
+                    <ResponsiveNavLink :href="route('register')">Sign Up</ResponsiveNavLink>
+                    <ResponsiveNavLink :href="route('login')">Log In</ResponsiveNavLink>
                 </div>
             </div>
         </header>

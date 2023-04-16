@@ -1,7 +1,7 @@
 <script setup>
 import { Head } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import Tabs from '@/Components/Tabs.vue';
+import Tabs from '@/Pages/Good/Tabs.vue';
 
 defineProps({
     good: Object,

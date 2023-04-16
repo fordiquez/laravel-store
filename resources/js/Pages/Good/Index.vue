@@ -1,7 +1,7 @@
 <script setup>
 import { Head, router } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import Tabs from '@/Components/Tabs.vue';
+import Tabs from '@/Pages/Good/Tabs.vue';
 import { computed, onMounted, reactive, ref } from 'vue';
 import '@splidejs/vue-splide/css/sea-green';
 import { initTooltips } from 'flowbite';

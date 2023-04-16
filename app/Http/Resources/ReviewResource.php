@@ -25,7 +25,7 @@ class ReviewResource extends JsonResource
             'user_id' => $this->user_id,
             'good_id' => $this->good_id,
 
-            'username' => $this->user->fullName(),
+            'username' => $this->user->full_name,
 
             'good' => new GoodResource($this->whenLoaded('good')),
         ];

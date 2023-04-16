@@ -36,6 +36,8 @@
         "@vueform/slider": "^2.1.7",
         "@vueuse/core": "^9.12.0",
         "flowbite": "^1.6.3",
-        "qs": "^6.11.0"
+        "qs": "^6.11.0",
+        "vue-multiselect": "^3.0.0-beta.1",
+        "vue-tel-input": "^8.0.1"
     }
 }

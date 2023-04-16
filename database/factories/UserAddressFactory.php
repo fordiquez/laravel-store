@@ -2,8 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\State;
-use App\Models\Street;
+use App\Models\City;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,14 +17,13 @@ class UserAddressFactory extends Factory
      */
     public function definition(): array
     {
-        $street = Street::inRandomOrder()->first();
+        $city = City::inRandomOrder()->first();
 
         return [
-            'title' => fake()->unique()->words(rand(1, 3), true),
-            'country_id' => $street->city->state->country_id,
-            'state_id' => $street->city->state_id,
-            'city_id' => $street->city_id,
-            'street_id' => $street->id,
+            'country_id' => $city->state->country_id,
+            'state_id' => $city->state_id,
+            'city_id' => $city->id,
+            'street' => fake()->streetName,
             'house' => fake()->buildingNumber,
             'flat' => fake()->boolean ?: fake()->numberBetween(0, 100),
             'postal_code' => fake()->postcode,

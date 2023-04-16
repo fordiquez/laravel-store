@@ -50,7 +50,7 @@ class Country extends Model implements HasMedia
         'Oceania' => ['Australia and New Zealand', 'Melanesia', 'Polynesia', 'Micronesia'],
     ];
 
-    protected static function boot()
+    protected static function boot(): void
     {
         parent::boot();
 
@@ -93,5 +93,10 @@ class Country extends Model implements HasMedia
     public function states(): HasMany
     {
         return $this->hasMany(State::class);
+    }
+
+    public function getRouteKeyName(): string
+    {
+        return 'iso2';
     }
 }

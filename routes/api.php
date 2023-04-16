@@ -1,26 +1,13 @@
 <?php
 
+use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\LocationController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
-
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::prefix('locations')->controller(LocationController::class)->group(function () {
+    Route::get('countries', 'countries')->name('locations.countries');
+    Route::get('{country}/states', 'states')->name('locations.states');
+    Route::get('{state}/cities', 'cities')->name('locations.cities');
 });
 
-Route::prefix('locations')->name('locations.')->controller(LocationController::class)->group(function () {
-    Route::get('countries', 'countries')->name('countries');
-});
-
-Route::get('categories', [\App\Http\Controllers\API\CategoryController::class, 'index'])->name('categories');
+Route::get('categories', [CategoryController::class, 'index'])->name('categories');

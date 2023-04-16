@@ -4,7 +4,7 @@ import Modal from '@/Components/Modal.vue';
 import { useFormat } from '@/composables/format';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
-import DangerButton from "@/Components/DangerButton.vue";
+import DangerButton from '@/Components/DangerButton.vue';
 
 const props = defineProps({
     show: {
@@ -68,10 +68,10 @@ const bulkDelete = () => router.delete(route('cart.bulk-delete'));
                                 v-if="good.old_price"
                                 class="absolute top-0 left-0 bg-red-600 px-2 text-xs font-medium leading-6 text-gray-100"
                             >
-                                {{ good.old_price }}
+                                {{ Number((good.price * 100) / good.old_price - 100).toFixed(0) }}%
                             </span>
                             <Link
-                                :href="route('goods.good.general', good)"
+                                :href="route('goods.good.general', good.slug)"
                                 class="mr-4 flex h-32 w-32 shrink-0 items-center justify-center"
                             >
                                 <img
@@ -84,13 +84,13 @@ const bulkDelete = () => router.delete(route('cart.bulk-delete'));
                                 />
                             </Link>
                             <div class="grow">
-                                <Link :href="route('goods.index', good)" class="mb-2" :title="good.title">
+                                <Link :href="route('goods.good.general', good.slug)" class="mb-2" :title="good.title">
                                     <span class="text-sm text-gray-900 dark:text-gray-200">{{ good.title }}</span>
                                 </Link>
                             </div>
                             <font-awesome-icon
                                 :icon="['fas', 'trash-can']"
-                                class="cursor-pointer text-gray-800 hover:opacity-70 dark:text-gray-100"
+                                class="cursor-pointer text-purple-900 hover:opacity-70 dark:text-purple-200"
                                 @click.prevent="remove(good)"
                             />
                         </div>

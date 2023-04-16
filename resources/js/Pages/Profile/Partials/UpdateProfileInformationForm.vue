@@ -5,6 +5,8 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
+import { VueTelInput } from 'vue-tel-input';
+import 'vue-tel-input/dist/style.css';
 
 const props = defineProps({
     mustVerifyEmail: Boolean,
@@ -17,6 +19,9 @@ const form = useForm({
     first_name: user.first_name,
     last_name: user.last_name,
     email: user.email,
+    phone: user.phone,
+    birth_date: user.birth_date,
+    gender: user.gender,
 });
 </script>
 
@@ -30,7 +35,7 @@ const form = useForm({
             </p>
         </header>
 
-        <form @submit.prevent="form.patch(route('profile.update'))" class="mt-6 space-y-6">
+        <form @submit.prevent="form.patch(route('profile.personal-information.update'))" class="mt-6 space-y-6">
             <div>
                 <InputLabel for="first_name" value="First Name" />
 
@@ -98,6 +103,34 @@ const form = useForm({
                 </div>
             </div>
 
+            <div>
+                <InputLabel for="phone" value="Phone Number" />
+
+                <vue-tel-input
+                    v-model="form.phone"
+                    mode="auto"
+                    style-classes="mt-1 !border-none ring-1 ring-gray-300 dark:ring-gray-700 !rounded-lg dark:bg-gray-900 dark:text-gray-300"
+                    :dropdown-options="{
+                        disabled: false,
+                        showDialCodeInList: true,
+                        showDialCodeInSelection: false,
+                        showFlags: true,
+                        showSearchBox: false,
+                        tabindex: 0,
+                    }"
+                    :input-options="{
+                        placeholder: 'Phone number',
+                        styleClasses: '!rounded-lg h-[42px] dark:bg-gray-900 dark:text-gray-300',
+                        showDialCode: true,
+                    }"
+                    auto-format
+                    auto-default-country
+                    valid-characters-only
+                />
+
+                <InputError class="mt-2" :message="form.errors.phone" />
+            </div>
+
             <div class="flex items-center gap-4">
                 <PrimaryButton :disabled="form.processing">Save</PrimaryButton>
 
@@ -108,3 +141,22 @@ const form = useForm({
         </form>
     </section>
 </template>
+
+<style>
+.vue-tel-input:focus-within {
+    @apply border-none shadow-none ring-2 ring-indigo-500;
+}
+
+.vti__dropdown:hover,
+.vti__dropdown.open {
+    @apply rounded-lg bg-gray-700;
+}
+
+.vti__dropdown-list {
+    @apply border border-gray-600 scrollbar-thin scrollbar-track-purple-300 scrollbar-thumb-purple-600 dark:bg-gray-900 dark:text-gray-200;
+}
+
+.vti__dropdown-item.highlighted {
+    @apply dark:bg-gray-800;
+}
+</style>

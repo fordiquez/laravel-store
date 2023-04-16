@@ -26,10 +26,18 @@ Route::prefix('cart')->controller(CartController::class)->group(function () {
     Route::delete('bulk-delete', 'bulkDelete')->name('cart.bulk-delete');
 });
 
-Route::middleware('auth')->group(function () {
-    Route::get('profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+Route::prefix('profile')->controller(ProfileController::class)->middleware('auth')->group(function () {
+    Route::get('personal-information', 'edit')->name('profile.personal-information.edit');
+    Route::patch('personal-information', 'update')->name('profile.personal-information.update');
+    Route::delete('personal-information', 'destroy')->name('profile.personal-information.destroy');
+    Route::post('address', 'storeAddress')->name('profile.address.store');
+    Route::patch('address/{address}', 'updateAddress')->name('profile.address.update');
+    Route::delete('address/{address}', 'destroyAddress')->name('profile.address.destroy');
+    Route::get('orders', 'orders')->name('profile.orders');
+    Route::get('wishlist', 'wishlist')->name('profile.wishlist');
+    Route::get('wallet', 'wallet')->name('profile.wallet');
+    Route::get('messages', 'messages')->name('profile.messages');
+    Route::get('reviews', 'reviews')->name('profile.reviews');
 });
 
 require __DIR__ . '/auth.php';

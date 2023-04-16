@@ -40,7 +40,7 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser, Has
         'password',
     ];
 
-    protected $appends = ['avatar'];
+    protected $appends = ['avatar', 'full_name'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -60,7 +60,7 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser, Has
 
     public const ADMIN_EMAIL = 'fordiquez@store.com';
 
-    public function sendEmailVerificationNotification()
+    public function sendEmailVerificationNotification(): void
     {
         $this->notify(new SendVerifyWithQueueNotification);
     }
@@ -80,6 +80,11 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser, Has
         return $this->hasMany(OrderRecipient::class);
     }
 
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class);
+    }
+
     public function reviews(): HasMany
     {
         return $this->hasMany(Review::class);
@@ -90,14 +95,14 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser, Has
         return $this->email === $this::ADMIN_EMAIL && $this->hasVerifiedEmail();
     }
 
-    public function fullName(): string
+    public function fullName(): Attribute
     {
-        return "$this->first_name $this->last_name";
+        return Attribute::get(fn ($value) => "$this->first_name $this->last_name");
     }
 
     public function getFilamentName(): string
     {
-        return $this->fullName();
+        return "$this->first_name $this->last_name";
     }
 
     public function avatar(): Attribute
@@ -108,7 +113,7 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser, Has
     /**
      * @throws FileDoesNotExist|FileIsTooBig
      */
-    public function addAvatarMedia(string $url, string $collectionName = 'avatars', string $diskName = 'public')
+    public function addAvatarMedia(string $url, string $collectionName = 'avatars', string $diskName = 'public'): void
     {
         $this->clearMediaCollection($collectionName)
             ->addMediaFromUrl($url)

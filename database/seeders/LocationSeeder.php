@@ -7,7 +7,6 @@ use App\Models\State;
 use Database\Factories\CityFactory;
 use Database\Factories\CountryFactory;
 use Database\Factories\StateFactory;
-use Database\Factories\StreetFactory;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Http;
 
@@ -58,7 +57,7 @@ class LocationSeeder extends Seeder
                     ])->get(config('services.csc.url') . Country::DEFAULT_COUNTRY . "/states/$stateCode/cities")->json();
 
                     foreach ($cities as $city) {
-                        CityFactory::new()->has(StreetFactory::new()->count(rand(1, 3)))->create([
+                        CityFactory::new()->create([
                             'name' => $city['name'],
                             'state_id' => State::whereName($state['name'])->value('id'),
                         ]);

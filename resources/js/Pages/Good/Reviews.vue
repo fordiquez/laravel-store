@@ -1,7 +1,7 @@
 <script setup>
 import { Head, useForm } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import Tabs from '@/Components/Tabs.vue';
+import Tabs from '@/Pages/Good/Tabs.vue';
 import { ref } from 'vue';
 import Modal from '@/Components/Modal.vue';
 import Rating from '@/Components/Rating.vue';

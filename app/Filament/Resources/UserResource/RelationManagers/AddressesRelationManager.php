@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\UserResource\RelationManagers;
 
-use App\Models\City;
 use App\Models\Country;
 use App\Models\State;
 use App\Models\UserAddress;
@@ -28,7 +27,6 @@ class AddressesRelationManager extends RelationManager
         return $form
             ->schema([
                 Card::make()->schema([
-                    TextInput::make('title')->required()->maxLength(255),
                     Toggle::make('is_main')->inline()->default(false),
                     Select::make('country_id')
                         ->options(Country::all()->pluck('name', 'id')->toArray())
@@ -47,11 +45,7 @@ class AddressesRelationManager extends RelationManager
                         ->reactive()
                         ->disabled(fn (callable $get) => !$get('state_id'))
                         ->afterStateUpdated(fn (callable $set) => $set('street_id', null)),
-                    Select::make('street_id')
-                        ->options(fn (callable $get) => $get('city_id') ? City::find($get('city_id'))->streets->pluck('name', 'id') : [])
-                        ->required()
-                        ->reactive()
-                        ->disabled(fn (callable $get) => !$get('city_id')),
+                    TextInput::make('street')->required(),
                     TextInput::make('house')->required(),
                     TextInput::make('flat')->nullable(),
                     TextInput::make('postal_code')->numeric()->nullable(),
@@ -67,7 +61,6 @@ class AddressesRelationManager extends RelationManager
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('id')->sortable(),
-                Tables\Columns\TextColumn::make('title'),
                 Tables\Columns\IconColumn::make('is_main')->boolean()->toggleable()
                     ->tooltip('Toggle value')
                     ->action(function ($record, $column) {

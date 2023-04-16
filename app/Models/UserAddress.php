@@ -11,12 +11,11 @@ class UserAddress extends Model
     use HasFactory;
 
     protected $fillable = [
-        'title',
         'is_main',
         'country_id',
         'state_id',
         'city_id',
-        'street_id',
+        'street',
         'house',
         'flat',
         'postal_code',
@@ -39,10 +38,5 @@ class UserAddress extends Model
     public function city(): BelongsTo
     {
         return $this->belongsTo(City::class);
-    }
-
-    public function street(): BelongsTo
-    {
-        return $this->belongsTo(Street::class);
     }
 }
