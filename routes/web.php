@@ -31,11 +31,13 @@ Route::prefix('profile')->controller(ProfileController::class)->middleware('auth
     Route::patch('personal-information', 'update')->name('profile.personal-information.update');
     Route::delete('personal-information', 'destroy')->name('profile.personal-information.destroy');
     Route::post('address', 'storeAddress')->name('profile.address.store');
-    Route::patch('address/{address}', 'updateAddress')->name('profile.address.update');
+    Route::put('address/{address}', 'updateAddress')->name('profile.address.update');
+    Route::patch('address/{address}', 'patchAddress')->name('profile.address.patch');
     Route::delete('address/{address}', 'destroyAddress')->name('profile.address.destroy');
     Route::get('orders', 'orders')->name('profile.orders');
     Route::get('wishlist', 'wishlist')->name('profile.wishlist');
     Route::get('wallet', 'wallet')->name('profile.wallet');
+    Route::post('wallet', 'storeCard')->name('profile.wallet.store');
     Route::get('messages', 'messages')->name('profile.messages');
     Route::get('reviews', 'reviews')->name('profile.reviews');
 });

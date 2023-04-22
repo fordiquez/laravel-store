@@ -9,7 +9,7 @@ class OrderRecipient extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'first_name', 'last_name', 'second_name', 'phone', 'description', 'is_default'];
+    protected $fillable = ['user_id', 'title', 'first_name', 'last_name', 'second_name', 'phone', 'description', 'is_default'];
 
     protected $casts = [
         'is_default' => 'boolean',

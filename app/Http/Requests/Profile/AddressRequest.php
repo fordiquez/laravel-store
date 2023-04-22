@@ -7,6 +7,13 @@ use Illuminate\Validation\Rule;
 
 class AddressRequest extends FormRequest
 {
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'is_main' => !$this->user()->addresses()->count()
+        ]);
+    }
+
     public function rules(): array
     {
         return [
@@ -17,6 +24,7 @@ class AddressRequest extends FormRequest
             'house' => ['required', 'max:10'],
             'flat' => ['nullable', 'max:10'],
             'postal_code' => ['nullable', 'max:10'],
+            'is_main' => ['required', 'boolean'],
         ];
     }
 

@@ -25,6 +25,7 @@ class OrderRecipientsRelationManager extends RelationManager
         return $form
             ->schema([
                 Forms\Components\Card::make()->schema([
+                    Forms\Components\TextInput::make('title')->required()->maxLength(255),
                     Forms\Components\TextInput::make('first_name')->required()->maxLength(50),
                     Forms\Components\TextInput::make('last_name')->required()->maxLength(50),
                     Forms\Components\TextInput::make('second_name')->nullable()->maxLength(50),
@@ -50,6 +51,7 @@ class OrderRecipientsRelationManager extends RelationManager
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('id')->sortable(),
+                Tables\Columns\TextColumn::make('title')->sortable()->searchable(),
                 Tables\Columns\TextColumn::make('first_name')->sortable()->searchable(),
                 Tables\Columns\TextColumn::make('last_name')->sortable()->searchable(),
                 Tables\Columns\TextColumn::make('second_name')->sortable()->searchable()->toggleable(),

@@ -14,7 +14,7 @@ class ProfileTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this->actingAs($user)->get('/profile');
+        $response = $this->actingAs($user)->get(route('profile.personal-information.edit'));
 
         $response->assertOk();
     }
@@ -23,13 +23,14 @@ class ProfileTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this->actingAs($user)->patch('/profile', [
+        $response = $this->actingAs($user)->patch(route('profile.personal-information.update'), [
             'first_name' => 'Test',
             'last_name' => 'User',
             'email' => 'test@example.com',
+            'phone' => '+380732202222',
         ]);
 
-        $response->assertSessionHasNoErrors()->assertRedirect('/profile');
+        $response->assertSessionHasNoErrors()->assertRedirect(route('profile.personal-information.edit'));
 
         $user->refresh();
 
@@ -43,13 +44,14 @@ class ProfileTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this->actingAs($user)->patch('/profile', [
+        $response = $this->actingAs($user)->patch(route('profile.personal-information.update'), [
             'first_name' => 'Test',
             'last_name' => 'User',
             'email' => $user->email,
+            'phone' => '+380732202222',
         ]);
 
-        $response->assertSessionHasNoErrors()->assertRedirect('/profile');
+        $response->assertSessionHasNoErrors()->assertRedirect(route('profile.personal-information.edit'));
 
         $this->assertNotNull($user->refresh()->email_verified_at);
     }
@@ -58,7 +60,7 @@ class ProfileTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this->actingAs($user)->delete('/profile', [
+        $response = $this->actingAs($user)->delete(route('profile.personal-information.destroy'), [
             'password' => 'password',
         ]);
 
@@ -73,12 +75,12 @@ class ProfileTest extends TestCase
         $user = User::factory()->create();
 
         $response = $this->actingAs($user)
-            ->from('/profile')
-            ->delete('/profile', [
+            ->from(route('profile.personal-information.edit'))
+            ->delete(route('profile.personal-information.destroy'), [
                 'password' => 'wrong-password',
             ]);
 
-        $response->assertSessionHasErrors('password')->assertRedirect('/profile');
+        $response->assertSessionHasErrors('password')->assertRedirect(route('profile.personal-information.edit'));
 
         $this->assertNotNull($user->fresh());
     }

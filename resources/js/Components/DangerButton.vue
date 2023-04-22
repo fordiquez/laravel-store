@@ -2,7 +2,7 @@
 defineProps({
     type: {
         type: String,
-        default: 'submit',
+        default: 'button',
     },
     disabled: {
         type: Boolean,

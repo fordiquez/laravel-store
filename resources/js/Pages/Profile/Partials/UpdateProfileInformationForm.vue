@@ -6,7 +6,7 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { VueTelInput } from 'vue-tel-input';
-import 'vue-tel-input/dist/style.css';
+import 'vue-tel-input/vue-tel-input.css';
 
 const props = defineProps({
     mustVerifyEmail: Boolean,

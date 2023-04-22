@@ -16,6 +16,7 @@
         "filament/spatie-laravel-media-library-plugin": "^2.0",
         "guzzlehttp/guzzle": "^7.2",
         "inertiajs/inertia-laravel": "^0.6.8",
+        "laravel/cashier": "^14.12",
         "laravel/framework": "^10.0",
         "laravel/horizon": "^5.13",
         "laravel/sanctum": "^3.2",

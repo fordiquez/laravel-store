@@ -14,6 +14,7 @@ return new class extends Migration {
         Schema::create('order_recipients', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class)->constrained()->cascadeOnUpdate()->cascadeOnDelete();
+            $table->string('title');
             $table->string('first_name', 50);
             $table->string('last_name', 50);
             $table->string('second_name', 50)->nullable();
@@ -21,6 +22,8 @@ return new class extends Migration {
             $table->string('description')->nullable();
             $table->boolean('is_default')->default(false);
             $table->timestamps();
+
+            $table->unique(['user_id', 'title']);
         });
     }
 

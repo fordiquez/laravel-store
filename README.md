@@ -91,6 +91,14 @@ MULTIAVATAR_API_KEY=
 CSC_API_KEY=
 ```
 
+#### 3.7 Setup Stripe keys
+
+```
+STRIPE_KEY=
+STRIPE_SECRET=
+STRIPE_WEBHOOK_SECRET=
+```
+
 ### 4. Install all composer & npm dependencies
 
 ```

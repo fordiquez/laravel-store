@@ -25,7 +25,7 @@ class Category extends Model implements HasMedia
         'is_navigational' => 'boolean',
     ];
 
-    protected static function boot()
+    protected static function boot(): void
     {
         parent::boot();
 

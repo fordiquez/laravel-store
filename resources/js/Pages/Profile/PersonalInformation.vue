@@ -19,10 +19,12 @@ defineProps({
     <Head title="Personal Information" />
 
     <AuthenticatedLayout>
-        <div class="flex flex-col justify-between space-x-0 py-12 px-4 sm:px-6 md:flex-row md:space-x-10 lg:px-8">
+        <div class="flex flex-col justify-between space-x-0 px-4 py-12 sm:px-6 md:flex-row md:space-x-10 lg:px-8">
             <Sidebar />
-            <div class="w-full space-y-6">
-                <h2 class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">Profile</h2>
+            <div class="w-full space-y-4">
+                <h2 class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200 md:leading-[64px]">
+                    Personal Information
+                </h2>
                 <div class="bg-white p-4 shadow dark:bg-gray-800 sm:rounded-lg sm:p-8">
                     <UpdateProfileInformationForm
                         :must-verify-email="mustVerifyEmail"

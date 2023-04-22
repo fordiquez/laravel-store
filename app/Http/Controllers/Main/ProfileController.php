@@ -7,6 +7,7 @@ use App\Http\Requests\Profile\AddressRequest;
 use App\Http\Requests\Profile\ProfileUpdateRequest;
 use App\Http\Resources\UserAddressResource;
 use App\Models\Country;
+use App\Models\User;
 use App\Models\UserAddress;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
@@ -86,6 +87,14 @@ class ProfileController extends Controller
         return to_route('profile.personal-information.edit');
     }
 
+    public function patchAddress(UserAddress $address, Request $request)
+    {
+        $request->user()->addresses()->update(['is_main' => false]);
+        $address->update(['is_main' => true]);
+
+        return to_route('profile.personal-information.edit');
+    }
+
     public function destroyAddress(UserAddress $address)
     {
         $address->delete();
@@ -103,9 +112,49 @@ class ProfileController extends Controller
         inertia('Profile/Edit');
     }
 
-    public function wallet()
+    public function wallet(Request $request)
     {
-        inertia('Profile/Edit');
+        /** @var User $user */
+        $user = $request->user()->load('addresses');
+        $address = $user->addresses()->firstWhere('is_main', true);
+
+        $line1 = $address ? "$address->street, $address->house" : null;
+
+        $billingDetails = [
+            'name' => $user->full_name,
+            'email' => $user->email,
+            'address' => [
+                'line1' => $address?->flat ? "$line1, $address->flat" : $line1,
+                'city' => $address?->city->name,
+                'state' => $address?->state->name,
+                'country' => $address?->country->iso2,
+                'postal_code' => $address?->postal_code,
+            ],
+        ];
+
+        return inertia('Profile/Wallet', [
+            'badges' => [
+                'orders' => $request->user()->orders()->count(),
+                'reviews' => $request->user()->reviews()->count(),
+            ],
+            'billingDetails' => $billingDetails
+        ]);
+    }
+
+    public function storeCard(Request $request)
+    {
+        /** @var User $user */
+        $user = $request->user();
+
+        $options = [
+            'name' => $user->full_name,
+        ];
+
+        $user->createOrGetStripeCustomer($options);
+        $user->addPaymentMethod($request->get('id'));
+        $user->updateDefaultPaymentMethod($request->get('id'));
+
+        return redirect()->back();
     }
 
     public function reviews()

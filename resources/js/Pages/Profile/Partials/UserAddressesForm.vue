@@ -1,8 +1,10 @@
 <script setup>
-import { reactive, ref } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 import { useForm, router } from '@inertiajs/vue3';
+import { initTooltips } from 'flowbite';
 import Multiselect from 'vue-multiselect';
 import axios from 'axios';
+import DangerButton from '@/Components/DangerButton.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import Modal from '@/Components/Modal.vue';
@@ -16,6 +18,8 @@ const props = defineProps({
     countries: Array,
 });
 
+onMounted(() => initTooltips());
+
 const form = useForm({
     country_id: null,
     state_id: null,
@@ -26,6 +30,7 @@ const form = useForm({
     postal_code: null,
 });
 
+const defaultAddress = ref(props.addresses?.find((item) => item.is_main)?.id || null);
 const addressModal = ref(false);
 const addressUpdateModal = ref(false);
 const country = ref();
@@ -76,19 +81,18 @@ const submit = () =>
         ? form.post(route('profile.address.store'), {
               onSuccess: () => closeAddressModal(),
           })
-        : form.patch(route('profile.address.update', form.id), {
+        : form.put(route('profile.address.update', form), {
               onSuccess: () => closeAddressModal(),
           });
 
 const closeAddressModal = () => {
-    country.value = state.value = city.value = null;
-    addressModal.value = false;
     form.reset();
     form.clearErrors();
+    addressModal.value = false;
+    country.value = state.value = city.value = null;
 };
 
 const onEditAddress = (address) => {
-    console.log(address);
     country.value = address.country;
     onCountrySelected(address.country).then(() => {
         state.value = address.state;
@@ -105,6 +109,11 @@ const onEditAddress = (address) => {
     addressModal.value = true;
     addressUpdateModal.value = true;
 };
+
+const onChangeDefaultAddress = (event) => {
+    defaultAddress.value = Number.parseInt(event.target.value) || null;
+    router.patch(route('profile.address.patch', defaultAddress.value));
+};
 </script>
 
 <template>
@@ -117,9 +126,31 @@ const onEditAddress = (address) => {
             <secondary-button class="w-full sm:w-auto" @click="addressModal = true">Add address</secondary-button>
         </header>
 
+        <div v-if="addresses.length" class="mt-4 lg:max-w-lg">
+            <label for="addresses" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
+                Default delivery address
+            </label>
+            <select
+                @change="onChangeDefaultAddress"
+                id="addresses"
+                class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-purple-500 focus:ring-purple-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-purple-500 dark:focus:ring-purple-500"
+            >
+                <option disabled :selected="!defaultAddress">Choose the address</option>
+                <option
+                    v-for="address in addresses"
+                    :key="address.id"
+                    :value="address.id"
+                    :selected="address.id === defaultAddress"
+                    v-html="
+                        `${address.country.name}, ${address.state.name}, ${address.city.name}, ${address.street}, ${address.house}`
+                    "
+                />
+            </select>
+        </div>
+
         <div
-            v-if="props.addresses.length"
-            class="relative mx-auto mt-6 overflow-x-auto shadow-md sm:rounded-lg md:max-w-md lg:max-w-2xl xl:max-w-5xl"
+            v-if="addresses.length"
+            class="relative mx-auto mt-6 overflow-x-auto max-w-full md:max-w-md lg:max-w-xl xl:max-w-full shadow-md sm:rounded-lg"
         >
             <table class="w-full text-left text-sm text-gray-500 dark:text-gray-400">
                 <thead class="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
@@ -136,8 +167,8 @@ const onEditAddress = (address) => {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(address, i) in props.addresses" :key="address.id" class="bg-white dark:bg-gray-800">
-                        <th scope="row" class="whitespace-nowrap p-4 font-medium text-gray-900 dark:text-white">
+                    <tr v-for="(address, i) in addresses" :key="address.id" class="bg-white dark:bg-gray-800">
+                        <th scope="row" class="whitespace-nowrap p-4 font-bold text-gray-900 dark:text-white">
                             {{ i + 1 }}
                         </th>
                         <td class="p-4">{{ address.country.name }}</td>
@@ -147,20 +178,37 @@ const onEditAddress = (address) => {
                         <td class="p-4">{{ address.house }}</td>
                         <td class="p-4">{{ address.flat ?? '–' }}</td>
                         <td class="p-4">{{ address.postal_code ?? '–' }}</td>
-                        <td class="flex space-x-4 p-4">
+                        <td class="flex items-center justify-end p-4">
                             <button
-                                class="cursor-pointer text-purple-900 hover:opacity-70 dark:text-purple-200"
+                                :data-tooltip-target="`edit-${address.id}-tooltip`"
+                                class="text-purple-900 transition-all duration-300 hover:opacity-70 dark:text-purple-200"
                                 @click.prevent="onEditAddress(address)"
                             >
                                 <font-awesome-icon :icon="['fas', 'pen-to-square']" />
                             </button>
+                            <div
+                                :id="`edit-${address.id}-tooltip`"
+                                role="tooltip"
+                                class="tooltip invisible absolute z-10 inline-block rounded-lg bg-gray-900 px-3 py-2 text-sm font-medium text-white opacity-0 shadow-sm transition-opacity duration-300 dark:bg-gray-700"
+                            >
+                                Edit address
+                                <div class="tooltip-arrow" data-popper-arrow></div>
+                            </div>
                             <button
-                                type="button"
-                                class="cursor-pointer text-purple-900 hover:opacity-70 dark:text-purple-200"
+                                :data-tooltip-target="`delete-${address.id}-tooltip`"
+                                class="ml-2 text-purple-900 transition-all duration-300 hover:opacity-70 dark:text-purple-200"
                                 @click.prevent="router.delete(route('profile.address.destroy', address.id))"
                             >
                                 <font-awesome-icon :icon="['fas', 'trash-can']" />
                             </button>
+                            <div
+                                :id="`delete-${address.id}-tooltip`"
+                                role="tooltip"
+                                class="tooltip invisible absolute z-10 inline-block rounded-lg bg-gray-900 px-3 py-2 text-sm font-medium text-white opacity-0 shadow-sm transition-opacity duration-300 dark:bg-gray-700"
+                            >
+                                Delete address
+                                <div class="tooltip-arrow" data-popper-arrow></div>
+                            </div>
                         </td>
                     </tr>
                 </tbody>
@@ -192,7 +240,7 @@ const onEditAddress = (address) => {
                                 <multiselect
                                     id="country"
                                     v-model="country"
-                                    :options="props.countries"
+                                    :options="countries"
                                     :close-on-select="true"
                                     :clear-on-select="false"
                                     @select="onCountrySelected"
@@ -301,8 +349,9 @@ const onEditAddress = (address) => {
                                 <InputError class="mt-2" :message="form.errors.postal_code" />
                             </div>
                         </div>
-                        <div>
-                            <PrimaryButton :disabled="form.processing">Save</PrimaryButton>
+                        <div class="flex items-center justify-between">
+                            <danger-button :disabled="form.processing" @click="closeAddressModal">Cancel</danger-button>
+                            <primary-button :disabled="form.processing">Save</primary-button>
                         </div>
                     </form>
                 </div>
