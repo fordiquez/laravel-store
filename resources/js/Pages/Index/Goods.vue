@@ -130,7 +130,7 @@ const goodsSort = (key) => {
         >
             <div class="overflow-hidden bg-white px-4 shadow-sm dark:bg-gray-800 sm:rounded-lg sm:px-6 lg:px-8">
                 <div
-                    class="flex items-baseline justify-between border-b border-gray-200 pt-5 pb-6 dark:border-gray-600"
+                    class="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-5 dark:border-gray-600"
                 >
                     <div class="flex items-center">
                         <FiltersDrawer
@@ -221,7 +221,7 @@ const goodsSort = (key) => {
                     </div>
                 </div>
 
-                <div class="pt-6 pb-24">
+                <div class="pb-24 pt-6">
                     <div class="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
                         <Filters
                             v-if="goods.data.length"
@@ -242,7 +242,7 @@ const goodsSort = (key) => {
                                     class="group relative flex w-full flex-col px-4 pb-4 sm:w-1/2 lg:w-1/3 xl:w-1/4 2xl:w-1/5"
                                 >
                                     <div
-                                        class="min-h-80 aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80"
+                                        class="min-h-80 aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80"
                                     >
                                         <img
                                             :src="good.preview"

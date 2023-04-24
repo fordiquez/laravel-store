@@ -150,7 +150,7 @@ const onChangeDefaultAddress = (event) => {
 
         <div
             v-if="addresses.length"
-            class="relative mx-auto mt-6 overflow-x-auto max-w-full md:max-w-md lg:max-w-xl xl:max-w-full shadow-md sm:rounded-lg"
+            class="relative mx-auto mt-6 max-w-full overflow-x-auto shadow-md sm:rounded-lg md:max-w-md lg:max-w-xl xl:max-w-full"
         >
             <table class="w-full text-left text-sm text-gray-500 dark:text-gray-400">
                 <thead class="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
@@ -233,7 +233,7 @@ const onChangeDefaultAddress = (event) => {
 
                 <div class="mt-6">
                     <form @submit.prevent="submit" class="mt-6 flex flex-col space-y-6">
-                        <div class="flex w-full flex-col space-y-4 lg:flex-row lg:space-y-0 lg:space-x-4">
+                        <div class="flex w-full flex-col space-y-4 lg:flex-row lg:space-x-4 lg:space-y-0">
                             <div class="basis-1/3">
                                 <InputLabel for="country" value="Country" />
 
@@ -293,7 +293,7 @@ const onChangeDefaultAddress = (event) => {
                                 <InputError class="mt-2" :message="form.errors.city_id" />
                             </div>
                         </div>
-                        <div class="flex w-full flex-col space-y-4 lg:flex-row lg:space-y-0 lg:space-x-4">
+                        <div class="flex w-full flex-col space-y-4 lg:flex-row lg:space-x-4 lg:space-y-0">
                             <div class="basis-2/5">
                                 <InputLabel for="street" value="Street" />
 

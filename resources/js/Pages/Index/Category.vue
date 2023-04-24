@@ -25,7 +25,7 @@ const props = defineProps({
                         <div class="group relative flex flex-col text-base sm:text-sm" :title="subcategory.title">
                             <div
                                 v-if="subcategory.thumbnail"
-                                class="aspect-w-1 aspect-h-1 mb-4 overflow-hidden rounded-lg group-hover:opacity-75"
+                                class="aspect-h-1 aspect-w-1 mb-4 overflow-hidden rounded-lg group-hover:opacity-75"
                             >
                                 <img
                                     :alt="subcategory.title"

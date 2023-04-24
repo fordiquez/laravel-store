@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Main;
+namespace App\Http\Controllers\Main\Profile;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Profile\AddressRequest;
 use App\Http\Requests\Profile\ProfileUpdateRequest;
 use App\Http\Resources\UserAddressResource;
 use App\Models\Country;
-use App\Models\User;
 use App\Models\UserAddress;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
@@ -104,66 +103,21 @@ class ProfileController extends Controller
 
     public function orders()
     {
-        inertia('Profile/Form');
+        return redirect()->back();
     }
 
     public function wishlist()
     {
-        inertia('Profile/Edit');
+        return redirect()->back();
     }
 
-    public function wallet(Request $request)
+    public function messages()
     {
-        /** @var User $user */
-        $user = $request->user()->load('addresses');
-        $address = $user->addresses()->firstWhere('is_main', true);
-
-        $line1 = $address ? "$address->street, $address->house" : null;
-
-        $billingDetails = [
-            'name' => $user->full_name,
-            'email' => $user->email,
-            'address' => [
-                'line1' => $address?->flat ? "$line1, $address->flat" : $line1,
-                'city' => $address?->city->name,
-                'state' => $address?->state->name,
-                'country' => $address?->country->iso2,
-                'postal_code' => $address?->postal_code,
-            ],
-        ];
-
-        return inertia('Profile/Wallet', [
-            'badges' => [
-                'orders' => $request->user()->orders()->count(),
-                'reviews' => $request->user()->reviews()->count(),
-            ],
-            'billingDetails' => $billingDetails
-        ]);
-    }
-
-    public function storeCard(Request $request)
-    {
-        /** @var User $user */
-        $user = $request->user();
-
-        $options = [
-            'name' => $user->full_name,
-        ];
-
-        $user->createOrGetStripeCustomer($options);
-        $user->addPaymentMethod($request->get('id'));
-        $user->updateDefaultPaymentMethod($request->get('id'));
-
         return redirect()->back();
     }
 
     public function reviews()
     {
-        inertia('Profile/Edit');
-    }
-
-    public function messages()
-    {
-        inertia('Profile/Edit');
+        return redirect()->back();
     }
 }

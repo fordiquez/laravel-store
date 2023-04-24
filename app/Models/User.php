@@ -39,6 +39,7 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser, Has
         'email_verified_at',
         'phone',
         'password',
+        'trial_ends_at',
     ];
 
     protected $appends = ['avatar', 'full_name'];

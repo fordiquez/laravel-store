@@ -7,7 +7,7 @@ import { Head, Link, usePage } from '@inertiajs/vue3';
     <Head title="Dashboard" />
 
     <AuthenticatedLayout>
-        <div class="py-12 px-4 sm:px-6 lg:px-8">
+        <div class="px-4 py-12 sm:px-6 lg:px-8">
             <div class="overflow-hidden rounded-lg bg-white shadow-sm dark:bg-gray-800">
                 <div
                     class="p-6 text-center text-xl font-semibold uppercase tracking-wider text-gray-900 dark:text-gray-100"
@@ -23,7 +23,7 @@ import { Head, Link, usePage } from '@inertiajs/vue3';
                         <div class="group relative flex flex-col text-base sm:text-sm" :title="category.title">
                             <div
                                 v-if="category.thumbnail"
-                                class="aspect-w-1 aspect-h-1 mb-4 overflow-hidden rounded-lg group-hover:opacity-75"
+                                class="aspect-h-1 aspect-w-1 mb-4 overflow-hidden rounded-lg group-hover:opacity-75"
                             >
                                 <img
                                     :alt="category.title"

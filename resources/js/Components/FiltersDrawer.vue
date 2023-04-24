@@ -46,7 +46,7 @@ const propertyFilter = (value) => {
     <div
         ref="drawerRef"
         id="filters-drawer"
-        class="fixed top-0 left-0 z-40 h-screen w-80 -translate-x-full overflow-y-auto bg-white p-4 transition-transform dark:bg-gray-800 dark:[color-scheme:dark]"
+        class="fixed left-0 top-0 z-40 h-screen w-80 -translate-x-full overflow-y-auto bg-white p-4 transition-transform dark:bg-gray-800 dark:[color-scheme:dark]"
         tabindex="-1"
     >
         <h5 class="mb-4 inline-flex items-center text-lg font-medium text-gray-500 dark:text-gray-400">
@@ -56,7 +56,7 @@ const propertyFilter = (value) => {
         <button
             @click="hide"
             type="button"
-            class="absolute top-2.5 right-2.5 inline-flex items-center rounded-lg bg-transparent p-2 text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white"
+            class="absolute right-2.5 top-2.5 inline-flex items-center rounded-lg bg-transparent p-2 text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white"
         >
             <font-awesome-icon :icon="['fas', 'xmark']" size="xl" />
         </button>

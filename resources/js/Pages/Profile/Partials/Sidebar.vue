@@ -64,7 +64,7 @@ const routes = reactive([
                 </div>
             </Link>
         </li>
-        <li :class="i === 0 ? 'pt-2 pb-1' : 'py-1'" v-for="(item, i) in routes" :key="route.name">
+        <li :class="i === 0 ? 'pb-1 pt-2' : 'py-1'" v-for="(item, i) in routes" :key="route.name">
             <Link
                 :href="route(item.name)"
                 :class="[linkClasses.default, route().current(item.name) ? linkClasses.active : linkClasses.inactive]"

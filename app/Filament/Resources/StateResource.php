@@ -75,10 +75,10 @@ class StateResource extends Resource
             ->filters([
                 Tables\Filters\SelectFilter::make('country')->form([
                     Forms\Components\Select::make('country_id')->label('Country')
-                    ->options(fn () => Country::all()->pluck('name', 'id')->toArray()),
+                        ->options(fn () => Country::all()->pluck('name', 'id')->toArray()),
                     Forms\Components\Select::make('parent_id')->label('Parent State')
-                    ->options(fn (callable $get) => Country::find($get('country_id'))?->states->pluck('name', 'id')->toArray())
-                    ->disabled(fn (callable $get) => empty($get('country_id'))),
+                        ->options(fn (callable $get) => Country::find($get('country_id'))?->states->pluck('name', 'id')->toArray())
+                        ->disabled(fn (callable $get) => empty($get('country_id'))),
                 ])->query(function (Builder $query, array $data) {
                     $countryId = (int) $data['country_id'];
                     $parentId = (int) $data['parent_id'];

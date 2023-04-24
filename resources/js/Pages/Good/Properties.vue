@@ -42,7 +42,7 @@ defineProps({
                     </dl>
                 </div>
 
-                <p class="font-italic pt-6 pb-12 text-gray-700 dark:text-gray-400">* {{ good.warning_description }}</p>
+                <p class="font-italic pb-12 pt-6 text-gray-700 dark:text-gray-400">* {{ good.warning_description }}</p>
             </div>
         </section>
     </AuthenticatedLayout>

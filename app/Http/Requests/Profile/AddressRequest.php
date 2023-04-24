@@ -10,7 +10,7 @@ class AddressRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         $this->merge([
-            'is_main' => !$this->user()->addresses()->count()
+            'is_main' => !$this->user()->addresses()->count(),
         ]);
     }
 

@@ -133,11 +133,11 @@ class Profile extends Page implements HasForms
                         ->formatOnDisplay(false),
                 ]),
             Section::make('Details')->columns()
-            ->schema([
-                DatePicker::make('birth_date')->maxDate(now()),
-                Select::make('gender')->options(UserGender::asSelectArray()),
-                SpatieMediaLibraryFileUpload::make('avatar')->collection('avatars')->columnSpanFull(),
-            ]),
+                ->schema([
+                    DatePicker::make('birth_date')->maxDate(now()),
+                    Select::make('gender')->options(UserGender::asSelectArray()),
+                    SpatieMediaLibraryFileUpload::make('avatar')->collection('avatars')->columnSpanFull(),
+                ]),
             Section::make('Update Password')->columns()
                 ->schema([
                     Password::make('current_password')

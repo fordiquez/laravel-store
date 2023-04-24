@@ -36,7 +36,7 @@ const bulkDelete = () => router.delete(route('cart.bulk-delete'));
 <template>
     <Modal :show="show" @close="$emit('close')">
         <div
-            class="flex items-center justify-between border-b border-gray-200 py-3 px-4 text-gray-800 dark:border-gray-700 dark:text-gray-200 md:px-6"
+            class="flex items-center justify-between border-b border-gray-200 px-4 py-3 text-gray-800 dark:border-gray-700 dark:text-gray-200 md:px-6"
         >
             <h3 class="text-2xl sm:text-3xl">Cart</h3>
             <button class="hover:opacity-70" @click="$emit('close')">
@@ -66,7 +66,7 @@ const bulkDelete = () => router.delete(route('cart.bulk-delete'));
                         <div class="relative flex">
                             <span
                                 v-if="good.old_price"
-                                class="absolute top-0 left-0 bg-red-600 px-2 text-xs font-medium leading-6 text-gray-100"
+                                class="absolute left-0 top-0 bg-red-600 px-2 text-xs font-medium leading-6 text-gray-100"
                             >
                                 {{ Number((good.price * 100) / good.old_price - 100).toFixed(0) }}%
                             </span>
@@ -135,7 +135,7 @@ const bulkDelete = () => router.delete(route('cart.bulk-delete'));
                     <div
                         class="flex w-full flex-col items-center rounded border border-slate-300 bg-purple-50 p-4 dark:border-slate-500 dark:bg-gray-700 md:ml-auto md:w-auto md:flex-row md:p-6"
                     >
-                        <div class="mb-4 flex w-full flex-row items-center justify-between md:mr-6 md:mb-0 md:w-auto">
+                        <div class="mb-4 flex w-full flex-row items-center justify-between md:mb-0 md:mr-6 md:w-auto">
                             <p class="text-xl text-gray-900 dark:text-gray-200 md:hidden">Total</p>
                             <div class="ml-auto text-2xl text-gray-900 dark:text-gray-200 md:text-4xl">
                                 <span>{{ formatMoney(total) }}</span>

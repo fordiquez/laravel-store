@@ -104,7 +104,7 @@ const onCategory = (category) => (hoveredCategoryId.value = category.id);
                                         <div class="group relative text-base sm:text-sm">
                                             <div
                                                 v-if="hoveredCategory.thumbnail"
-                                                class="aspect-w-1 aspect-h-1 mb-2 overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75"
+                                                class="aspect-h-1 aspect-w-1 mb-2 overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75"
                                             >
                                                 <img
                                                     :alt="hoveredCategory.title"

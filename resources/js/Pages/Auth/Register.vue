@@ -109,14 +109,14 @@ const submit = () => {
                     :href="route('social', 'github')"
                     class="inline-flex items-center justify-center rounded-lg bg-[#24292F] px-5 py-2.5 text-center text-sm font-medium text-white focus:outline-none focus:ring-4 focus:ring-[#24292F]/50 hover:bg-[#24292F]/90 dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30"
                 >
-                    <font-awesome-icon :icon="['fab', 'github']" size="lg" class="mr-2 -ml-1" />
+                    <font-awesome-icon :icon="['fab', 'github']" size="lg" class="-ml-1 mr-2" />
                     Sign up with Github
                 </Link>
                 <Link
                     :href="route('social', 'google')"
                     class="dark:focus:ring-[#4285F4]/55 inline-flex items-center justify-center rounded-lg bg-[#4285F4] px-5 py-2.5 text-center text-sm font-medium text-white focus:outline-none focus:ring-4 focus:ring-[#4285F4]/50 hover:bg-[#4285F4]/90"
                 >
-                    <font-awesome-icon :icon="['fab', 'google']" size="lg" class="mr-2 -ml-1" />
+                    <font-awesome-icon :icon="['fab', 'google']" size="lg" class="-ml-1 mr-2" />
                     Sign up with Google
                 </Link>
             </div>

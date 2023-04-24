@@ -74,6 +74,11 @@ module.exports = {
                 warning: colors.yellow,
             },
         },
+        screens: {
+            '2xs': '360px',
+            xs: '480px',
+            ...defaultTheme.screens,
+        },
     },
 
     plugins: [

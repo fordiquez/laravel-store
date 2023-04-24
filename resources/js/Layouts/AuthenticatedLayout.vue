@@ -141,7 +141,7 @@ const searchGoods = () => form.get(route('goods.search'));
                         >
                             <font-awesome-icon :icon="['fas', 'cart-shopping']" size="lg" />
                             <span
-                                class="absolute -top-1 -right-2 inline-flex h-6 w-6 items-center justify-center rounded-full bg-purple-500 text-xs font-bold text-white"
+                                class="absolute -right-2 -top-1 inline-flex h-6 w-6 items-center justify-center rounded-full bg-purple-500 text-xs font-bold text-white"
                             >
                                 {{ cart.count }}
                             </span>
@@ -208,7 +208,7 @@ const searchGoods = () => form.get(route('goods.search'));
 
             <!-- Responsive Navigation Menu -->
             <div :class="{ block: showingNavigationDropdown, hidden: !showingNavigationDropdown }" class="sm:hidden">
-                <div class="space-y-1 pt-2 pb-3">
+                <div class="space-y-1 pb-3 pt-2">
                     <ResponsiveNavLink :href="route('index.dashboard')" :active="route().current('index.dashboard')">
                         Dashboard
                     </ResponsiveNavLink>
@@ -226,7 +226,7 @@ const searchGoods = () => form.get(route('goods.search'));
                 </div>
 
                 <!-- Responsive Settings Options -->
-                <div v-if="user" class="border-t border-gray-200 pt-4 pb-1 dark:border-gray-600">
+                <div v-if="user" class="border-t border-gray-200 pb-1 pt-4 dark:border-gray-600">
                     <div class="flex items-center">
                         <div v-if="user?.avatar" class="ml-2 h-9 w-9">
                             <img :src="user.avatar" :alt="fullName" :title="fullName" class="rounded-full" />
@@ -249,7 +249,7 @@ const searchGoods = () => form.get(route('goods.search'));
                     </div>
                 </div>
 
-                <div v-else class="border-t border-gray-200 pt-4 pb-1 dark:border-gray-600">
+                <div v-else class="border-t border-gray-200 pb-1 pt-4 dark:border-gray-600">
                     <ResponsiveNavLink :href="route('register')">Sign Up</ResponsiveNavLink>
                     <ResponsiveNavLink :href="route('login')">Log In</ResponsiveNavLink>
                 </div>

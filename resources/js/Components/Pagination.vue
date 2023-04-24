@@ -74,7 +74,7 @@ const trimPageRange = (pageRange) => {
 </script>
 
 <template>
-    <div class="mt-6 flex items-center justify-between py-3 px-4">
+    <div class="mt-6 flex items-center justify-between px-4 py-3">
         <div v-if="meta.total > 0" class="flex flex-1 justify-between sm:hidden">
             <Link
                 v-if="prevPage"

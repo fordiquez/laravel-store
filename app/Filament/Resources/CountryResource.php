@@ -42,34 +42,34 @@ class CountryResource extends Resource
                     TextInput::make('name')
                         ->suffixAction(
                             fn ($state, Closure $get, Closure $set) => Action::make('search-action')
-                            ->icon('heroicon-o-search')
-                            ->tooltip('Find country by ISO alpha-2 code and filled data')
-                            ->action(function () use ($state, $get, $set) {
-                                if (blank($state)) {
-                                    Filament::notify('danger', 'Please enter a country ISO alpha-2 code');
+                                ->icon('heroicon-o-search')
+                                ->tooltip('Find country by ISO alpha-2 code and filled data')
+                                ->action(function () use ($state, $get, $set) {
+                                    if (blank($state)) {
+                                        Filament::notify('danger', 'Please enter a country ISO alpha-2 code');
 
-                                    return;
-                                }
+                                        return;
+                                    }
 
-                                try {
-                                    $countryData = Http::acceptJson()->withHeaders([
-                                        'X-CSCAPI-KEY' => config('services.csc.key'),
-                                    ])->get(config('services.csc.url') . $get('name'))->throw()->json();
-                                } catch (RequestException) {
-                                    Filament::notify('danger', 'Unable to find the country, please enter a valid ISO alpha-2 code');
+                                    try {
+                                        $countryData = Http::acceptJson()->withHeaders([
+                                            'X-CSCAPI-KEY' => config('services.csc.key'),
+                                        ])->get(config('services.csc.url') . $get('name'))->throw()->json();
+                                    } catch (RequestException) {
+                                        Filament::notify('danger', 'Unable to find the country, please enter a valid ISO alpha-2 code');
 
-                                    return;
-                                }
-                                $set('name', $countryData['name'] ?? null);
-                                $set('capital', $countryData['capital'] ?? null);
-                                $set('iso2', $countryData['iso2'] ?? null);
-                                $set('iso3', $countryData['iso3'] ?? null);
-                                $set('phone_code', $countryData['phonecode'] ?? null);
-                                $set('currency', $countryData['currency'] ?? null);
-                                $set('tld', $countryData['tld'] ?? null);
-                                $set('region', $countryData['region'] ?? null);
-                                $set('subregion', $countryData['subregion'] ?? null);
-                            })
+                                        return;
+                                    }
+                                    $set('name', $countryData['name'] ?? null);
+                                    $set('capital', $countryData['capital'] ?? null);
+                                    $set('iso2', $countryData['iso2'] ?? null);
+                                    $set('iso3', $countryData['iso3'] ?? null);
+                                    $set('phone_code', $countryData['phonecode'] ?? null);
+                                    $set('currency', $countryData['currency'] ?? null);
+                                    $set('tld', $countryData['tld'] ?? null);
+                                    $set('region', $countryData['region'] ?? null);
+                                    $set('subregion', $countryData['subregion'] ?? null);
+                                })
                         )
                         ->required()
                         ->maxLength(50)

@@ -150,7 +150,7 @@ const store = () => router.post(route('cart.store', props.good));
                         </div>
                         <div class="mt-4 flex">
                             <div
-                                class="flex items-center justify-center rounded border bg-purple-100 py-2 px-2 dark:border-purple-600 dark:bg-purple-900"
+                                class="flex items-center justify-center rounded border bg-purple-100 px-2 py-2 dark:border-purple-600 dark:bg-purple-900"
                             >
                                 <span
                                     class="font-[Inter] text-xs uppercase tracking-wider text-purple-600 dark:text-purple-400"
@@ -159,7 +159,7 @@ const store = () => router.post(route('cart.store', props.good));
                             </div>
                         </div>
                         <p class="mt-4 leading-relaxed">{{ good.description }}</p>
-                        <div class="mt-4 mb-5 flex items-center pb-5">
+                        <div class="mb-5 mt-4 flex items-center pb-5">
                             <div class="flex">
                                 <span class="mr-3">Color</span>
                                 <button
