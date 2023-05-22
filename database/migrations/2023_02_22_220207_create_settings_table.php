@@ -12,14 +12,14 @@ return new class extends Migration {
     {
         Schema::create('settings', function (Blueprint $table) {
             $table->id();
-            $table->string('section', 50);
+            $table->string('group', 50);
             $table->string('name', 50)->nullable();
             $table->string('details')->nullable();
             $table->string('key', 50);
             $table->text('value');
             $table->timestamps();
 
-            $table->unique(['section', 'key']);
+            $table->unique(['group', 'key']);
         });
     }
 

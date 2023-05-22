@@ -43,6 +43,7 @@ class HandleInertiaRequests extends Middleware
             },
             'categories' => $request->routeIs('livewire.message') ?: CategoryResource::collection(Category::whereParentId(null)->get()),
             'cart' => new CartResource(Cart::getGoodsAndCartItems()),
+            'notification' => $request->session()->get('notification'),
         ]);
     }
 }

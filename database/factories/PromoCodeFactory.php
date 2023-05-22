@@ -17,15 +17,19 @@ class PromoCodeFactory extends Factory
      */
     public function definition(): array
     {
+        $type = fake()->boolean ? 'fixed' : 'percentage';
+
         return [
             'key' => Str::random(8),
-            'type' => fake()->boolean ? 'fixed' : 'percentage',
-            'value' => fake()->numberBetween(1, 99),
+            'type' => $type,
+            'value' => fake()->numberBetween(1, $type === 'percentage' ? 99 : 1000),
             'description' => fake()->sentence(10),
             'used_times' => fake()->numberBetween(0, 1000),
-            'start_date' => fake()->dateTimeThisYear(),
-            'expire_date' => fake()->dateTimeThisYear(),
-            'is_active' => fake()->boolean,
+            'starts_at' => fake()->dateTimeThisYear(),
+            'expires_at' => fake()->dateTimeThisYear(),
+            'greater_than' => fake()->boolean ? fake()->numberBetween(0, 1000) : null,
+            'is_active' => fake()->boolean(77),
+            'is_public' => fake()->boolean(99),
         ];
     }
 }

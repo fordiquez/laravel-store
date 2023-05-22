@@ -12,20 +12,16 @@ class Cart
 {
     public static function getCount(): int
     {
-        $user = auth()->user();
-        if ($user) {
+        if ($user = auth()->user()) {
             return CartItem::whereUserId($user->id)->sum('quantity');
         }
 
-        $cartItems = self::getCookieCartItems();
-
-        return array_reduce($cartItems, fn ($carry, $item) => $carry + $item['quantity'], 0);
+        return array_reduce(self::getCookieCartItems(), fn ($carry, $item) => $carry + $item['quantity'], 0);
     }
 
     public static function getCartItems(): Collection|array
     {
-        $user = auth()->user();
-        if ($user) {
+        if ($user = auth()->user()) {
             return CartItem::whereUserId($user->id)->get()->map(fn (CartItem $item) => ['good_id' => $item->good_id, 'quantity' => $item->quantity]);
         }
 
@@ -50,11 +46,10 @@ class Cart
     public static function saveCookieCartItems(): void
     {
         $user = auth()->user();
-        $cartItems = self::getCookieCartItems();
         $userCartItems = CartItem::where(['user_id' => $user->id])->get()->keyBy('good_id');
         $savedCartItems = [];
 
-        foreach ($cartItems as $cartItem) {
+        foreach (self::getCookieCartItems() as $cartItem) {
             if (isset($userCartItems[$cartItem['good_id']])) {
                 $userCartItems[$cartItem['good_id']]->update(['quantity' => $cartItem['quantity']]);
 

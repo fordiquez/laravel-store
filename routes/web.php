@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Main\CartController;
+use App\Http\Controllers\Main\CheckoutController;
 use App\Http\Controllers\Main\GoodController;
 use App\Http\Controllers\Main\IndexController;
 use App\Http\Controllers\Main\Profile\ProfileController;
@@ -27,25 +28,35 @@ Route::prefix('cart')->controller(CartController::class)->group(function () {
     Route::delete('bulk-delete', 'bulkDelete')->name('cart.bulk-delete');
 });
 
-Route::prefix('profile')->middleware('auth')->group(function () {
-    Route::controller(ProfileController::class)->group(function () {
-        Route::get('personal-information', 'edit')->name('profile.personal-information.edit');
-        Route::patch('personal-information', 'update')->name('profile.personal-information.update');
-        Route::delete('personal-information', 'destroy')->name('profile.personal-information.destroy');
-        Route::post('address', 'storeAddress')->name('profile.address.store');
-        Route::put('address/{address}', 'updateAddress')->name('profile.address.update');
-        Route::patch('address/{address}', 'patchAddress')->name('profile.address.patch');
-        Route::delete('address/{address}', 'destroyAddress')->name('profile.address.destroy');
-        Route::get('orders', 'orders')->name('profile.orders');
-        Route::get('wishlist', 'wishlist')->name('profile.wishlist');
-        Route::get('messages', 'messages')->name('profile.messages');
-        Route::get('reviews', 'reviews')->name('profile.reviews');
+Route::middleware('auth')->group(function () {
+    Route::prefix('checkout')->controller(CheckoutController::class)->group(function () {
+        Route::get('', 'index')->name('checkout.index');
+        Route::post('order', 'store')->name('checkout.store');
+        Route::get('success', 'success')->name('checkout.success');
+        Route::get('cancel', 'cancel')->name('checkout.cancel');
     });
-    Route::controller(WalletController::class)->group(function () {
-        Route::get('wallet', 'show')->name('profile.wallet');
-        Route::post('wallet', 'store')->name('profile.wallet.store');
-        Route::put('wallet', 'update')->name('profile.wallet.update');
-        Route::delete('wallet', 'delete')->name('profile.wallet.delete');
+
+    Route::prefix('profile')->group(function () {
+        Route::controller(ProfileController::class)->group(function () {
+            Route::get('personal-information', 'edit')->name('profile.personal-information.edit');
+            Route::patch('personal-information', 'update')->name('profile.personal-information.update');
+            Route::delete('personal-information', 'destroy')->name('profile.personal-information.destroy');
+            Route::post('address', 'storeAddress')->name('profile.address.store');
+            Route::put('address/{address}', 'updateAddress')->name('profile.address.update');
+            Route::patch('address/{address}', 'patchAddress')->name('profile.address.patch');
+            Route::delete('address/{address}', 'destroyAddress')->name('profile.address.destroy');
+            Route::get('orders', 'orders')->name('profile.orders');
+            Route::get('wishlist', 'wishlist')->name('profile.wishlist');
+            Route::get('messages', 'messages')->name('profile.messages');
+            Route::get('reviews', 'reviews')->name('profile.reviews');
+        });
+
+        Route::controller(WalletController::class)->group(function () {
+            Route::get('wallet', 'show')->name('profile.wallet');
+            Route::post('wallet', 'store')->name('profile.wallet.store');
+            Route::put('wallet', 'update')->name('profile.wallet.update');
+            Route::delete('wallet', 'delete')->name('profile.wallet.delete');
+        });
     });
 });
 

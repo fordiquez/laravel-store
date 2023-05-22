@@ -141,7 +141,7 @@ const bulkDelete = () => router.delete(route('cart.bulk-delete'));
                                 <span>{{ formatMoney(total) }}</span>
                             </div>
                         </div>
-                        <primary-button class="self-end" type="button" @click="$emit('checkout')">
+                        <primary-button class="self-end" type="button" @click="router.get(route('checkout.index'))">
                             <font-awesome-icon :icon="['fas', 'credit-card']" class="mr-2" />
                             <span>Proceed to checkout</span>
                         </primary-button>

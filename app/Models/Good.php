@@ -46,7 +46,37 @@ class Good extends Model implements HasMedia
         'options' => 'array',
     ];
 
-    public function scopeFiltered(Builder $query)
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    public function brand(): BelongsTo
+    {
+        return $this->belongsTo(Brand::class);
+    }
+
+    public function tags(): BelongsToMany
+    {
+        return $this->belongsToMany(Tag::class, 'good_tag', 'good_id', 'tag_id');
+    }
+
+    public function properties(): BelongsToMany
+    {
+        return $this->belongsToMany(Property::class)->withPivot('value');
+    }
+
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    public function cartItems(): HasMany
+    {
+        return $this->hasMany(CartItem::class);
+    }
+
+    public function scopeFiltered(Builder $query): void
     {
         $query->when(request('brands'), function (Builder $q) {
             $q->whereIn('brand_id', request('brands'));
@@ -62,7 +92,7 @@ class Good extends Model implements HasMedia
         });
     }
 
-    public function scopeSorted(Builder $query)
+    public function scopeSorted(Builder $query): void
     {
         $query->when(request('sort'), function (Builder $q) {
             $column = request()->str('sort');
@@ -75,7 +105,7 @@ class Good extends Model implements HasMedia
         });
     }
 
-    public function scopeSearched(Builder $query)
+    public function scopeSearched(Builder $query): void
     {
         $query->when(request('search'), function (Builder $q) {
             $q->whereFullText(['title', 'description'], request('search'));
@@ -113,31 +143,6 @@ class Good extends Model implements HasMedia
         });
 
         return $properties;
-    }
-
-    public function category(): BelongsTo
-    {
-        return $this->belongsTo(Category::class);
-    }
-
-    public function brand(): BelongsTo
-    {
-        return $this->belongsTo(Brand::class);
-    }
-
-    public function tags(): BelongsToMany
-    {
-        return $this->belongsToMany(Tag::class, 'good_tag', 'good_id', 'tag_id');
-    }
-
-    public function properties(): BelongsToMany
-    {
-        return $this->belongsToMany(Property::class)->withPivot('value');
-    }
-
-    public function reviews(): HasMany
-    {
-        return $this->hasMany(Review::class);
     }
 
     protected function preview(): Attribute

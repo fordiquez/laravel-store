@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, reactive, ref } from 'vue';
+import { computed, onMounted, onUpdated, reactive, ref } from 'vue';
 import { Link, useForm, usePage } from '@inertiajs/vue3';
 import { useDark, useToggle } from '@vueuse/core';
 import { initTooltips } from 'flowbite';
@@ -11,15 +11,19 @@ import DropdownLink from '@/Components/DropdownLink.vue';
 import ResponsiveCategories from '@/Components/ResponsiveCategories.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
+import { useNotification } from '@kyvg/vue3-notification';
 
 defineProps({
     title: String,
 });
 
-const { user, categories, breadcrumbs } = reactive(usePage().props);
+const { user, categories, breadcrumbs, notification } = reactive(usePage().props);
 
 const isDark = useDark();
 const toggleDark = useToggle(isDark);
+
+const { notify } = useNotification();
+const notificationsHistory = reactive([]);
 
 const showingNavigationDropdown = ref(false);
 const showingResponsiveCategories = ref(false);
@@ -30,7 +34,12 @@ const form = useForm({
 });
 const search = ref(null);
 
-onMounted(() => initTooltips());
+onMounted(() => {
+    initTooltips();
+    makeNotification(notification);
+});
+
+onUpdated(() => makeNotification(notification));
 
 const cart = computed(() => usePage().props.cart);
 const fullName = computed(() => (user ? `${user.first_name} ${user.last_name}` : null));
@@ -41,6 +50,21 @@ const breadcrumbsRoutes = computed(
         route().current('goods.good.reviews'),
 );
 
+const makeNotification = (notification) => {
+    if (notification && !notificationsHistory.find((item) => item.id === notification.id)) {
+        console.log(notification);
+        notify({
+            id: notification.id,
+            type: notification.type,
+            title: notification.title,
+            text: notification.text,
+            duration: 10000,
+            pauseOnHover: true,
+        });
+        notificationsHistory.push(notification);
+    }
+};
+
 const closeResponsiveCategories = () => (showingResponsiveCategories.value = false);
 
 const searchGoods = () => form.get(route('goods.search'));
@@ -48,6 +72,8 @@ const searchGoods = () => form.get(route('goods.search'));
 
 <template>
     <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
+        <notifications position="top right" />
+
         <header class="border-b border-gray-100 bg-white dark:border-gray-700 dark:bg-gray-800">
             <!-- Primary Navigation Menu -->
             <div class="mx-auto max-w-9xl px-4 sm:px-6 lg:px-8">

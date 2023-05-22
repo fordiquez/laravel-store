@@ -8,7 +8,8 @@ defineProps({
 
 const classes = reactive({
     link: {
-        default: 'border-transparent hover:border-purple-300 hover:text-purple-600 dark:hover:text-purple-300',
+        default:
+            'border-transparent transition-all duration-300 hover:border-purple-300 hover:text-purple-600 dark:hover:text-purple-300',
         active: 'active border-purple-600 text-purple-600 dark:border-purple-400 dark:text-purple-500',
     },
     icon: {

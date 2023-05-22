@@ -14,7 +14,7 @@ class Order extends Model
     use HasFactory;
 
     protected $fillable = [
-        'ref_id',
+        'uuid',
         'user_id',
         'user_address_id',
         'promo_code_id',
@@ -24,6 +24,7 @@ class Order extends Model
         'delivery_cost',
         'total_cost',
         'status',
+        'status_history',
     ];
 
     protected $casts = [
@@ -53,10 +54,5 @@ class Order extends Model
     public function orderItems(): HasMany
     {
         return $this->hasMany(OrderItem::class);
-    }
-
-    public function orderHistories(): HasMany
-    {
-        return $this->hasMany(OrderHistory::class);
     }
 }

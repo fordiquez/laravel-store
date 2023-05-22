@@ -40,9 +40,9 @@ class PromoCodeResource extends Resource
                     Forms\Components\TextInput::make('description')->required()->maxLength(255),
                     Forms\Components\TextInput::make('used_times')->default(0)->disabled(),
                     Forms\Components\TextInput::make('greater_than'),
-                    Forms\Components\DateTimePicker::make('start_date')->default(now())->minDate(Date::today()),
-                    Forms\Components\DateTimePicker::make('expire_date')
-                        ->minDate(fn (Closure $get) => $get('start_date')),
+                    Forms\Components\DateTimePicker::make('starts_at')->default(now())->minDate(Date::today()),
+                    Forms\Components\DateTimePicker::make('expires_at')
+                        ->minDate(fn (Closure $get) => $get('starts_at')),
                     Forms\Components\Toggle::make('is_active')->required()->default(true),
                     Forms\Components\Toggle::make('is_public')->required(),
                 ])->columns(),
@@ -61,8 +61,8 @@ class PromoCodeResource extends Resource
                 Tables\Columns\TextColumn::make('type')->sortable(),
                 Tables\Columns\TextColumn::make('value')->sortable(),
                 Tables\Columns\TextColumn::make('used_times')->sortable(),
-                Tables\Columns\TextColumn::make('start_date')->dateTime()->sortable(),
-                Tables\Columns\TextColumn::make('expire_date')->dateTime()->sortable(),
+                Tables\Columns\TextColumn::make('starts_at')->dateTime()->sortable(),
+                Tables\Columns\TextColumn::make('expires_at')->dateTime()->sortable(),
                 Tables\Columns\TextColumn::make('greater_than')->sortable()->toggleable(),
                 Tables\Columns\IconColumn::make('is_active')->boolean()->sortable(),
                 Tables\Columns\IconColumn::make('is_public')->boolean()->sortable(),

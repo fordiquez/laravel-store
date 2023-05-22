@@ -159,20 +159,6 @@ const store = () => router.post(route('cart.store', props.good));
                             </div>
                         </div>
                         <p class="mt-4 leading-relaxed">{{ good.description }}</p>
-                        <div class="mb-5 mt-4 flex items-center pb-5">
-                            <div class="flex">
-                                <span class="mr-3">Color</span>
-                                <button
-                                    class="h-6 w-6 rounded-full border-2 border-gray-800 bg-fuchsia-600 focus:outline-none"
-                                ></button>
-                                <button
-                                    class="ml-1 h-6 w-6 rounded-full border-2 border-gray-800 bg-gray-700 focus:outline-none"
-                                ></button>
-                                <button
-                                    class="ml-1 h-6 w-6 rounded-full border-2 border-gray-800 bg-indigo-500 focus:outline-none"
-                                ></button>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>

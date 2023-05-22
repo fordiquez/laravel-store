@@ -110,7 +110,7 @@ const submit = () => {
                     class="inline-flex items-center justify-center rounded-lg bg-[#24292F] px-5 py-2.5 text-center text-sm font-medium text-white focus:outline-none focus:ring-4 focus:ring-[#24292F]/50 hover:bg-[#24292F]/90 dark:focus:ring-gray-500 dark:hover:bg-[#050708]/30"
                 >
                     <font-awesome-icon :icon="['fab', 'github']" size="lg" class="-ml-1 mr-2" />
-                    Sign up with Github
+                    Sign up with GitHub
                 </Link>
                 <Link
                     :href="route('social', 'google')"

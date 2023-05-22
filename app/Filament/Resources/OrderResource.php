@@ -39,7 +39,7 @@ class OrderResource extends Resource
                         ->required(),
                     Forms\Components\Select::make('promo_code_id')
                         ->relationship('promoCode', 'key'),
-                    Forms\Components\TextInput::make('ref_id')
+                    Forms\Components\TextInput::make('uuid')
                         ->required()
                         ->uuid()
                         ->maxLength(36)
@@ -127,7 +127,7 @@ class OrderResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('id')->sortable()->searchable(),
-                Tables\Columns\TextColumn::make('ref_id')->searchable()->toggleable(),
+                Tables\Columns\TextColumn::make('uuid')->searchable()->toggleable(),
                 Tables\Columns\TextColumn::make('user.email')->sortable()->searchable(),
                 Tables\Columns\TextColumn::make('delivery_method')->sortable()->toggleable(),
                 Tables\Columns\TextColumn::make('payment_method')->sortable()->toggleable(),

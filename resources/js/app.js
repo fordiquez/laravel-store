@@ -11,6 +11,7 @@ import { fas } from '@fortawesome/free-solid-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 import VueSplide from '@splidejs/vue-splide';
+import Notifications from '@kyvg/vue3-notification';
 
 library.add(fas, far, fab);
 dom.watch();
@@ -26,6 +27,7 @@ createInertiaApp({
             .use(plugin)
             .use(ZiggyVue, Ziggy)
             .use(VueSplide)
+            .use(Notifications)
             .mount(el);
     },
     progress: {

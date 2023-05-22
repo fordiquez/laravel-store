@@ -1,13 +1,12 @@
 <?php
 
-use App\Http\Controllers\API\CategoryController;
-use App\Http\Controllers\API\LocationController;
+use App\Http\Controllers\API\IndexController;
 use Illuminate\Support\Facades\Route;
 
-Route::prefix('locations')->controller(LocationController::class)->group(function () {
-    Route::get('countries', 'countries')->name('locations.countries');
-    Route::get('{country}/states', 'states')->name('locations.states');
-    Route::get('{state}/cities', 'cities')->name('locations.cities');
+Route::controller(IndexController::class)->group(function () {
+    Route::get('countries', 'countries')->name('api.locations.countries');
+    Route::get('{country}/states', 'states')->name('api.locations.states');
+    Route::get('{state}/cities', 'cities')->name('api.locations.cities');
+    Route::get('categories', 'categories')->name('api.categories');
+    Route::post('verify-promo-code/key', 'verifyPromoCode')->name('api.verify-promo-code');
 });
-
-Route::get('categories', [CategoryController::class, 'index'])->name('categories');

@@ -15,11 +15,11 @@ return new class extends Migration {
             $table->id();
             $table->string('key', 50)->unique();
             $table->enum('type', PromoCode::getValues());
-            $table->tinyInteger('value');
+            $table->unsignedSmallInteger('value');
             $table->string('description');
             $table->integer('used_times')->default(0);
-            $table->dateTime('start_date')->nullable();
-            $table->dateTime('expire_date')->nullable();
+            $table->dateTime('starts_at')->nullable();
+            $table->dateTime('expires_at')->nullable();
             $table->unsignedDecimal('greater_than')->nullable();
             $table->boolean('is_active')->default(true);
             $table->boolean('is_public')->default(false);

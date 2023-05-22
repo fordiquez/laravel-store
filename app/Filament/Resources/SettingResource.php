@@ -22,7 +22,7 @@ class SettingResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('section')
+                Forms\Components\TextInput::make('group')
                     ->required()
                     ->maxLength(50),
                 Forms\Components\TextInput::make('name')
@@ -34,7 +34,7 @@ class SettingResource extends Resource
                     ->maxLength(50)
                     ->unique(
                         Setting::class,
-                        callback: fn (Unique $rule, Closure $get) => $rule->where('key', $get('key'))->where('section', $get('section')),
+                        callback: fn (Unique $rule, Closure $get) => $rule->where('key', $get('key'))->where('group', $get('group')),
                         ignoreRecord: true
                     ),
                 Forms\Components\Textarea::make('value')
@@ -51,14 +51,14 @@ class SettingResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('id')->sortable(),
-                Tables\Columns\TextColumn::make('section')->sortable(),
+                Tables\Columns\TextColumn::make('group')->sortable(),
                 Tables\Columns\TextColumn::make('name')->searchable(),
                 Tables\Columns\TextColumn::make('key')->sortable()->searchable(),
                 Tables\Columns\TextColumn::make('value')->searchable()->limit(50),
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('section')
-                    ->options(fn () => Setting::all()->pluck('section', 'section')->toArray())
+                Tables\Filters\SelectFilter::make('group')
+                    ->options(fn () => Setting::all()->pluck('group', 'group')->toArray())
                     ->multiple(),
             ])
             ->actions([

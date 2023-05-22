@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Main\Profile;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Profile\AddressRequest;
 use App\Http\Requests\Profile\ProfileUpdateRequest;
+use App\Http\Resources\OrderResource;
 use App\Http\Resources\UserAddressResource;
 use App\Models\Country;
 use App\Models\UserAddress;
@@ -101,9 +102,15 @@ class ProfileController extends Controller
         return to_route('profile.personal-information.edit');
     }
 
-    public function orders()
+    public function orders(Request $request)
     {
-        return redirect()->back();
+        return inertia('Profile/Orders', [
+            'badges' => [
+                'orders' => $request->user()->orders()->count(),
+                'reviews' => $request->user()->reviews()->count(),
+            ],
+            'orders' => OrderResource::collection($request->user()->orders->load('orderItems', 'orderItems.good')),
+        ]);
     }
 
     public function wishlist()

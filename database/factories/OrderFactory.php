@@ -22,7 +22,7 @@ class OrderFactory extends Factory
     public function definition(): array
     {
         return [
-            'ref_id' => fake()->unique()->uuid,
+            'uuid' => fake()->unique()->uuid,
             'user_id' => User::query()->inRandomOrder()->value('id'),
             'user_address_id' => UserAddress::query()->inRandomOrder()->value('id'),
             'delivery_method' => OrderDelivery::getRandomValue(),

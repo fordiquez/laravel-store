@@ -13,7 +13,7 @@ return new class extends Migration {
     {
         Schema::create('states', function (Blueprint $table) {
             $table->id();
-            $table->uuid();
+            $table->uuid()->unique()->index();
             $table->string('name', 50);
             $table->string('old_name', 50)->nullable();
             $table->foreignIdFor(Country::class)->constrained()->cascadeOnUpdate()->cascadeOnDelete();

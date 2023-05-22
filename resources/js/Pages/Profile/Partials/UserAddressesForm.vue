@@ -46,7 +46,7 @@ const onCountrySelected = async (selectedCountry) => {
     form.country_id = selectedCountry.id;
     loading.push('state');
     await axios
-        .get(route('locations.states', selectedCountry.iso2.toLowerCase()))
+        .get(route('api.locations.states', selectedCountry.iso2.toLowerCase()))
         .then(({ data }) => {
             states.splice(0, states.length, ...data);
             state.value = city.value = null;
@@ -62,7 +62,7 @@ const onStateSelected = async (selectedState) => {
     form.state_id = selectedState.id;
     loading.push('city');
     await axios
-        .get(route('locations.cities', selectedState.id))
+        .get(route('api.locations.cities', selectedState.id))
         .then(({ data }) => {
             cities.splice(0, cities.length, ...data);
             city.value = null;

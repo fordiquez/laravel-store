@@ -18,7 +18,7 @@ return new class extends Migration {
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->uuid('ref_id')->unique();
+            $table->uuid()->unique()->index();
             $table->foreignIdFor(User::class)->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignIdFor(UserAddress::class)->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignIdFor(PromoCode::class)->nullable()->constrained()->cascadeOnUpdate()->cascadeOnDelete();
@@ -28,6 +28,7 @@ return new class extends Migration {
             $table->unsignedDecimal('delivery_cost')->nullable()->default(0);
             $table->unsignedDecimal('total_cost');
             $table->enum('status', OrderStatus::getValues())->default(OrderStatus::UNPAID);
+            $table->json('status_history')->nullable();
             $table->timestamps();
         });
     }
