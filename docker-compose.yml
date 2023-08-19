@@ -1,8 +1,8 @@
 version: '3.5'
 services:
     nginx:
-        image: nginx:1.23.4-alpine
-        container_name: ${APP_NAME}_nginx
+        image: nginx:1.25.1-alpine
+        container_name: brandford_nginx
         working_dir: /var/www/html
         restart: unless-stopped
         volumes:
@@ -19,15 +19,15 @@ services:
             - brandford
 
     app:
-        container_name: ${APP_NAME}_app
+        container_name: brandford_app
         build:
             args:
-                user: ${APP_NAME}
+                user: brandford
                 uid: 1000
             context: docker/php
             dockerfile: Dockerfile
         environment:
-            APP_NAME: ${APP_NAME}
+            APP_NAME: brandford
         volumes:
             - ./:/var/www/html
         working_dir: /var/www/html
@@ -42,8 +42,8 @@ services:
             - brandford
 
     redis:
-        image: redis:7.0.10-alpine
-        container_name: ${APP_NAME}_redis
+        image: redis:7.2.0-alpine
+        container_name: brandford_redis
         restart: unless-stopped
         ports:
             - '6379:6379'
@@ -52,7 +52,7 @@ services:
 
     database:
         image: mysql:latest
-        container_name: ${APP_NAME}_db
+        container_name: brandford_db
         restart: always
         volumes:
             - ./docker/mysql:/var/lib/mysql

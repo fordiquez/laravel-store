@@ -7,6 +7,7 @@ use Database\Factories\OrderRecipientFactory;
 use Database\Factories\UserAddressFactory;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
@@ -27,7 +28,7 @@ class UserSeeder extends Seeder
                 'birth_date' => '2001-02-22',
                 'gender' => 'male',
                 'email' => User::ADMIN_EMAIL,
-                'password' => '$2y$10$Y.tltioAYrGTul6J8GeDoOqjv/98LM8iSj4PCIDsVYkE3KWFah.lC',
+                'password' => Hash::make('brandford22'),
             ]);
 
         try {

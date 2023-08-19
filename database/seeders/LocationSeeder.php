@@ -57,10 +57,12 @@ class LocationSeeder extends Seeder
                     ])->get(config('services.csc.url') . Country::DEFAULT_COUNTRY . "/states/$stateCode/cities")->json();
 
                     foreach ($cities as $city) {
-                        CityFactory::new()->create([
-                            'name' => $city['name'],
-                            'state_id' => State::whereName($state['name'])->value('id'),
-                        ]);
+                        if (!empty($city['name'])) {
+                            CityFactory::new()->create([
+                                'name' => $city['name'],
+                                'state_id' => State::whereName($state['name'])->value('id'),
+                            ]);
+                        }
                     }
                 }
             }

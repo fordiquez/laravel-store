@@ -14,8 +14,8 @@
 -   **PHP v8.1;**
 -   **Composer v2.0;**
 -   **MySQL;**
--   **Node;**
 -   **NPM;**
+-   **Docker;**
 
 ## Local installation workflow
 
@@ -109,7 +109,17 @@ composer install
 npm install
 ```
 
-### 5. Run artisan commands
+### 5. Docker settings
+
+```
+docker-compose up --build -d
+```
+
+```
+docker exec -it brandford_app /bin/bash
+```
+
+### 6. Run artisan commands
 
 ```
 php artisan key:generate
@@ -120,7 +130,7 @@ php artisan storage:link
 ```
 
 ```
-php artisan migrate --seed
+php artisan migrate:fresh --seed
 ```
 
 ```
@@ -131,7 +141,7 @@ php artisan shield:install --fresh
 php artisan optimize:clear
 ```
 
-### 6. Run application server & SSR rendering
+### 7. Run application server & SSR rendering
 
 ```
 npm run dev
@@ -139,4 +149,29 @@ npm run dev
 
 ```
 php artisan inertia:start-ssr
+```
+
+### 8. Run stripe webhook
+```
+stripe login
+```
+
+```
+stripe listen --forward-to brandford.local.io/stripe/webhook
+```
+
+```
+stripe trigger payment_intent.succeeded
+```
+
+### 9. Edit hosts file (Windows 10)
+
+**Add your application domain**
+```
+C:\Windows\System32\drivers\etc
+```
+
+**Add the next line:**
+```
+127.0.0.1 brandford.local.io
 ```

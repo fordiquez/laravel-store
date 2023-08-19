@@ -1,7 +1,7 @@
 name: Build project
 
 env:
-  'DB_DATABASE': 'laravel_store'
+  'DB_DATABASE': 'brandford'
   'DB_USERNAME': 'root'
   'DB_PASSWORD': 'root'
 on:

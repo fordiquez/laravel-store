@@ -28,9 +28,8 @@ RUN pecl install redis
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install PHP extensions
-RUN docker-php-ext-install pgsql pdo_pgsql pdo_mysql pdo sockets zip soap intl bcmath
+RUN docker-php-ext-install pdo pdo_mysql sockets zip soap intl bcmath gd
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp
-RUN docker-php-ext-install gd
 RUN docker-php-ext-enable redis
 
 # Install composer
