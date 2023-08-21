@@ -3,7 +3,7 @@
 namespace App\Filament\Resources\PromoCodeResource\Pages;
 
 use App\Filament\Resources\PromoCodeResource;
-use Filament\Pages\Actions;
+use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 
 class ListPromoCodes extends ListRecords

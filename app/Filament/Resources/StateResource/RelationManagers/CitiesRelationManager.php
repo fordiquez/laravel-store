@@ -3,10 +3,10 @@
 namespace App\Filament\Resources\StateResource\RelationManagers;
 
 use Filament\Forms;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Resources\Table;
 use Filament\Tables;
+use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 
 class CitiesRelationManager extends RelationManager
@@ -15,14 +15,14 @@ class CitiesRelationManager extends RelationManager
 
     protected static ?string $recordTitleAttribute = 'name';
 
-    public static function form(Form $form): Form
+    public function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxlength(50)
-                    ->hint(fn ($state, $component) => 'left: ' . $component->getMaxLength() - strlen($state) . ' characters')
+//                    ->hint(fn ($state, $component) => 'left: ' . $component->getMaxLength() - strlen($state) . ' characters')
                     ->reactive(),
                 Forms\Components\TextInput::make('old_name')->maxlength(50),
                 Forms\Components\Hidden::make('state_id')
@@ -36,7 +36,7 @@ class CitiesRelationManager extends RelationManager
     /**
      * @throws \Exception
      */
-    public static function table(Table $table): Table
+    public function table(Table $table): Table
     {
         return $table
             ->columns([

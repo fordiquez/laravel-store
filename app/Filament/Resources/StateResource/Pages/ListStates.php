@@ -3,7 +3,7 @@
 namespace App\Filament\Resources\StateResource\Pages;
 
 use App\Filament\Resources\StateResource;
-use Filament\Pages\Actions;
+use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 
 class ListStates extends ListRecords

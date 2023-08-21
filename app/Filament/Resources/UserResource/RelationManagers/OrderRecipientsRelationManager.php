@@ -5,13 +5,12 @@ namespace App\Filament\Resources\UserResource\RelationManagers;
 use App\Models\Country;
 use App\Models\OrderRecipient;
 use Filament\Forms;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Resources\Table;
 use Filament\Tables;
-use Filament\Tables\Contracts\HasRelationshipTable;
+use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
-use Ysfkaya\FilamentPhoneInput\PhoneInput;
+use Ysfkaya\FilamentPhoneInput\Forms\PhoneInput;
 use Ysfkaya\FilamentPhoneInput\PhoneInputNumberType;
 
 class OrderRecipientsRelationManager extends RelationManager
@@ -20,11 +19,11 @@ class OrderRecipientsRelationManager extends RelationManager
 
     protected static ?string $recordTitleAttribute = 'phone';
 
-    public static function form(Form $form): Form
+    public function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\Card::make()->schema([
+                Forms\Components\Section::make()->schema([
                     Forms\Components\TextInput::make('title')->required()->maxLength(255),
                     Forms\Components\TextInput::make('first_name')->required()->maxLength(50),
                     Forms\Components\TextInput::make('last_name')->required()->maxLength(50),
@@ -46,7 +45,7 @@ class OrderRecipientsRelationManager extends RelationManager
     /**
      * @throws \Exception
      */
-    public static function table(Table $table): Table
+    public function table(Table $table): Table
     {
         return $table
             ->columns([
@@ -74,7 +73,7 @@ class OrderRecipientsRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make()->using(function (HasRelationshipTable $livewire, array $data): Model {
+                Tables\Actions\CreateAction::make()->using(function (RelationManager $livewire, array $data): Model {
                     if ($data['is_default']) {
                         OrderRecipient::whereUserId($livewire->ownerRecord->id)->whereIsDefault(true)->update([
                             'is_default' => false,

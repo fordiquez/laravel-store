@@ -3,11 +3,11 @@
 namespace App\Filament\Resources\GoodResource\RelationManagers;
 
 use Filament\Forms;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Resources\Table;
 use Filament\Tables;
 use Filament\Tables\Actions\AttachAction;
+use Filament\Tables\Table;
 
 class PropertiesRelationManager extends RelationManager
 {
@@ -15,7 +15,7 @@ class PropertiesRelationManager extends RelationManager
 
     protected static ?string $recordTitleAttribute = 'name';
 
-    public static function form(Form $form): Form
+    public function form(Form $form): Form
     {
         return $form
             ->schema([
@@ -28,7 +28,7 @@ class PropertiesRelationManager extends RelationManager
     /**
      * @throws \Exception
      */
-    public static function table(Table $table): Table
+    public function table(Table $table): Table
     {
         return $table
             ->columns([

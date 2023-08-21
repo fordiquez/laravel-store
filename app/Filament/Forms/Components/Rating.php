@@ -271,7 +271,7 @@ class Rating extends Field
         return $this->evaluate($this->clearable);
     }
 
-    public function getRefId(string $prefix, ?string $suffix = null): string
+    public function getRefId(string $prefix, string $suffix = null): string
     {
         return sprintf('%s_%s%s', str_replace('.', '_', $this->getId()), $prefix, $suffix ? '_' . $suffix : '');
     }

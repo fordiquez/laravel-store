@@ -3,7 +3,7 @@
 namespace App\Filament\Resources\GoodResource\Pages;
 
 use App\Filament\Resources\GoodResource;
-use Filament\Pages\Actions;
+use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 
 class EditGood extends EditRecord

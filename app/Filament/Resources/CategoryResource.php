@@ -5,18 +5,18 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\CategoryResource\Pages;
 use App\Filament\Resources\CategoryResource\RelationManagers\GoodsRelationManager;
 use App\Models\Category;
-use Camya\Filament\Forms\Components\TitleWithSlugInput;
 use Filament\Forms;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
 use Filament\Tables;
+use Filament\Tables\Table;
+use Illuminate\Support\Str;
 
 class CategoryResource extends Resource
 {
     protected static ?string $model = Category::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-collection';
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     protected static ?string $navigationGroup = 'Goods Management';
 
@@ -28,23 +28,27 @@ class CategoryResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Card::make()->schema([
+                Forms\Components\Section::make()->schema([
                     Forms\Components\Select::make('parent_id')
                         ->relationship('parent', 'title'),
-                    TitleWithSlugInput::make(
-                        fieldTitle: 'title',
-                        fieldSlug: 'slug',
-                        urlVisitLinkVisible: false,
-                        titleLabel: 'Title',
-                        titleRules: ['required', 'max:100'],
-                        slugLabel: 'Slug',
-                        slugRules: ['required', 'max:100', 'alpha_dash'],
-                        slugRuleUniqueParameters: [
-                            'table' => 'categories',
-                            'column' => 'slug',
-                            'ignoreRecord' => true,
-                        ]
-                    ),
+                    Forms\Components\TextInput::make('title')
+                        ->required()
+                        ->maxLength(100)
+                        ->autofocus()
+                        ->live(debounce: 500)
+                        ->afterStateUpdated(function (Forms\Get $get, Forms\Set $set, ?string $state) {
+                            if (!$get('is_slug_changed_manually')) {
+                                $set('slug', Str::slug($state));
+                            }
+                        }),
+                    Forms\Components\TextInput::make('slug')
+                        ->rule('alpha_dash:ascii')
+                        ->unique('categories', 'slug', ignoreRecord: true)
+                        ->afterStateUpdated(function (Forms\Set $set) {
+                            $set('is_slug_changed_manually', true);
+                        })
+                        ->required()
+                        ->maxLength(100),
                     Forms\Components\TextInput::make('description')->maxLength(255),
                     Forms\Components\Toggle::make('is_active')->required(),
                     Forms\Components\Toggle::make('is_navigational')->required(),
@@ -69,6 +73,8 @@ class CategoryResource extends Resource
                 Tables\Columns\IconColumn::make('is_active')->boolean(),
                 Tables\Columns\IconColumn::make('is_navigational')->boolean(),
                 Tables\Columns\TextColumn::make('manual_url')->toggleable(),
+                Tables\Columns\TextColumn::make('created_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('updated_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
@@ -90,7 +96,7 @@ class CategoryResource extends Resource
             ]);
     }
 
-    protected static function getNavigationBadge(): ?string
+    public static function getNavigationBadge(): ?string
     {
         return static::$model::count();
     }

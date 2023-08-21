@@ -2,18 +2,14 @@
     "name": "laravel/laravel",
     "type": "project",
     "description": "The Laravel Framework.",
-    "keywords": [
-        "framework",
-        "laravel"
-    ],
+    "keywords": ["framework", "laravel"],
     "license": "MIT",
     "require": {
         "php": "^8.1",
         "bensampo/laravel-enum": "^6.3",
-        "bezhansalleh/filament-shield": "^2.4",
-        "camya/filament-title-with-slug": "^0.5.6",
-        "filament/filament": "^2.0",
-        "filament/spatie-laravel-media-library-plugin": "^2.0",
+        "bezhansalleh/filament-shield": "^3.0@beta",
+        "filament/filament": "^3.0-stable",
+        "filament/spatie-laravel-media-library-plugin": "^3.0-stable",
         "guzzlehttp/guzzle": "^7.2",
         "inertiajs/inertia-laravel": "^0.6.8",
         "laravel/cashier": "^14.12",
@@ -23,12 +19,12 @@
         "laravel/socialite": "^5.6",
         "laravel/telescope": "^4.12",
         "laravel/tinker": "^2.7",
-        "opcodesio/log-viewer": "^2.0",
-        "phpsa/filament-password-reveal": "^1.1",
+        "mohammadhprp/filament-ip-to-country-flag-column": "^1.0",
+        "opcodesio/log-viewer": "^3.0",
+        "phpsa/filament-password-reveal": "^2.0.0",
         "predis/predis": "^2.1",
-        "pxlrbt/filament-spotlight": "^0.3.6",
         "tightenco/ziggy": "^1.0",
-        "ysfkaya/filament-phone-input": "^1.2"
+        "ysfkaya/filament-phone-input": "^2.0.0"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.7",
@@ -57,7 +53,8 @@
     "scripts": {
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
-            "@php artisan package:discover --ansi"
+            "@php artisan package:discover --ansi",
+            "@php artisan filament:upgrade"
         ],
         "post-update-cmd": [
             "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
@@ -77,6 +74,6 @@
             "pestphp/pest-plugin": true
         }
     },
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "prefer-stable": true
 }

@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Notifications\SendVerifyWithQueueNotification;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasName;
+use Filament\Panel;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -12,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Log;
 use Laravel\Cashier\Billable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\MediaLibrary\HasMedia;
@@ -102,7 +104,7 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser, Has
         return $this->hasMany(CartItem::class);
     }
 
-    public function canAccessFilament(): bool
+    public function canAccessPanel(Panel $panel): bool
     {
         return $this->email === $this::ADMIN_EMAIL && $this->hasVerifiedEmail();
     }
@@ -122,14 +124,15 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser, Has
         return Attribute::get(fn ($value) => $this->getFirstMediaUrl('avatars'));
     }
 
-    /**
-     * @throws FileDoesNotExist|FileIsTooBig
-     */
     public function addAvatarMedia(string $url, string $collectionName = 'avatars', string $diskName = 'public'): void
     {
-        $this->clearMediaCollection($collectionName)
-            ->addMediaFromUrl($url)
-            ->sanitizingFileName(fn ($fileName) => strtolower(str_replace(['#', '/', '\\', ' '], '-', $fileName)))
-            ->toMediaCollection($collectionName, $diskName);
+        try {
+            $this->clearMediaCollection($collectionName)
+                ->addMediaFromUrl($url)
+                ->sanitizingFileName(fn ($fileName) => strtolower(str_replace(['#', '/', '\\', ' '], '-', $fileName)))
+                ->toMediaCollection($collectionName, $diskName);
+        } catch (FileDoesNotExist|FileIsTooBig $exception) {
+            Log::error($exception->getMessage());
+        }
     }
 }

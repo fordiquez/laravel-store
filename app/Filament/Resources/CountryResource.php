@@ -5,19 +5,18 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\CountryResource\Pages;
 use App\Filament\Resources\CountryResource\RelationManagers\StatesRelationManager;
 use App\Models\Country;
-use Closure;
 use Filament\Facades\Filament;
 use Filament\Forms;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Form;
 use Filament\Pages\Page;
-use Filament\Resources\Form;
 use Filament\Resources\Pages\CreateRecord;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
 use Filament\Tables;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
+use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Http\Client\RequestException;
@@ -38,10 +37,10 @@ class CountryResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Card::make()->schema([
+                Forms\Components\Section::make()->schema([
                     TextInput::make('name')
                         ->suffixAction(
-                            fn ($state, Closure $get, Closure $set) => Action::make('search-action')
+                            fn ($state, Forms\Get $get, Forms\Set $set) => Action::make('search-action')
                                 ->icon('heroicon-o-search')
                                 ->tooltip('Find country by ISO alpha-2 code and filled data')
                                 ->action(function () use ($state, $get, $set) {
@@ -149,6 +148,8 @@ class CountryResource extends Resource
                             $name => !$record->$name,
                         ]);
                     }),
+                Tables\Columns\TextColumn::make('created_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('updated_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
@@ -169,7 +170,7 @@ class CountryResource extends Resource
             ]);
     }
 
-    protected static function getNavigationBadge(): ?string
+    public static function getNavigationBadge(): ?string
     {
         return static::$model::count();
     }

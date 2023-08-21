@@ -3,10 +3,10 @@
 namespace App\Filament\Resources\UserResource\RelationManagers;
 
 use Filament\Forms;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Resources\Table;
 use Filament\Tables;
+use Filament\Tables\Table;
 
 class SocialsRelationManager extends RelationManager
 {
@@ -14,11 +14,11 @@ class SocialsRelationManager extends RelationManager
 
     protected static ?string $recordTitleAttribute = 'provider';
 
-    public static function form(Form $form): Form
+    public function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\Card::make()->schema([
+                Forms\Components\Section::make()->schema([
                     Forms\Components\TextInput::make('provider'),
                     Forms\Components\TextInput::make('provider_id'),
                     Forms\Components\TextInput::make('provider_token'),
@@ -29,7 +29,7 @@ class SocialsRelationManager extends RelationManager
     /**
      * @throws \Exception
      */
-    public static function table(Table $table): Table
+    public function table(Table $table): Table
     {
         return $table
             ->columns([

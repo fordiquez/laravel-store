@@ -1,5 +1,5 @@
 import { defineConfig, loadEnv } from 'vite';
-import laravel from 'laravel-vite-plugin';
+import laravel, {refreshPaths} from 'laravel-vite-plugin';
 import vue from '@vitejs/plugin-vue';
 
 export default ({ mode }) => {
@@ -9,9 +9,12 @@ export default ({ mode }) => {
         server: { host: process.env.VITE_APP_URL },
         plugins: [
             laravel({
-                input: ['resources/js/app.js', 'resources/css/filament.css'],
+                input: 'resources/js/app.js',
                 ssr: 'resources/js/ssr.js',
-                refresh: true,
+                refresh: [
+                    ...refreshPaths,
+                    'app/Livewire/**',
+                ],
             }),
             vue({
                 template: {

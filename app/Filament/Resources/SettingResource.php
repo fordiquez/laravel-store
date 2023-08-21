@@ -4,12 +4,11 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\SettingResource\Pages;
 use App\Models\Setting;
-use Closure;
 use Filament\Forms;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
 use Filament\Tables;
+use Filament\Tables\Table;
 use Illuminate\Validation\Rules\Unique;
 
 class SettingResource extends Resource
@@ -22,24 +21,26 @@ class SettingResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('group')
-                    ->required()
-                    ->maxLength(50),
-                Forms\Components\TextInput::make('name')
-                    ->maxLength(50),
-                Forms\Components\TextInput::make('details')
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('key')
-                    ->required()
-                    ->maxLength(50)
-                    ->unique(
-                        Setting::class,
-                        callback: fn (Unique $rule, Closure $get) => $rule->where('key', $get('key'))->where('group', $get('group')),
-                        ignoreRecord: true
-                    ),
-                Forms\Components\Textarea::make('value')
-                    ->required()
-                    ->maxLength(65535),
+                Forms\Components\Section::make()->schema([
+                    Forms\Components\TextInput::make('group')
+                        ->required()
+                        ->maxLength(50),
+                    Forms\Components\TextInput::make('name')
+                        ->maxLength(50),
+                    Forms\Components\TextInput::make('details')
+                        ->maxLength(255),
+                    Forms\Components\TextInput::make('key')
+                        ->required()
+                        ->maxLength(50)
+                        ->unique(
+                            Setting::class,
+                            ignoreRecord: true,
+                            modifyRuleUsing: fn (Unique $rule, Forms\Get $get) => $rule->where('key', $get('key'))->where('group', $get('group')),
+                        ),
+                    Forms\Components\Textarea::make('value')
+                        ->required()
+                        ->maxLength(65535)->columnSpanFull(),
+                ])->columns(),
             ]);
     }
 
@@ -55,6 +56,8 @@ class SettingResource extends Resource
                 Tables\Columns\TextColumn::make('name')->searchable(),
                 Tables\Columns\TextColumn::make('key')->sortable()->searchable(),
                 Tables\Columns\TextColumn::make('value')->searchable()->limit(50),
+                Tables\Columns\TextColumn::make('created_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('updated_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('group')
@@ -70,7 +73,7 @@ class SettingResource extends Resource
             ]);
     }
 
-    protected static function getNavigationBadge(): ?string
+    public static function getNavigationBadge(): ?string
     {
         return static::$model::count();
     }

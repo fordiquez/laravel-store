@@ -7,10 +7,10 @@ use App\Filament\Resources\StateResource\RelationManagers\CitiesRelationManager;
 use App\Models\Country;
 use App\Models\State;
 use Filament\Forms;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
 use Filament\Tables;
+use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 
 class StateResource extends Resource
@@ -30,7 +30,7 @@ class StateResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxlength(50)
-                    ->hint(fn ($state, $component) => 'left: ' . $component->getMaxLength() - strlen($state) . ' characters')
+                    ->hint(fn (string $state, $component): string => 'left: ' . $component->getMaxLength() - strlen($state) . ' characters')
                     ->reactive(),
                 Forms\Components\TextInput::make('old_name')->maxlength(50),
                 Forms\Components\Select::make('country_id')
@@ -56,11 +56,11 @@ class StateResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('id')->sortable(),
-                Tables\Columns\TextColumn::make('uuid')->searchable()->toggleable(),
+                Tables\Columns\TextColumn::make('uuid')->searchable()->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('country.name')->searchable()->sortable()->limit(25)->wrap(),
                 Tables\Columns\TextColumn::make('name')->sortable()->searchable()->limit(50)->wrap(),
-                Tables\Columns\TextColumn::make('old_name')->sortable()->searchable()->toggleable(),
-                Tables\Columns\TextColumn::make('parent.name')->sortable()->searchable()->toggleable(),
+                Tables\Columns\TextColumn::make('old_name')->sortable()->searchable()->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('parent.name')->sortable()->searchable()->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('type')->sortable(),
                 Tables\Columns\IconColumn::make('is_active')->boolean()->toggleable()
                     ->tooltip('Toggle value')
@@ -71,6 +71,8 @@ class StateResource extends Resource
                             $name => !$record->$name,
                         ]);
                     }),
+                Tables\Columns\TextColumn::make('created_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('updated_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('country')->form([
@@ -105,7 +107,7 @@ class StateResource extends Resource
             ]);
     }
 
-    protected static function getNavigationBadge(): ?string
+    public static function getNavigationBadge(): ?string
     {
         return static::$model::count();
     }

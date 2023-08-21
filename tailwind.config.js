@@ -1,18 +1,25 @@
-const defaultTheme = require('tailwindcss/defaultTheme');
-const colors = require('tailwindcss/colors');
+import defaultTheme from 'tailwindcss/defaultTheme';
+import forms from '@tailwindcss/forms';
+import typography from '@tailwindcss/typography';
+import colors from 'tailwindcss/colors'
+import aspectRatio from '@tailwindcss/aspect-ratio'
+import tailwindScrollbar from 'tailwind-scrollbar'
+import flowbitePlugin from 'flowbite/plugin'
 
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
+    darkMode: 'class',
     content: [
         './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
         './storage/framework/views/*.php',
         './resources/views/**/*.blade.php',
         './resources/js/**/*.vue',
-        './vendor/filament/**/*.blade.php',
         './node_modules/flowbite/**/*.js',
+        './app/Filament/**/*.php',
+        './resources/views/filament/**/*.blade.php',
+        './vendor/filament/**/*.blade.php',
     ],
 
-    darkMode: 'class',
     theme: {
         letterSpacing: {
             tightest: '-.075em',
@@ -82,10 +89,10 @@ module.exports = {
     },
 
     plugins: [
-        require('@tailwindcss/forms'),
-        require('@tailwindcss/typography'),
-        require('@tailwindcss/aspect-ratio'),
-        require('flowbite/plugin'),
-        require('tailwind-scrollbar'),
+        forms,
+        typography,
+        aspectRatio,
+        flowbitePlugin,
+        tailwindScrollbar,
     ],
 };

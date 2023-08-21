@@ -8,9 +8,6 @@ use Database\Factories\UserAddressFactory;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
-use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
-use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
 class UserSeeder extends Seeder
 {
@@ -31,10 +28,6 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('brandford22'),
             ]);
 
-        try {
-            $user->addAvatarMedia(config('services.multiavatar.url') . $user->getFilamentName() . '.svg?apikey=' . config('services.multiavatar.key'));
-        } catch (FileDoesNotExist|FileIsTooBig $e) {
-            Log::error($e);
-        }
+        $user->addAvatarMedia(config('services.multiavatar.url') . $user->getFilamentName() . '.svg?apikey=' . config('services.multiavatar.key'));
     }
 }

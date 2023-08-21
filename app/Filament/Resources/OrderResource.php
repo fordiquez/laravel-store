@@ -10,10 +10,10 @@ use App\Models\Good;
 use App\Models\Order;
 use App\Models\Setting;
 use Filament\Forms;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
 use Filament\Tables;
+use Filament\Tables\Table;
 use Illuminate\Support\Str;
 
 class OrderResource extends Resource
@@ -30,7 +30,7 @@ class OrderResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Card::make()->schema([
+                Forms\Components\Section::make()->schema([
                     Forms\Components\Select::make('user_id')
                         ->relationship('user', 'email')
                         ->required(),
@@ -58,7 +58,7 @@ class OrderResource extends Resource
                         ->options(OrderStatus::asSelectArray())
                         ->default(OrderStatus::UNPAID),
                 ])->columns(),
-                Forms\Components\Card::make()->schema([
+                Forms\Components\Section::make()->schema([
                     Forms\Components\Grid::make()->schema([
                         Forms\Components\Placeholder::make('Goods cost')
                             ->content(fn (callable $get) => self::getMoneyFormat($get('goods_cost'))),
@@ -66,7 +66,7 @@ class OrderResource extends Resource
                             ->content(fn (callable $get) => self::getMoneyFormat($get('total_cost'))),
                     ]),
                 ]),
-                Forms\Components\Card::make()->schema([
+                Forms\Components\Section::make()->schema([
                     Forms\Components\Repeater::make('orderItems')
                         ->relationship()
                         ->mutateRelationshipDataBeforeFillUsing(function (array $data) {
@@ -127,14 +127,40 @@ class OrderResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('id')->sortable()->searchable(),
-                Tables\Columns\TextColumn::make('uuid')->searchable()->toggleable(),
+                Tables\Columns\TextColumn::make('uuid')->searchable()->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('user.email')->sortable()->searchable(),
-                Tables\Columns\TextColumn::make('delivery_method')->sortable()->toggleable(),
-                Tables\Columns\TextColumn::make('payment_method')->sortable()->toggleable(),
-                Tables\Columns\TextColumn::make('goods_cost')->sortable(),
-                Tables\Columns\TextColumn::make('delivery_cost')->sortable(),
-                Tables\Columns\TextColumn::make('total_cost')->sortable(),
-                Tables\Columns\TextColumn::make('status')->sortable(),
+                Tables\Columns\TextColumn::make('delivery_method')
+                    ->badge()
+                    ->formatStateUsing(fn (string $state) => Str::of($state)->upper())
+                    ->color(fn (string $state): string => match ($state) {
+                        OrderDelivery::COURIER => 'info',
+                        OrderDelivery::MEEST => 'gray',
+                        OrderDelivery::UKRPOSHTA => 'warning',
+                        OrderDelivery::NOVA_POSHTA => 'danger',
+                    })->sortable(),
+                Tables\Columns\TextColumn::make('payment_method')
+                    ->badge()
+                    ->formatStateUsing(fn (string $state) => Str::of($state)->upper())
+                    ->color(fn (string $state): string => match ($state) {
+                        OrderPayment::CASH => 'info',
+                        OrderPayment::STRIPE => 'primary',
+                        OrderPayment::BANK_TRANSFER => 'gray',
+                    })->sortable(),
+                Tables\Columns\TextColumn::make('goods_cost')->money()->sortable(),
+                Tables\Columns\TextColumn::make('delivery_cost')->money()->sortable(),
+                Tables\Columns\TextColumn::make('total_cost')->money()->sortable(),
+                Tables\Columns\TextColumn::make('status')
+                    ->badge()
+                    ->formatStateUsing(fn (string $state) => Str::of($state)->upper())
+                    ->color(fn (string $state): string => match ($state) {
+                        OrderStatus::UNPAID, OrderStatus::PAID => 'gray',
+                        OrderStatus::UNDER_PROCESS, OrderStatus::PROCESSING, OrderStatus::REFUNDED, OrderStatus::RETURNED => 'info',
+                        OrderStatus::FINISHED => 'success',
+                        OrderStatus::REJECTED, OrderStatus::CANCELED => 'danger',
+                        OrderStatus::REFUNDED_REQUEST => 'warning',
+                    })->sortable(),
+                Tables\Columns\TextColumn::make('created_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('updated_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('user')
@@ -162,7 +188,7 @@ class OrderResource extends Resource
             ]);
     }
 
-    protected static function getNavigationBadge(): ?string
+    public static function getNavigationBadge(): ?string
     {
         return static::$model::count();
     }

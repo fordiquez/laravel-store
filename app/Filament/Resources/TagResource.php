@@ -4,12 +4,12 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\TagResource\Pages;
 use App\Models\Tag;
-use Camya\Filament\Forms\Components\TitleWithSlugInput;
 use Filament\Forms;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
 use Filament\Tables;
+use Filament\Tables\Table;
+use Illuminate\Support\Str;
 
 class TagResource extends Resource
 {
@@ -25,19 +25,25 @@ class TagResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Card::make()->schema([
-                    TitleWithSlugInput::make(
-                        fieldTitle: 'name',
-                        fieldSlug: 'slug',
-                        urlVisitLinkVisible: false,
-                        titleLabel: 'Name',
-                        slugLabel: 'Slug',
-                        slugRuleUniqueParameters: [
-                            'table' => 'tags',
-                            'column' => 'slug',
-                            'ignoreRecord' => true,
-                        ]
-                    ),
+                Forms\Components\Section::make()->schema([
+                    Forms\Components\TextInput::make('name')
+                        ->required()
+                        ->maxLength(100)
+                        ->autofocus()
+                        ->live(debounce: 500)
+                        ->afterStateUpdated(function (Forms\Get $get, Forms\Set $set, ?string $state) {
+                            if (!$get('is_slug_changed_manually')) {
+                                $set('slug', Str::slug($state));
+                            }
+                        }),
+                    Forms\Components\TextInput::make('slug')
+                        ->rule('alpha_dash:ascii')
+                        ->unique('tags', 'slug', ignoreRecord: true)
+                        ->afterStateUpdated(function (Forms\Set $set) {
+                            $set('is_slug_changed_manually', true);
+                        })
+                        ->required()
+                        ->maxLength(100),
                 ]),
             ]);
     }
@@ -49,14 +55,8 @@ class TagResource extends Resource
                 Tables\Columns\TextColumn::make('id')->sortable(),
                 Tables\Columns\TextColumn::make('name')->sortable()->searchable(),
                 Tables\Columns\TextColumn::make('slug'),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(),
+                Tables\Columns\TextColumn::make('created_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('updated_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //
@@ -70,7 +70,7 @@ class TagResource extends Resource
             ]);
     }
 
-    protected static function getNavigationBadge(): ?string
+    public static function getNavigationBadge(): ?string
     {
         return static::$model::count();
     }

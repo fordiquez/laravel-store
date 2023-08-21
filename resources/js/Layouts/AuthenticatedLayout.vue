@@ -11,7 +11,7 @@ import DropdownLink from '@/Components/DropdownLink.vue';
 import ResponsiveCategories from '@/Components/ResponsiveCategories.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import SecondaryButton from '@/Components/SecondaryButton.vue';
-import { useNotification } from '@kyvg/vue3-notification';
+import { notify } from '@kyvg/vue3-notification';
 
 defineProps({
     title: String,
@@ -22,7 +22,6 @@ const { user, categories, breadcrumbs, notification } = reactive(usePage().props
 const isDark = useDark();
 const toggleDark = useToggle(isDark);
 
-const { notify } = useNotification();
 const notificationsHistory = reactive([]);
 
 const showingNavigationDropdown = ref(false);

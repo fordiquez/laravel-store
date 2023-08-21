@@ -3,21 +3,23 @@
 namespace App\Filament\Resources\GoodResource\RelationManagers;
 
 use App\Filament\Forms\Components\Rating;
+use App\Filament\Tables\Components\RatingColumn;
 use Filament\Forms;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Resources\Table;
 use Filament\Tables;
+use Filament\Tables\Table;
+use Mohammadhprp\IPToCountryFlagColumn\Columns\IPToCountryFlagColumn;
 
 class ReviewsRelationManager extends RelationManager
 {
     protected static string $relationship = 'reviews';
 
-    public static function form(Form $form): Form
+    public function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\Card::make()->schema([
+                Forms\Components\Section::make()->schema([
                     Forms\Components\Select::make('user_id')
                         ->relationship('user', 'email')
                         ->required()
@@ -49,17 +51,15 @@ class ReviewsRelationManager extends RelationManager
     /**
      * @throws \Exception
      */
-    public static function table(Table $table): Table
+    public function table(Table $table): Table
     {
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('id')->sortable(),
                 Tables\Columns\TextColumn::make('user.email')->sortable()->searchable(),
                 Tables\Columns\IconColumn::make('is_buyer')->boolean()->toggleable(),
-                Tables\Columns\TextColumn::make('rating')
-                    ->sortable()
-                    ->formatStateUsing(fn (string $state) => self::ratingState($state)),
-                Tables\Columns\TextColumn::make('ip_address')->sortable()->searchable()->toggleable(),
+                RatingColumn::make('rating')->color('primary')->sortable(),
+                IPToCountryFlagColumn::make('ip_address')->flagPosition()->sortable()->toggleable(),
                 Tables\Columns\TextColumn::make('created_at')->dateTime()->sortable()->toggleable(),
                 Tables\Columns\TextColumn::make('updated_at')->dateTime()->sortable()->toggleable(),
             ])
@@ -88,17 +88,5 @@ class ReviewsRelationManager extends RelationManager
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
             ]);
-    }
-
-    public static function ratingState(int $state): string
-    {
-        return match ($state) {
-            1 => '★',
-            2 => '★★',
-            3 => '★★★',
-            4 => '★★★★',
-            5 => '★★★★★',
-            default => $state,
-        };
     }
 }

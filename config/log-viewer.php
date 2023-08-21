@@ -1,7 +1,5 @@
 <?php
 
-use Opcodes\LogViewer\Level;
-
 return [
 
     /*
@@ -52,14 +50,77 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Log Viewer route middleware.
+    | Log Viewer time zone.
     |--------------------------------------------------------------------------
-    | The middleware should enable session and cookies support in order for the Log Viewer to work.
-    | The 'web' middleware will be applied automatically if empty.
+    | The time zone in which to display the times in the UI. Default to
+    | the application's timezone defined in config/app.php.
     |
     */
 
-    'middleware' => ['web', 'auth'],
+    'timezone' => null,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Log Viewer route middleware.
+    |--------------------------------------------------------------------------
+    | Optional middleware to use when loading the initial Log Viewer page.
+    |
+    */
+
+    'middleware' => [
+        'web',
+        \Opcodes\LogViewer\Http\Middleware\AuthorizeLogViewer::class,
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Log Viewer API middleware.
+    |--------------------------------------------------------------------------
+    | Optional middleware to use on every API request. The same API is also
+    | used from within the Log Viewer user interface.
+    |
+    */
+
+    'api_middleware' => [
+        \Opcodes\LogViewer\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+        \Opcodes\LogViewer\Http\Middleware\AuthorizeLogViewer::class,
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Log Viewer Remote hosts.
+    |--------------------------------------------------------------------------
+    | Log Viewer supports viewing Laravel logs from remote hosts. They must
+    | be running Log Viewer as well. Below you can define the hosts you
+    | would like to show in this Log Viewer instance.
+    |
+    */
+
+    'hosts' => [
+        'local' => [
+            'name' => ucfirst(env('APP_ENV', 'local')),
+        ],
+
+        // 'staging' => [
+        //     'name' => 'Staging',
+        //     'host' => 'https://staging.example.com/log-viewer',
+        //     'auth' => [      // Example of HTTP Basic auth
+        //         'username' => 'username',
+        //         'password' => 'password',
+        //     ],
+        // ],
+        //
+        // 'production' => [
+        //     'name' => 'Production',
+        //     'host' => 'https://example.com/log-viewer',
+        //     'auth' => [      // Example of Bearer token auth
+        //         'token' => env('LOG_VIEWER_PRODUCTION_TOKEN'),
+        //     ],
+        //     'headers' => [
+        //         'X-Foo' => 'Bar',
+        //     ],
+        // ],
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -70,6 +131,21 @@ return [
 
     'include_files' => [
         '*.log',
+        '**/*.log',
+
+        // You can include paths to other log types as well, such as apache, nginx, and more.
+        '/var/log/httpd/*',
+        '/var/log/nginx/*',
+
+        // MacOS Apple Silicon logs
+        '/opt/homebrew/var/log/nginx/*',
+        '/opt/homebrew/var/log/httpd/*',
+        '/opt/homebrew/var/log/php-fpm.log',
+        '/opt/homebrew/var/log/postgres*log',
+        '/opt/homebrew/var/log/redis*log',
+        '/opt/homebrew/var/log/supervisor*log',
+
+        // '/absolute/paths/supported',
     ],
 
     /*
@@ -81,8 +157,20 @@ return [
     */
 
     'exclude_files' => [
-        //'my_secret.log'
+        // 'my_secret.log'
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Hide unknown files.
+    |--------------------------------------------------------------------------
+    | The include/exclude options above might catch files which are not
+    | logs supported by Log Viewer. In that case, you can hide them
+    | from the UI and API calls by setting this to true.
+    |
+    */
+
+    'hide_unknown_files' => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -98,46 +186,6 @@ return [
         '/vendor/laravel/framework/',
         '/vendor/barryvdh/laravel-debugbar/',
     ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Log matching patterns
-    |--------------------------------------------------------------------------
-    | Regexes for matching log files
-    |
-    */
-
-    'patterns' => [
-        'laravel' => [
-            'log_matching_regex' => '/^\[(\d{4}-\d{2}-\d{2}[T ]\d{2}:\d{2}:\d{2}\.?(\d{6}([\+-]\d\d:\d\d)?)?)\].*/',
-
-            /**
-             * This pattern, used for processing Laravel logs, returns these results:
-             * $matches[0] - the full log line being tested.
-             * $matches[1] - full timestamp between the square brackets (includes microseconds and timezone offset)
-             * $matches[2] - timestamp microseconds, if available
-             * $matches[3] - timestamp timezone offset, if available
-             * $matches[4] - contents between timestamp and the severity level
-             * $matches[5] - environment (local, production, etc)
-             * $matches[6] - log severity (info, debug, error, etc)
-             * $matches[7] - the log text, the rest of the text.
-             */
-            'log_parsing_regex' => '/^\[(\d{4}-\d{2}-\d{2}[T ]\d{2}:\d{2}:\d{2}\.?(\d{6}([\+-]\d\d:\d\d)?)?)\](.*?(\w+)\.|.*?)('
-                . implode('|', array_filter(Level::caseValues()))
-                . ')?: (.*?)( in [\/].*?:[0-9]+)?$/is',
-        ],
-    ],
-
-    /*
-    |--------------------------------------------------------------------------
-    | Log Viewer API middleware.
-    |--------------------------------------------------------------------------
-    | Optional middleware to use on every API request. The same API is also
-    | used from within the Log Viewer user interface.
-    |
-    */
-
-    'api_middleware' => [],
 
     /*
     |--------------------------------------------------------------------------
@@ -158,5 +206,7 @@ return [
     |
     */
 
-    'lazy_scan_chunk_size_in_mb' => 200,
+    'lazy_scan_chunk_size_in_mb' => 50,
+
+    'strip_extracted_context' => true,
 ];

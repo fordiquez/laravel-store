@@ -3,7 +3,7 @@
 namespace App\Filament\Resources\CountryResource\Pages;
 
 use App\Filament\Resources\CountryResource;
-use Filament\Pages\Actions;
+use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 
 class EditCountry extends EditRecord
@@ -22,6 +22,6 @@ class EditCountry extends EditRecord
 
     protected function getRedirectUrl(): string
     {
-        return $this->getResource()::getUrl('index');
+        return $this->previousUrl ?? $this->getResource()::getUrl('index');
     }
 }

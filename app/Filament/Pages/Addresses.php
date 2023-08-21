@@ -2,15 +2,18 @@
 
 namespace App\Filament\Pages;
 
-use App\Models\City;
 use App\Models\Country;
 use App\Models\State;
 use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
+use Filament\Forms\Get;
+use Filament\Forms\Set;
+use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Illuminate\Support\Arr;
 
@@ -33,14 +36,14 @@ class Addresses extends Page implements HasForms
         return static::getUrl();
     }
 
-    protected function getBreadcrumbs(): array
+    public function getBreadcrumbs(): array
     {
         return [
             url()->current() => 'Addresses',
         ];
     }
 
-    public function mount()
+    public function mount(): void
     {
         $this->form->fill([
             'addresses' => auth()->user()->addresses->toArray(),
@@ -75,44 +78,40 @@ class Addresses extends Page implements HasForms
             }
         }
 
-        $this->notify('success', 'Your addresses has been updated.');
+        Notification::make()->title('Your addresses has been updated.')->success()->send();
     }
 
     protected function getFormSchema(): array
     {
         return [
-            Repeater::make('addresses')
-                ->schema([
-                    TextInput::make('title')->required()->maxLength(255),
-                    Toggle::make('is_main')->inline()->default(false),
-                    Select::make('country_id')
-                        ->options(Country::all()->pluck('name', 'id')->toArray())
-                        ->required()
-                        ->reactive()
-                        ->afterStateUpdated(fn (callable $set) => $set('state_id', null)),
-                    Select::make('state_id')
-                        ->options(fn (callable $get) => $get('country_id') ? Country::find($get('country_id'))->states->pluck('name', 'id') : [])
-                        ->required()
-                        ->reactive()
-                        ->disabled(fn (callable $get) => !$get('country_id'))
-                        ->afterStateUpdated(fn (callable $set) => $set('city_id', null)),
-                    Select::make('city_id')
-                        ->options(fn (callable $get) => $get('state_id') ? State::find($get('state_id'))->cities->pluck('name', 'id') : [])
-                        ->required()
-                        ->reactive()
-                        ->disabled(fn (callable $get) => !$get('state_id'))
-                        ->afterStateUpdated(fn (callable $set) => $set('street_id', null)),
-                    Select::make('street_id')
-                        ->options(fn (callable $get) => $get('city_id') ? City::find($get('city_id'))->streets->pluck('name', 'id') : [])
-                        ->required()
-                        ->reactive()
-                        ->disabled(fn (callable $get) => !$get('city_id')),
-                    TextInput::make('house')->required(),
-                    TextInput::make('flat')->nullable(),
-                    TextInput::make('postal_code')->numeric()->nullable(),
-                ])->columns()
-                ->lazy()
-                ->itemLabel(fn (array $state): ?string => $state['title'] ?? null),
+            Section::make()->schema([
+                Repeater::make('addresses')
+                    ->schema([
+                        TextInput::make('title')->required()->maxLength(255),
+                        Toggle::make('is_main')->inline()->default(false),
+                        Select::make('country_id')
+                            ->options(Country::all()->pluck('name', 'id')->toArray())
+                            ->required()
+                            ->reactive()
+                            ->afterStateUpdated(fn (callable $set) => $set('state_id', null)),
+                        Select::make('state_id')
+                            ->options(fn (Get $get) => $get('country_id') ? Country::find($get('country_id'))->states->pluck('name', 'id') : [])
+                            ->required()
+                            ->reactive()
+                            ->disabled(fn (Get $get) => !$get('country_id'))
+                            ->afterStateUpdated(fn (Set $set) => $set('city_id', null)),
+                        Select::make('city_id')
+                            ->options(fn (Get $get) => $get('state_id') ? State::find($get('state_id'))->cities->pluck('name', 'id') : [])
+                            ->required()
+                            ->reactive()
+                            ->disabled(fn (Get $get) => !$get('state_id')),
+                        TextInput::make('house')->required(),
+                        TextInput::make('flat')->nullable(),
+                        TextInput::make('postal_code')->numeric()->nullable(),
+                    ])->columns()
+                    ->lazy()
+                    ->itemLabel(fn (array $state): ?string => $state['title'] ?? null),
+            ]),
         ];
     }
 }

@@ -14,8 +14,6 @@ use App\Models\Country;
 use App\Models\User;
 use BezhanSalleh\FilamentShield\FilamentShield;
 use BezhanSalleh\FilamentShield\Support\Utils;
-use Closure;
-use Filament\Forms\Components\Card;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\DatePicker;
@@ -28,13 +26,15 @@ use Filament\Forms\Components\Tabs;
 use Filament\Forms\Components\Tabs\Tab;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
+use Filament\Forms\Form;
+use Filament\Forms\Get;
+use Filament\Forms\Set;
 use Filament\Pages\Page;
-use Filament\Resources\Form;
 use Filament\Resources\Pages\CreateRecord;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
 use Filament\Tables;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
+use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -43,7 +43,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Phpsa\FilamentPasswordReveal\Password;
 use Spatie\Permission\Models\Permission;
-use Ysfkaya\FilamentPhoneInput\PhoneInput;
+use Ysfkaya\FilamentPhoneInput\Forms\PhoneInput;
 use Ysfkaya\FilamentPhoneInput\PhoneInputNumberType;
 
 class UserResource extends Resource
@@ -72,7 +72,7 @@ class UserResource extends Resource
                     ->preferredCountries([Country::DEFAULT_COUNTRY])
                     ->onlyCountries(Country::$validCountries)
                     ->formatOnDisplay(false),
-                DatePicker::make('birth_date')->maxDate(now()),
+                DatePicker::make('birth_date')->native(false)->maxDate(now()),
                 SpatieMediaLibraryFileUpload::make('avatar')->collection('avatars'),
                 Select::make('gender')->options(UserGender::asSelectArray()),
                 Select::make('status')->options(UserStatus::asSelectArray())->required(),
@@ -80,7 +80,7 @@ class UserResource extends Resource
                     ->password()
                     ->minLength(8)
                     ->revealable()
-                    ->copyable()
+                    ->copyable(!app()->isLocal())
                     ->generatable()
                     ->required(fn (Page $livewire) => $livewire instanceof CreateRecord)
                     ->same('passwordConfirmation')
@@ -89,7 +89,7 @@ class UserResource extends Resource
                 Password::make('passwordConfirmation')
                     ->password()
                     ->revealable()
-                    ->copyable()
+                    ->copyable(!app()->isLocal())
                     ->generatable()
                     ->label('Password Confirmation')
                     ->required(fn (Page $livewire): bool => $livewire instanceof CreateRecord)
@@ -148,17 +148,32 @@ class UserResource extends Resource
                 Tables\Columns\TextColumn::make('first_name')->sortable()->searchable(),
                 Tables\Columns\TextColumn::make('last_name')->sortable()->searchable(),
                 Tables\Columns\TextColumn::make('email')
-                    ->tooltip('Copy to clipboard')
-                    ->copyable()
+                    ->tooltip(!app()->isLocal() ? 'Copy to clipboard' : null)
+                    ->copyable(!app()->isLocal())
                     ->copyMessage('Email address copied')
                     ->copyMessageDuration(1500)
                     ->sortable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('email_verified_at')->dateTime()->sortable()->toggleable(),
-                Tables\Columns\TextColumn::make('roles.name')->formatStateUsing(fn ($state) => Str::of($state)->headline()),
+                Tables\Columns\TextColumn::make('email_verified_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('roles.name')->formatStateUsing(fn ($state) => Str::of($state)->headline())->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('birth_date')->date()->sortable()->toggleable(),
-                Tables\Columns\TextColumn::make('gender')->enum(UserGender::getValues())->sortable()->toggleable(),
-                Tables\Columns\TextColumn::make('status')->enum(UserStatus::getValues())->sortable(),
+                Tables\Columns\TextColumn::make('gender')
+                    ->badge()
+                    ->formatStateUsing(fn (string $state) => Str::of($state)->upper())
+                    ->color(fn (string $state): string => match ($state) {
+                        UserGender::MALE => 'info',
+                        UserGender::FEMALE => 'danger'
+                    })->sortable()->toggleable(),
+                Tables\Columns\TextColumn::make('status')
+                    ->badge()
+                    ->formatStateUsing(fn (string $state) => Str::of($state)->upper())
+                    ->color(fn (string $state): string => match ($state) {
+                        UserStatus::ACTIVE => 'success',
+                        UserStatus::INACTIVE => 'gray',
+                        UserStatus::BLOCKED => 'danger',
+                    })->sortable(),
+                Tables\Columns\TextColumn::make('created_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('updated_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
@@ -196,7 +211,7 @@ class UserResource extends Resource
         return [UsersOverview::class];
     }
 
-    protected static function getNavigationBadge(): ?string
+    public static function getNavigationBadge(): ?string
     {
         return static::$model::count();
     }
@@ -217,8 +232,8 @@ class UserResource extends Resource
 
     public static function getResourceEntitiesSchema(): ?array
     {
-        return collect(FilamentShield::getResources())->sortKeys()->reduce(function ($entities, $entity) {
-            $entities[] = Card::make()
+        return collect((new FilamentShield)->getResources())->sortKeys()->reduce(function ($entities, $entity) {
+            $entities[] = Section::make()
                 ->extraAttributes(['class' => 'border-0 shadow-lg dark:bg-gray-900'])
                 ->schema([
                     Toggle::make($entity['resource'])
@@ -226,7 +241,7 @@ class UserResource extends Resource
                         ->onIcon('heroicon-s-lock-open')
                         ->offIcon('heroicon-s-lock-closed')
                         ->reactive()
-                        ->afterStateUpdated(function (Closure $set, Closure $get, $state) use ($entity) {
+                        ->afterStateUpdated(function (Set $set, Get $get, $state) use ($entity) {
                             collect(Utils::getGeneralResourcePermissionPrefixes())->each(function ($permission) use ($set, $entity, $state) {
                                 $set($permission . '_' . $entity['resource'], $state);
                             });
@@ -263,7 +278,7 @@ class UserResource extends Resource
             $permissions[] = Checkbox::make($permission . '_' . $entity['resource'])
                 ->label(FilamentShield::getLocalizedResourcePermissionLabel($permission))
                 ->extraAttributes(['class' => 'text-primary-600'])
-                ->afterStateHydrated(function (Closure $set, Closure $get, $record) use ($entity, $permission) {
+                ->afterStateHydrated(function (Set $set, Get $get, $record) use ($entity, $permission) {
                     if (is_null($record)) {
                         return;
                     }
@@ -275,7 +290,7 @@ class UserResource extends Resource
                     static::refreshSelectAllStateViaEntities($set, $get);
                 })
                 ->reactive()
-                ->afterStateUpdated(function (Closure $set, Closure $get, $state) use ($entity) {
+                ->afterStateUpdated(function (Set $set, Get $get, $state) use ($entity) {
                     static::refreshResourceEntityStateAfterUpdate($set, $get, Str::of($entity['resource']));
 
                     if (!$state) {
@@ -292,9 +307,9 @@ class UserResource extends Resource
             ->toArray();
     }
 
-    protected static function refreshSelectAllStateViaEntities(Closure $set, Closure $get): void
+    protected static function refreshSelectAllStateViaEntities(Set $set, Get $get): void
     {
-        $entitiesStates = collect(FilamentShield::getResources())
+        $entityStates = collect((new FilamentShield)->getResources())
             ->when(Utils::isPageEntityEnabled(), fn ($entities) => $entities->merge(FilamentShield::getPages()))
             ->when(Utils::isWidgetEntityEnabled(), fn ($entities) => $entities->merge(FilamentShield::getWidgets()))
             ->when(Utils::isCustomPermissionEntityEnabled(), fn ($entities) => $entities->merge(static::getCustomEntities()))
@@ -306,18 +321,18 @@ class UserResource extends Resource
                 return (bool) $get($entity);
             });
 
-        if ($entitiesStates->containsStrict(false) === false) {
+        if ($entityStates->containsStrict(false) === false) {
             $set('select_all', true);
         }
 
-        if ($entitiesStates->containsStrict(false) === true) {
+        if ($entityStates->containsStrict(false) === true) {
             $set('select_all', false);
         }
     }
 
-    protected static function refreshEntitiesStatesViaSelectAll(Closure $set, $state): void
+    protected static function refreshEntitiesStatesViaSelectAll(Set $set, $state): void
     {
-        collect(FilamentShield::getResources())->each(function ($entity) use ($set, $state) {
+        collect((new FilamentShield)->getResources())->each(function ($entity) use ($set, $state) {
             $set($entity['resource'], $state);
             collect(Utils::getGeneralResourcePermissionPrefixes())->each(function ($permission) use ($entity, $set, $state) {
                 $set($permission . '_' . $entity['resource'], $state);
@@ -343,7 +358,7 @@ class UserResource extends Resource
         });
     }
 
-    protected static function refreshResourceEntityStateAfterUpdate(Closure $set, Closure $get, string $entity): void
+    protected static function refreshResourceEntityStateAfterUpdate(Set $set, Get $get, string $entity): void
     {
         $permissionStates = collect(Utils::getGeneralResourcePermissionPrefixes())
             ->map(function ($permission) use ($get, $entity) {
@@ -359,7 +374,7 @@ class UserResource extends Resource
         }
     }
 
-    protected static function refreshResourceEntityStateAfterHydrated(Model $record, Closure $set, string $entity): void
+    protected static function refreshResourceEntityStateAfterHydrated(Model $record, Set $set, string $entity): void
     {
         $permissions = $record->getPermissionsViaRoles() ?: $record->permissions;
 
@@ -400,7 +415,7 @@ class UserResource extends Resource
                     Checkbox::make($page)
                         ->label(FilamentShield::getLocalizedPageLabel($page))
                         ->inline()
-                        ->afterStateHydrated(function (Closure $set, Closure $get, $record) use ($page) {
+                        ->afterStateHydrated(function (Set $set, Get $get, $record) use ($page) {
                             if (is_null($record)) {
                                 return;
                             }
@@ -410,7 +425,7 @@ class UserResource extends Resource
                             static::refreshSelectAllStateViaEntities($set, $get);
                         })
                         ->reactive()
-                        ->afterStateUpdated(function (Closure $set, Closure $get, $state) {
+                        ->afterStateUpdated(function (Set $set, Get $get, $state) {
                             if (!$state) {
                                 $set('select_all', false);
                             }
@@ -434,7 +449,7 @@ class UserResource extends Resource
                     Checkbox::make($widget)
                         ->label(FilamentShield::getLocalizedWidgetLabel($widget))
                         ->inline()
-                        ->afterStateHydrated(function (Closure $set, Closure $get, $record) use ($widget) {
+                        ->afterStateHydrated(function (Set $set, Get $get, $record) use ($widget) {
                             if (is_null($record)) {
                                 return;
                             }
@@ -444,7 +459,7 @@ class UserResource extends Resource
                             static::refreshSelectAllStateViaEntities($set, $get);
                         })
                         ->reactive()
-                        ->afterStateUpdated(function (Closure $set, Closure $get, $state) {
+                        ->afterStateUpdated(function (Set $set, Get $get, $state) {
                             if (!$state) {
                                 $set('select_all', false);
                             }
@@ -463,18 +478,18 @@ class UserResource extends Resource
     protected static function getCustomEntities(): ?Collection
     {
         $resourcePermissions = collect();
-        collect(FilamentShield::getResources())->each(function ($entity) use ($resourcePermissions) {
+        collect((new FilamentShield)->getResources())->each(function ($entity) use ($resourcePermissions) {
             collect(Utils::getGeneralResourcePermissionPrefixes())->map(function ($permission) use ($resourcePermissions, $entity) {
                 $resourcePermissions->push((string) Str::of($permission . '_' . $entity['resource']));
             });
         });
 
-        $entitiesPermissions = $resourcePermissions
+        $entityPermissions = $resourcePermissions
             ->merge(FilamentShield::getPages())
             ->merge(FilamentShield::getWidgets())
             ->values();
 
-        return Permission::whereNotIn('name', $entitiesPermissions)->pluck('name');
+        return Permission::whereNotIn('name', $entityPermissions)->pluck('name');
     }
 
     protected static function getCustomEntitiesPermissionsSchema(): ?array
@@ -485,7 +500,7 @@ class UserResource extends Resource
                     Checkbox::make($customPermission)
                         ->label(Str::of($customPermission)->headline())
                         ->inline()
-                        ->afterStateHydrated(function (Closure $set, Closure $get, $record) use ($customPermission) {
+                        ->afterStateHydrated(function (Set $set, Get $get, $record) use ($customPermission) {
                             if (is_null($record)) {
                                 return;
                             }
@@ -495,7 +510,7 @@ class UserResource extends Resource
                             static::refreshSelectAllStateViaEntities($set, $get);
                         })
                         ->reactive()
-                        ->afterStateUpdated(function (Closure $set, Closure $get, $state) {
+                        ->afterStateUpdated(function (Set $set, Get $get, $state) {
                             if (!$state) {
                                 $set('select_all', false);
                             }

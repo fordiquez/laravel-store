@@ -4,18 +4,20 @@ namespace App\Filament\Resources;
 
 use App\Filament\Forms\Components\Rating;
 use App\Filament\Resources\ReviewResource\Pages;
+use App\Filament\Tables\Components\RatingColumn;
 use App\Models\Review;
 use Filament\Forms;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
 use Filament\Tables;
+use Filament\Tables\Table;
+use Mohammadhprp\IPToCountryFlagColumn\Columns\IPToCountryFlagColumn;
 
 class ReviewResource extends Resource
 {
     protected static ?string $model = Review::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-chat-alt';
+    protected static ?string $navigationIcon = 'heroicon-o-chat-bubble-oval-left-ellipsis';
 
     protected static ?string $navigationGroup = 'Goods Management';
 
@@ -25,7 +27,7 @@ class ReviewResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Card::make()->schema([
+                Forms\Components\Section::make()->schema([
                     Forms\Components\Select::make('user_id')
                         ->relationship('user', 'email')
                         ->required()
@@ -67,17 +69,15 @@ class ReviewResource extends Resource
                 Tables\Columns\TextColumn::make('user.email')->sortable()->searchable(),
                 Tables\Columns\TextColumn::make('good.title')->sortable()->searchable(),
                 Tables\Columns\IconColumn::make('is_buyer')->boolean()->toggleable(),
-                Tables\Columns\TextColumn::make('rating')
-                    ->sortable()
-                    ->formatStateUsing(fn (string $state) => self::ratingState($state)),
+                RatingColumn::make('rating')->color('primary')->sortable(),
                 Tables\Columns\TextColumn::make('video_src')
                     ->searchable()
                     ->toggleable()
-                    ->copyable()
-                    ->tooltip('Click to copy'),
-                Tables\Columns\TextColumn::make('ip_address')->sortable()->searchable()->toggleable(),
-                Tables\Columns\TextColumn::make('created_at')->dateTime()->sortable()->toggleable(),
-                Tables\Columns\TextColumn::make('updated_at')->dateTime()->sortable()->toggleable(),
+                    ->copyable(!app()->isLocal())
+                    ->tooltip(!app()->isLocal() ? 'Copy to clipboard' : null),
+                IPToCountryFlagColumn::make('ip_address')->flagPosition()->sortable()->toggleable(),
+                Tables\Columns\TextColumn::make('created_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('updated_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('user')
@@ -103,21 +103,9 @@ class ReviewResource extends Resource
             ]);
     }
 
-    protected static function getNavigationBadge(): ?string
+    public static function getNavigationBadge(): ?string
     {
         return static::$model::count();
-    }
-
-    public static function ratingState(int $state): string
-    {
-        return match ($state) {
-            1 => '★',
-            2 => '★★',
-            3 => '★★★',
-            4 => '★★★★',
-            5 => '★★★★★',
-            default => $state,
-        };
     }
 
     public static function getRelations(): array

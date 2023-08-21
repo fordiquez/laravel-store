@@ -4,12 +4,11 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\PromoCodeResource\Pages;
 use App\Models\PromoCode;
-use Closure;
 use Filament\Forms;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
 use Filament\Tables;
+use Filament\Tables\Table;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Str;
 
@@ -27,7 +26,7 @@ class PromoCodeResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Card::make()->schema([
+                Forms\Components\Section::make()->schema([
                     Forms\Components\TextInput::make('key')
                         ->required()
                         ->maxLength(50)
@@ -42,7 +41,7 @@ class PromoCodeResource extends Resource
                     Forms\Components\TextInput::make('greater_than'),
                     Forms\Components\DateTimePicker::make('starts_at')->default(now())->minDate(Date::today()),
                     Forms\Components\DateTimePicker::make('expires_at')
-                        ->minDate(fn (Closure $get) => $get('starts_at')),
+                        ->minDate(fn (Forms\Get $get) => $get('starts_at')),
                     Forms\Components\Toggle::make('is_active')->required()->default(true),
                     Forms\Components\Toggle::make('is_public')->required(),
                 ])->columns(),
@@ -58,14 +57,22 @@ class PromoCodeResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('id')->sortable(),
                 Tables\Columns\TextColumn::make('key')->sortable()->searchable()->limit(20),
-                Tables\Columns\TextColumn::make('type')->sortable(),
+                Tables\Columns\TextColumn::make('type')
+                    ->badge()
+                    ->formatStateUsing(fn (string $state) => Str::of($state)->upper())
+                    ->color(fn (string $state): string => match ($state) {
+                        \App\Enums\PromoCode::FIXED => 'gray',
+                        \App\Enums\PromoCode::PERCENTAGE => 'info',
+                    })->sortable(),
                 Tables\Columns\TextColumn::make('value')->sortable(),
                 Tables\Columns\TextColumn::make('used_times')->sortable(),
                 Tables\Columns\TextColumn::make('starts_at')->dateTime()->sortable(),
                 Tables\Columns\TextColumn::make('expires_at')->dateTime()->sortable(),
-                Tables\Columns\TextColumn::make('greater_than')->sortable()->toggleable(),
+                Tables\Columns\TextColumn::make('greater_than')->money()->sortable()->toggleable(),
                 Tables\Columns\IconColumn::make('is_active')->boolean()->sortable(),
                 Tables\Columns\IconColumn::make('is_public')->boolean()->sortable(),
+                Tables\Columns\TextColumn::make('created_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('updated_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('type')->options(\App\Enums\PromoCode::asSelectArray()),
@@ -81,7 +88,7 @@ class PromoCodeResource extends Resource
             ]);
     }
 
-    protected static function getNavigationBadge(): ?string
+    public static function getNavigationBadge(): ?string
     {
         return static::$model::count();
     }

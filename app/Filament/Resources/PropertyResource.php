@@ -4,18 +4,18 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\PropertyResource\Pages;
 use App\Models\Property;
-use Camya\Filament\Forms\Components\TitleWithSlugInput;
 use Filament\Forms;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Resources\Table;
 use Filament\Tables;
+use Filament\Tables\Table;
+use Illuminate\Support\Str;
 
 class PropertyResource extends Resource
 {
     protected static ?string $model = Property::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-clipboard-list';
+    protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-list';
 
     protected static ?string $navigationGroup = 'Goods Management';
 
@@ -25,19 +25,25 @@ class PropertyResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Card::make()->schema([
-                    TitleWithSlugInput::make(
-                        fieldTitle: 'name',
-                        fieldSlug: 'slug',
-                        urlVisitLinkVisible: false,
-                        titleLabel: 'Name',
-                        slugLabel: 'Slug',
-                        slugRuleUniqueParameters: [
-                            'table' => 'properties',
-                            'column' => 'slug',
-                            'ignoreRecord' => true,
-                        ]
-                    ),
+                Forms\Components\Section::make()->schema([
+                    Forms\Components\TextInput::make('name')
+                        ->required()
+                        ->maxLength(100)
+                        ->autofocus()
+                        ->live(debounce: 500)
+                        ->afterStateUpdated(function (Forms\Get $get, Forms\Set $set, ?string $state) {
+                            if (!$get('is_slug_changed_manually')) {
+                                $set('slug', Str::slug($state));
+                            }
+                        }),
+                    Forms\Components\TextInput::make('slug')
+                        ->rule('alpha_dash:ascii')
+                        ->unique('properties', 'slug', ignoreRecord: true)
+                        ->afterStateUpdated(function (Forms\Set $set) {
+                            $set('is_slug_changed_manually', true);
+                        })
+                        ->required()
+                        ->maxLength(100),
                     Forms\Components\Select::make('category_id')
                         ->required()
                         ->label('Category')
@@ -61,8 +67,8 @@ class PropertyResource extends Resource
                 Tables\Columns\TextColumn::make('slug')->limit(25)->sortable(),
                 Tables\Columns\TextColumn::make('category.title')->limit(25)->sortable()->toggleable(),
                 Tables\Columns\IconColumn::make('filterable')->boolean()->toggleable(),
-                Tables\Columns\TextColumn::make('created_at')->dateTime()->sortable()->toggleable()->toggledHiddenByDefault(),
-                Tables\Columns\TextColumn::make('updated_at')->dateTime()->sortable()->toggleable()->toggledHiddenByDefault(),
+                Tables\Columns\TextColumn::make('created_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('updated_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('category')
@@ -80,7 +86,7 @@ class PropertyResource extends Resource
             ]);
     }
 
-    protected static function getNavigationBadge(): ?string
+    public static function getNavigationBadge(): ?string
     {
         return static::$model::count();
     }

@@ -5,14 +5,14 @@ namespace App\Filament\Resources\CategoryResource\RelationManagers;
 use App\Enums\GoodStatus;
 use App\Models\Good;
 use App\Models\Setting;
-use Camya\Filament\Forms\Components\TitleWithSlugInput;
 use Filament\Forms;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Resources\Table;
 use Filament\Tables;
+use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Str;
 
 class GoodsRelationManager extends RelationManager
 {
@@ -20,11 +20,11 @@ class GoodsRelationManager extends RelationManager
 
     protected static ?string $recordTitleAttribute = 'title';
 
-    public static function form(Form $form): Form
+    public function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\Card::make()->schema([
+                Forms\Components\Section::make()->schema([
                     Forms\Components\Select::make('category_id')
                         ->relationship('category', 'title')
                         ->required()
@@ -39,20 +39,24 @@ class GoodsRelationManager extends RelationManager
                         ->numeric()
                         ->default(rand(1000000000, 2147483647))
                         ->unique(Good::class, 'vendor_code', ignoreRecord: true),
-                    TitleWithSlugInput::make(
-                        fieldTitle: 'title',
-                        fieldSlug: 'slug',
-                        urlVisitLinkVisible: false,
-                        titleLabel: 'Title',
-                        titleRules: ['required', 'max:100'],
-                        slugLabel: 'Slug',
-                        slugRules: ['required', 'max:100', 'alpha_dash'],
-                        slugRuleUniqueParameters: [
-                            'table' => 'goods',
-                            'column' => 'slug',
-                            'ignoreRecord' => true,
-                        ]
-                    ),
+                    Forms\Components\TextInput::make('title')
+                        ->required()
+                        ->maxLength(100)
+                        ->autofocus()
+                        ->live(debounce: 500)
+                        ->afterStateUpdated(function (Forms\Get $get, Forms\Set $set, ?string $state) {
+                            if (!$get('is_slug_changed_manually')) {
+                                $set('slug', Str::slug($state));
+                            }
+                        }),
+                    Forms\Components\TextInput::make('slug')
+                        ->rule('alpha_dash:ascii')
+                        ->unique('goods', 'slug', ignoreRecord: true)
+                        ->afterStateUpdated(function (Forms\Set $set) {
+                            $set('is_slug_changed_manually', true);
+                        })
+                        ->required()
+                        ->maxLength(100),
                     Forms\Components\SpatieMediaLibraryFileUpload::make('thumbnails')
                         ->collection('goods')
                         ->multiple()
@@ -91,7 +95,7 @@ class GoodsRelationManager extends RelationManager
     /**
      * @throws \Exception
      */
-    public static function table(Table $table): Table
+    public function table(Table $table): Table
     {
         return $table
             ->columns([
@@ -99,18 +103,29 @@ class GoodsRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('vendor_code')
                     ->sortable()
                     ->searchable()
-                    ->copyable()
-                    ->tooltip('Click to copy')
+                    ->copyable(!app()->isLocal())
+                    ->tooltip(!app()->isLocal() ? 'Copy to clipboard' : null)
                     ->toggleable(),
                 Tables\Columns\SpatieMediaLibraryImageColumn::make('preview')
                     ->collection('goods')
                     ->toggleable(),
                 Tables\Columns\TextColumn::make('category.title')->limit(25)->sortable()->toggleable(),
-                Tables\Columns\TextColumn::make('title')->limit(25)->sortable()->searchable(),
-                Tables\Columns\TextColumn::make('old_price')->sortable()->toggleable(),
-                Tables\Columns\TextColumn::make('price')->sortable()->toggleable(),
+                Tables\Columns\TextColumn::make('title')->limit(25)->sortable()->searchable()->toggleable(),
+                Tables\Columns\TextColumn::make('old_price')->money()->sortable()->toggleable(),
+                Tables\Columns\TextColumn::make('price')->money()->sortable()->toggleable(),
                 Tables\Columns\TextColumn::make('quantity')->sortable()->toggleable(),
-                Tables\Columns\TextColumn::make('status')->sortable()->toggleable(),
+                Tables\Columns\TextColumn::make('status')
+                    ->badge()
+                    ->formatStateUsing(fn (string $state) => Str::of($state)->upper())
+                    ->color(fn (string $state): string => match ($state) {
+                        GoodStatus::READY_FOR_DISPATCH => 'info',
+                        GoodStatus::IN_STOCK => 'success',
+                        GoodStatus::ENDS, GoodStatus::IS_OVER => 'danger',
+                        GoodStatus::OUT_OF_STOCK => 'gray',
+                        GoodStatus::DISCONTINUED => 'warning',
+                    })->sortable(),
+                Tables\Columns\TextColumn::make('created_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('updated_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
@@ -143,7 +158,7 @@ class GoodsRelationManager extends RelationManager
 
     protected function getTableQuery(): Builder
     {
-        return parent::getTableQuery()
+        return parent::getEloquentQuery()
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);

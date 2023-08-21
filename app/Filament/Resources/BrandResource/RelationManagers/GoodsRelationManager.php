@@ -5,14 +5,14 @@ namespace App\Filament\Resources\BrandResource\RelationManagers;
 use App\Enums\GoodStatus;
 use App\Models\Good;
 use App\Models\Setting;
-use Camya\Filament\Forms\Components\TitleWithSlugInput;
 use Filament\Forms;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Resources\Table;
 use Filament\Tables;
+use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Str;
 
 class GoodsRelationManager extends RelationManager
 {
@@ -20,11 +20,11 @@ class GoodsRelationManager extends RelationManager
 
     protected static ?string $recordTitleAttribute = 'title';
 
-    public static function form(Form $form): Form
+    public function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\Card::make()->schema([
+                Forms\Components\Section::make()->schema([
                     Forms\Components\Select::make('category_id')
                         ->relationship('category', 'title')
                         ->required()
@@ -92,7 +92,7 @@ class GoodsRelationManager extends RelationManager
     /**
      * @throws \Exception
      */
-    public static function table(Table $table): Table
+    public function table(Table $table): Table
     {
         return $table
             ->columns([
@@ -100,18 +100,29 @@ class GoodsRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('vendor_code')
                     ->sortable()
                     ->searchable()
-                    ->copyable()
-                    ->tooltip('Click to copy')
+                    ->copyable(!app()->isLocal())
+                    ->tooltip(!app()->isLocal() ? 'Copy to clipboard' : null)
                     ->toggleable(),
                 Tables\Columns\SpatieMediaLibraryImageColumn::make('preview')
                     ->collection('goods')
                     ->toggleable(),
                 Tables\Columns\TextColumn::make('category.title')->limit(25)->sortable()->toggleable(),
-                Tables\Columns\TextColumn::make('title')->limit(25)->sortable()->searchable(),
-                Tables\Columns\TextColumn::make('old_price')->sortable()->toggleable(),
-                Tables\Columns\TextColumn::make('price')->sortable()->toggleable(),
+                Tables\Columns\TextColumn::make('title')->limit(25)->sortable()->searchable()->toggleable(),
+                Tables\Columns\TextColumn::make('old_price')->money()->sortable()->toggleable(),
+                Tables\Columns\TextColumn::make('price')->money()->sortable()->toggleable(),
                 Tables\Columns\TextColumn::make('quantity')->sortable()->toggleable(),
-                Tables\Columns\TextColumn::make('status')->sortable()->toggleable(),
+                Tables\Columns\TextColumn::make('status')
+                    ->badge()
+                    ->formatStateUsing(fn (string $state) => Str::of($state)->upper())
+                    ->color(fn (string $state): string => match ($state) {
+                        GoodStatus::READY_FOR_DISPATCH => 'info',
+                        GoodStatus::IN_STOCK => 'success',
+                        GoodStatus::ENDS, GoodStatus::IS_OVER => 'danger',
+                        GoodStatus::OUT_OF_STOCK => 'gray',
+                        GoodStatus::DISCONTINUED => 'warning',
+                    })->sortable(),
+                Tables\Columns\TextColumn::make('created_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('updated_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
@@ -142,9 +153,9 @@ class GoodsRelationManager extends RelationManager
             ]);
     }
 
-    protected function getTableQuery(): Builder
+    public static function getEloquentQuery(): Builder
     {
-        return parent::getTableQuery()
+        return parent::getEloquentQuery()
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);

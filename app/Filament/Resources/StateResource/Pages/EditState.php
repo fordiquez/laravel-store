@@ -3,7 +3,7 @@
 namespace App\Filament\Resources\StateResource\Pages;
 
 use App\Filament\Resources\StateResource;
-use Filament\Pages\Actions;
+use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 
 class EditState extends EditRecord
@@ -20,6 +20,6 @@ class EditState extends EditRecord
 
     protected function getRedirectUrl(): string
     {
-        return $this->getResource()::getUrl('index');
+        return $this->previousUrl ?? $this->getResource()::getUrl('index');
     }
 }

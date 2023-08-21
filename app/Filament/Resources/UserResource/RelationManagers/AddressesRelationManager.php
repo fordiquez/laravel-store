@@ -5,15 +5,14 @@ namespace App\Filament\Resources\UserResource\RelationManagers;
 use App\Models\Country;
 use App\Models\State;
 use App\Models\UserAddress;
-use Filament\Forms\Components\Card;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
-use Filament\Resources\Form;
+use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Resources\Table;
 use Filament\Tables;
-use Filament\Tables\Contracts\HasRelationshipTable;
+use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 
 class AddressesRelationManager extends RelationManager
@@ -22,11 +21,11 @@ class AddressesRelationManager extends RelationManager
 
     protected static ?string $recordTitleAttribute = 'title';
 
-    public static function form(Form $form): Form
+    public function form(Form $form): Form
     {
         return $form
             ->schema([
-                Card::make()->schema([
+                Section::make()->schema([
                     Toggle::make('is_main')->inline()->default(false),
                     Select::make('country_id')
                         ->options(Country::all()->pluck('name', 'id')->toArray())
@@ -56,7 +55,7 @@ class AddressesRelationManager extends RelationManager
     /**
      * @throws \Exception
      */
-    public static function table(Table $table): Table
+    public function table(Table $table): Table
     {
         return $table
             ->columns([
@@ -81,7 +80,7 @@ class AddressesRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make()->using(function (HasRelationshipTable $livewire, array $data): Model {
+                Tables\Actions\CreateAction::make()->using(function (RelationManager $livewire, array $data): Model {
                     UserAddress::whereUserId($livewire->ownerRecord->id)->whereIsMain(true)->update([
                         'is_main' => false,
                     ]);

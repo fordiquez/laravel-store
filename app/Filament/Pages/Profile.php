@@ -13,10 +13,11 @@ use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
+use Filament\Notifications\Notification;
 use Filament\Pages\Page;
 use Illuminate\Support\Facades\Hash;
 use Phpsa\FilamentPasswordReveal\Password;
-use Ysfkaya\FilamentPhoneInput\PhoneInput;
+use Ysfkaya\FilamentPhoneInput\Forms\PhoneInput;
 use Ysfkaya\FilamentPhoneInput\PhoneInputNumberType;
 
 class Profile extends Page implements HasForms
@@ -51,7 +52,7 @@ class Profile extends Page implements HasForms
 
     public ?string $new_password_confirmation = null;
 
-    public function mount()
+    public function mount(): void
     {
         $this->form->fill([
             'first_name' => auth()->user()->first_name,
@@ -64,7 +65,7 @@ class Profile extends Page implements HasForms
         ]);
     }
 
-    public function submit()
+    public function submit(): void
     {
         $this->form->getState();
 
@@ -94,10 +95,13 @@ class Profile extends Page implements HasForms
         }
 
         $this->reset(['current_password', 'new_password', 'new_password_confirmation']);
-        $this->notify('success', 'Your profile has been updated.');
+        Notification::make()
+            ->title('Your profile has been updated.')
+            ->success()
+            ->send();
     }
 
-    protected function updateSessionPassword(User $user)
+    protected function updateSessionPassword(User $user): void
     {
         request()->session()->put([
             'password_hash_' . auth()->getDefaultDriver() => $user->getAuthPassword(),
@@ -109,7 +113,7 @@ class Profile extends Page implements HasForms
         return static::getUrl();
     }
 
-    protected function getBreadcrumbs(): array
+    public function getBreadcrumbs(): array
     {
         return [
             url()->current() => 'Profile',
@@ -134,7 +138,7 @@ class Profile extends Page implements HasForms
                 ]),
             Section::make('Details')->columns()
                 ->schema([
-                    DatePicker::make('birth_date')->maxDate(now()),
+                    DatePicker::make('birth_date')->native(false)->maxDate(now()),
                     Select::make('gender')->options(UserGender::asSelectArray()),
                     SpatieMediaLibraryFileUpload::make('avatar')->collection('avatars')->columnSpanFull(),
                 ]),
@@ -147,14 +151,14 @@ class Profile extends Page implements HasForms
                         ->autocomplete('off')
                         ->columnSpan(1)
                         ->revealable()
-                        ->copyable(),
+                        ->copyable(!app()->isLocal()),
                     Grid::make()->schema([
                         Password::make('new_password')
                             ->password()
                             ->rule('confirmed')
                             ->autocomplete('new-password')
                             ->revealable()
-                            ->copyable()
+                            ->copyable(!app()->isLocal())
                             ->generatable(),
                         Password::make('new_password_confirmation')
                             ->password()
@@ -163,7 +167,7 @@ class Profile extends Page implements HasForms
                             ->currentPassword()
                             ->autocomplete('new-password')
                             ->revealable()
-                            ->copyable()
+                            ->copyable(!app()->isLocal())
                             ->generatable(),
                     ]),
                 ]),
