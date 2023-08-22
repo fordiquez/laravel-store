@@ -154,7 +154,7 @@ const goodsSort = (key) => {
                             <button
                                 v-if="filters.brands.length || filters.properties.length"
                                 @click="clearFilters"
-                                class="mx-1 rounded-full bg-purple-700 px-2 text-center text-sm font-medium text-white focus:outline-none focus:ring-4 focus:ring-purple-300 hover:bg-purple-800 dark:bg-purple-600 dark:focus:ring-purple-900 dark:hover:bg-purple-700"
+                                class="mx-1 rounded-full bg-purple-700 px-2 text-center text-sm font-medium text-white hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900"
                             >
                                 <span>Clear</span>
                             </button>
@@ -190,7 +190,7 @@ const goodsSort = (key) => {
                         <button
                             id="dropdownNavbarButton"
                             data-dropdown-toggle="dropdownNavbar"
-                            class="flex w-full items-center justify-between py-2 pl-3 pr-4 font-medium text-gray-700 hover:bg-gray-50 dark:text-gray-400 dark:focus:text-white dark:hover:bg-gray-700 dark:hover:text-white md:w-auto md:p-0 md:hover:bg-transparent md:hover:text-blue-700 md:dark:hover:bg-transparent"
+                            class="flex w-full items-center justify-between py-2 pl-3 pr-4 font-medium text-gray-700 hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white dark:focus:text-white md:w-auto md:p-0 md:hover:bg-transparent md:hover:text-blue-700 md:dark:hover:bg-transparent"
                         >
                             Sort
                             <font-awesome-icon :icon="['fas', 'chevron-down']" class="ml-2" />

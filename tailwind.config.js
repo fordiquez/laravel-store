@@ -1,10 +1,10 @@
 import defaultTheme from 'tailwindcss/defaultTheme';
 import forms from '@tailwindcss/forms';
 import typography from '@tailwindcss/typography';
-import colors from 'tailwindcss/colors'
-import aspectRatio from '@tailwindcss/aspect-ratio'
-import tailwindScrollbar from 'tailwind-scrollbar'
-import flowbitePlugin from 'flowbite/plugin'
+import colors from 'tailwindcss/colors';
+import aspectRatio from '@tailwindcss/aspect-ratio';
+import tailwindScrollbar from 'tailwind-scrollbar';
+import flowbitePlugin from 'flowbite/plugin';
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -88,11 +88,5 @@ export default {
         },
     },
 
-    plugins: [
-        forms,
-        typography,
-        aspectRatio,
-        flowbitePlugin,
-        tailwindScrollbar,
-    ],
+    plugins: [forms, typography, aspectRatio, flowbitePlugin, tailwindScrollbar],
 };

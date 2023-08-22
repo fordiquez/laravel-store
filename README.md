@@ -152,6 +152,7 @@ php artisan inertia:start-ssr
 ```
 
 ### 8. Run stripe webhook
+
 ```
 stripe login
 ```
@@ -167,11 +168,13 @@ stripe trigger payment_intent.succeeded
 ### 9. Edit hosts file (Windows 10)
 
 **Add your application domain**
+
 ```
 C:\Windows\System32\drivers\etc
 ```
 
 **Add the next line:**
+
 ```
 127.0.0.1 brandford.local.io
 ```

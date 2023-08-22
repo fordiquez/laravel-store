@@ -26,7 +26,7 @@ const sliderFormat = (value) => `${Math.round(value)} $`;
                     :value="brand.id"
                     :checked="filters.brands?.includes(brand.id)"
                     @change="$emit('brandFilter', brand.id)"
-                    class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-purple-600 focus:ring-2 focus:ring-purple-500 group-hover:cursor-pointer dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-purple-600"
+                    class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-purple-600 group-hover:cursor-pointer focus:ring-2 focus:ring-purple-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-purple-600"
                 />
                 <label
                     :for="`filters-brands-${brand.id}`"
@@ -94,7 +94,7 @@ const sliderFormat = (value) => `${Math.round(value)} $`;
                         :value="value"
                         :checked="filters.properties?.includes(value)"
                         @change="$emit('propertyFilter', value)"
-                        class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-purple-600 focus:ring-2 focus:ring-purple-500 group-hover:cursor-pointer dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-purple-600"
+                        class="h-4 w-4 rounded border-gray-300 bg-gray-100 text-purple-600 group-hover:cursor-pointer focus:ring-2 focus:ring-purple-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-purple-600"
                     />
                     <label
                         :for="`filters-${property.slug}-${value}`"

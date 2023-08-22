@@ -95,7 +95,7 @@ const searchGoods = () => form.get(route('goods.search'));
                                 :class="[
                                     showingResponsiveCategories
                                         ? 'border-indigo-400 text-gray-900 focus:border-indigo-700 dark:border-indigo-600 dark:text-gray-100'
-                                        : 'border-transparent text-gray-500 focus:border-gray-300 focus:text-gray-700 hover:border-gray-300 hover:text-gray-700 dark:text-gray-400 dark:focus:border-gray-700 dark:focus:text-gray-300 dark:hover:border-gray-700 dark:hover:text-gray-300',
+                                        : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 focus:border-gray-300 focus:text-gray-700 dark:text-gray-400 dark:hover:border-gray-700 dark:hover:text-gray-300 dark:focus:border-gray-700 dark:focus:text-gray-300',
                                     'relative inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium leading-5 transition duration-150 ease-in-out focus:outline-none lg:hidden',
                                 ]"
                             >
@@ -137,7 +137,7 @@ const searchGoods = () => form.get(route('goods.search'));
                         </div>
                         <button
                             id="theme-toggle"
-                            class="rounded-lg p-2.5 text-sm text-gray-500 focus:outline-none focus:ring-4 focus:ring-gray-200 hover:bg-gray-100 dark:text-gray-400 dark:focus:ring-gray-700 dark:hover:bg-gray-700"
+                            class="rounded-lg p-2.5 text-sm text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-700"
                             data-tooltip-target="theme-toggle"
                             type="button"
                             @click="toggleDark()"
@@ -162,7 +162,7 @@ const searchGoods = () => form.get(route('goods.search'));
                         <button
                             type="button"
                             @click="cartModal = true"
-                            class="relative mx-2 rounded-lg p-2.5 text-sm text-gray-500 focus:outline-none focus:ring-4 focus:ring-gray-200 hover:bg-gray-100 dark:text-gray-400 dark:focus:ring-gray-700 dark:hover:bg-gray-700"
+                            class="relative mx-2 rounded-lg p-2.5 text-sm text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-700"
                         >
                             <font-awesome-icon :icon="['fas', 'cart-shopping']" size="lg" />
                             <span
@@ -209,7 +209,7 @@ const searchGoods = () => form.get(route('goods.search'));
                             </Link>
                             <Link
                                 :href="route('login')"
-                                class="rounded-lg bg-gradient-to-br from-purple-600 to-blue-500 px-3 py-2.5 text-center text-sm font-semibold uppercase tracking-wider text-white focus:outline-none focus:ring-4 focus:ring-blue-300 hover:bg-gradient-to-bl dark:focus:ring-blue-800"
+                                class="rounded-lg bg-gradient-to-br from-purple-600 to-blue-500 px-3 py-2.5 text-center text-sm font-semibold uppercase tracking-wider text-white hover:bg-gradient-to-bl focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800"
                             >
                                 Log In
                             </Link>
@@ -220,7 +220,7 @@ const searchGoods = () => form.get(route('goods.search'));
                     <div class="-mr-2 flex items-center sm:hidden">
                         <button
                             @click="showingNavigationDropdown = !showingNavigationDropdown"
-                            class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 transition duration-150 ease-in-out focus:bg-gray-100 focus:text-gray-500 focus:outline-none hover:bg-gray-100 hover:text-gray-500 dark:text-gray-500 dark:focus:bg-gray-900 dark:focus:text-gray-400 dark:hover:bg-gray-900 dark:hover:text-gray-400"
+                            class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 transition duration-150 ease-in-out hover:bg-gray-100 hover:text-gray-500 focus:bg-gray-100 focus:text-gray-500 focus:outline-none dark:text-gray-500 dark:hover:bg-gray-900 dark:hover:text-gray-400 dark:focus:bg-gray-900 dark:focus:text-gray-400"
                         >
                             <font-awesome-icon
                                 :icon="['fa-solid', showingNavigationDropdown ? 'fa-xmark' : 'fa-bars']"
@@ -242,7 +242,7 @@ const searchGoods = () => form.get(route('goods.search'));
                         :class="[
                             showingResponsiveCategories
                                 ? 'border-indigo-400 bg-indigo-50 text-indigo-700 dark:border-indigo-600 dark:bg-indigo-900 dark:text-indigo-300'
-                                : 'border-transparent text-gray-600 focus:border-gray-300 focus:bg-gray-50 focus:text-gray-800 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800 dark:text-gray-400 dark:focus:border-gray-600 dark:focus:bg-gray-700 dark:focus:text-gray-200 dark:hover:border-gray-600 dark:hover:bg-gray-700 dark:hover:text-gray-200',
+                                : 'border-transparent text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800 focus:border-gray-300 focus:bg-gray-50 focus:text-gray-800 dark:text-gray-400 dark:hover:border-gray-600 dark:hover:bg-gray-700 dark:hover:text-gray-200 dark:focus:border-gray-600 dark:focus:bg-gray-700 dark:focus:text-gray-200',
                             'block w-full border-l-4 py-2 pl-3 pr-4 text-left text-base font-medium transition duration-150 ease-in-out focus:outline-none',
                         ]"
                     >
