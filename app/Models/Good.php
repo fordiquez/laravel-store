@@ -17,7 +17,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 
 class Good extends Model implements HasMedia
 {
-    use HasFactory, SoftDeletes, InteractsWithMedia;
+    use HasFactory, InteractsWithMedia, SoftDeletes;
 
     protected $fillable = [
         'vendor_code',

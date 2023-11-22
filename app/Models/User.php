@@ -22,9 +22,9 @@ use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
 use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable implements MustVerifyEmail, FilamentUser, HasName, HasMedia
+class User extends Authenticatable implements FilamentUser, HasMedia, HasName, MustVerifyEmail
 {
-    use HasApiTokens, HasFactory, Notifiable, SoftDeletes, InteractsWithMedia, HasRoles, Billable;
+    use Billable, HasApiTokens, HasFactory, HasRoles, InteractsWithMedia, Notifiable, SoftDeletes;
 
     /**
      * The attributes that are mass assignable.

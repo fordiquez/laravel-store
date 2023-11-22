@@ -26,7 +26,7 @@ class UserAddressFactory extends Factory
             'street' => fake()->streetName,
             'house' => fake()->buildingNumber,
             'flat' => fake()->boolean ?: fake()->numberBetween(0, 100),
-            'postal_code' => fake()->postcode,
+            'postal_code' => intval(fake()->postcode),
         ];
     }
 }

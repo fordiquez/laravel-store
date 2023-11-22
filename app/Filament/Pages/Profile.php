@@ -5,17 +5,23 @@ namespace App\Filament\Pages;
 use App\Enums\UserGender;
 use App\Models\Country;
 use App\Models\User;
+use Filament\Actions\Action;
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
+use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
+use Filament\Support\Exceptions\Halt;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Phpsa\FilamentPasswordReveal\Password;
 use Ysfkaya\FilamentPhoneInput\Forms\PhoneInput;
 use Ysfkaya\FilamentPhoneInput\PhoneInputNumberType;
@@ -32,25 +38,7 @@ class Profile extends Page implements HasForms
 
     protected static string $view = 'filament.pages.profile';
 
-    public string $first_name;
-
-    public string $last_name;
-
-    public string $email;
-
-    public string $phone;
-
-    public ?string $birth_date = null;
-
-    public ?string $gender = null;
-
-    public array|string|null $avatar = null;
-
-    public ?string $current_password = null;
-
-    public ?string $new_password = null;
-
-    public ?string $new_password_confirmation = null;
+    public ?array $data = [];
 
     public function mount(): void
     {
@@ -61,44 +49,49 @@ class Profile extends Page implements HasForms
             'phone' => auth()->user()->phone,
             'birth_date' => auth()->user()->birth_date,
             'gender' => auth()->user()->gender,
-            'avatar' => auth()->user()->getFirstMediaUrl('avatars'),
+            'avatar' => auth()->user()->getFirstMedia('avatars')?->getPathRelativeToRoot(),
         ]);
     }
 
-    public function submit(): void
+    public function save(): void
     {
-        $this->form->getState();
+        try {
+            $state = $this->form->getState();
 
-        $state = array_filter([
-            'first_name' => $this->first_name,
-            'last_name' => $this->last_name,
-            'email' => $this->email,
-            'phone' => $this->phone,
-            'birth_date' => $this->birth_date,
-            'gender' => $this->gender,
-            'password' => $this->new_password ? Hash::make($this->new_password) : null,
-        ]);
+            if ($state['new_password']) {
+                $state['password'] = Hash::make($state['new_password']);
+            }
 
-        $user = auth()->user();
+            $user = auth()->user();
 
-        if (count($this->avatar)) {
-            $user->clearMediaCollection('avatars')
-                ->addMedia($this->avatar[array_key_first($this->avatar)])
-                ->sanitizingFileName(fn ($fileName) => strtolower(str_replace(['#', '/', '\\', ' '], '-', $fileName)))
-                ->toMediaCollection('avatars', 'public');
+            if ($state['avatar'] instanceof TemporaryUploadedFile) {
+                $user->clearMediaCollection('avatars')
+                    ->addMedia($state['avatar'])
+                    ->sanitizingFileName(fn ($fileName) => strtolower(str_replace(['#', '/', '\\', ' '], '-', $fileName)))
+                    ->toMediaCollection('avatars', 'public');
+            }
+
+            if (!$state['avatar']) {
+                $user->clearMediaCollection('avatars');
+            }
+
+            $user->update(Arr::except($state, 'avatar'));
+
+            if ($state['new_password']) {
+                $this->updateSessionPassword($user);
+            }
+
+            $this->reset(['data.current_password', 'data.new_password', 'data.new_password_confirmation']);
+
+            Notification::make()->title('Your profile has been updated.')->success()->send();
+
+        } catch (Halt $exception) {
+            Log::error($exception->getMessage(), $exception->getTrace());
+
+            Notification::make()->title($exception->getMessage())->danger()->send();
+
+            return;
         }
-
-        $user->update($state);
-
-        if ($this->new_password) {
-            $this->updateSessionPassword($user);
-        }
-
-        $this->reset(['current_password', 'new_password', 'new_password_confirmation']);
-        Notification::make()
-            ->title('Your profile has been updated.')
-            ->success()
-            ->send();
     }
 
     protected function updateSessionPassword(User $user): void
@@ -120,9 +113,18 @@ class Profile extends Page implements HasForms
         ];
     }
 
-    protected function getFormSchema(): array
+    protected function getFormActions(): array
     {
         return [
+            Action::make('save')
+                ->label(__('filament-panels::resources/pages/edit-record.form.actions.save.label'))
+                ->submit('save'),
+        ];
+    }
+
+    public function form(Form $form): Form
+    {
+        return $form->schema([
             Section::make('General')->columns()
                 ->schema([
                     TextInput::make('first_name')->required()->maxLength(50),
@@ -140,13 +142,28 @@ class Profile extends Page implements HasForms
                 ->schema([
                     DatePicker::make('birth_date')->native(false)->maxDate(now()),
                     Select::make('gender')->options(UserGender::asSelectArray()),
-                    SpatieMediaLibraryFileUpload::make('avatar')->collection('avatars')->columnSpanFull(),
+                    FileUpload::make('avatar')
+                        ->visibility(config('filesystems.disks.public.visibility'))
+                        ->disk(config('filament.default_filesystem_disk'))
+                        ->storeFiles(false)
+                        ->maxSize(10240)
+                        ->openable()
+                        ->previewable()
+                        ->downloadable()
+                        ->image()
+                        ->imageEditor()
+                        ->imageEditorAspectRatios([
+                            null,
+                            '16:9',
+                            '4:3',
+                            '1:1',
+                        ])->columnSpanFull(),
                 ]),
             Section::make('Update Password')->columns()
                 ->schema([
                     Password::make('current_password')
                         ->password()
-                        ->rule('required_with:new_password')
+                        ->requiredWith('new_password')
                         ->currentPassword()
                         ->autocomplete('off')
                         ->columnSpan(1)
@@ -155,7 +172,9 @@ class Profile extends Page implements HasForms
                     Grid::make()->schema([
                         Password::make('new_password')
                             ->password()
-                            ->rule('confirmed')
+                            ->confirmed()
+                            ->minLength(6)
+                            ->maxLength(25)
                             ->autocomplete('new-password')
                             ->revealable()
                             ->copyable(!app()->isLocal())
@@ -163,14 +182,12 @@ class Profile extends Page implements HasForms
                         Password::make('new_password_confirmation')
                             ->password()
                             ->label('Confirm Password')
-                            ->rule('required_with:new_password')
-                            ->currentPassword()
+                            ->requiredWith('new_password')
                             ->autocomplete('new-password')
                             ->revealable()
-                            ->copyable(!app()->isLocal())
-                            ->generatable(),
+                            ->copyable(!app()->isLocal()),
                     ]),
                 ]),
-        ];
+        ])->statePath('data');
     }
 }

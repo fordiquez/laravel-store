@@ -101,67 +101,71 @@ STRIPE_WEBHOOK_SECRET=
 
 ### 4. Install all composer & npm dependencies
 
-```
+```bash
 composer install
 ```
 
-```
+```bash
 npm install
 ```
 
 ### 5. Docker settings
 
-```
+```bash
 docker-compose up --build -d
 ```
 
-```
+```bash
 docker exec -it brandford_app /bin/bash
 ```
 
 ### 6. Run artisan commands
 
-```
+```bash
 php artisan key:generate
 ```
 
-```
+```bash
 php artisan storage:link
 ```
 
-```
+```bash
 php artisan migrate:fresh --seed
 ```
 
-```
+```bash
 php artisan shield:install --fresh
 ```
 
-```
+```bash
 php artisan optimize:clear
 ```
 
 ### 7. Run application server & SSR rendering
 
-```
+```bash
 npm run dev
 ```
 
-```
+```bash
 php artisan inertia:start-ssr
+```
+
+```bash
+php artisan serve --host=brandford.local.io
 ```
 
 ### 8. Run stripe webhook
 
-```
+```bash
 stripe login
 ```
 
-```
+```bash
 stripe listen --forward-to brandford.local.io/stripe/webhook
 ```
 
-```
+```bash
 stripe trigger payment_intent.succeeded
 ```
 

@@ -10,7 +10,8 @@ use Illuminate\Http\Request;
 
 class CartController extends Controller
 {
-    public function store(Request $request, Good $good) {
+    public function store(Request $request, Good $good)
+    {
         $quantity = $request->post('quantity', 1);
         $user = $request->user();
         if ($user) {
@@ -50,7 +51,8 @@ class CartController extends Controller
         return redirect()->back();
     }
 
-    public function update(Request $request, Good $good) {
+    public function update(Request $request, Good $good)
+    {
         $quantity = $request->integer('quantity');
         $user = $request->user();
         if ($user) {
@@ -70,7 +72,8 @@ class CartController extends Controller
         return redirect()->back();
     }
 
-    public function delete(Request $request, Good $good) {
+    public function delete(Request $request, Good $good)
+    {
         $user = $request->user();
         if ($user) {
             CartItem::query()->where(['user_id' => $user->id, 'good_id' => $good->id])->first()?->delete();
@@ -88,7 +91,8 @@ class CartController extends Controller
         return redirect()->back();
     }
 
-    public function bulkDelete(Request $request) {
+    public function bulkDelete(Request $request)
+    {
         $user = $request->user();
         if ($user) {
             CartItem::where('user_id', $user->id)->delete();

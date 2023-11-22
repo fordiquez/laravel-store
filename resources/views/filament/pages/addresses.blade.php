@@ -1,15 +1,13 @@
-<x-filament::page>
-    <form wire:submit.prevent="submit" class="space-y-6">
+<x-filament-panels::page>
+    <x-filament-panels::form wire:submit="save" class="space-y-6">
         {{ $this->form }}
 
         <div class="flex flex-wrap items-center gap-4 justify-start">
-            <x-filament::button type="submit">
-                Save
-            </x-filament::button>
+            <x-filament-panels::form.actions :actions="$this->getFormActions()" />
 
-            <x-filament::button type="button" color="secondary" tag="a" :href="$this->cancel_button_url">
+            <x-filament::button type="button" color="gray" tag="a" :href="$this->cancel_button_url">
                 Cancel
             </x-filament::button>
         </div>
-    </form>
-</x-filament::page>
+    </x-filament-panels::form>
+</x-filament-panels::page>

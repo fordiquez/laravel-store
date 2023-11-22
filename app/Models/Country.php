@@ -14,7 +14,7 @@ use Spatie\MediaLibrary\MediaCollections\Exceptions\FileCannotBeAdded;
 
 class Country extends Model implements HasMedia
 {
-    use HasFactory, SoftDeletes, InteractsWithMedia;
+    use HasFactory, InteractsWithMedia, SoftDeletes;
 
     protected $fillable = [
         'name',

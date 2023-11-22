@@ -14,7 +14,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 
 class Category extends Model implements HasMedia
 {
-    use HasFactory, SoftDeletes, InteractsWithMedia;
+    use HasFactory, InteractsWithMedia, SoftDeletes;
 
     protected $fillable = ['title', 'slug', 'parent_id', 'is_active', 'is_navigational', 'manual_url'];
 
