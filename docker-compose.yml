@@ -1,74 +1,74 @@
 version: '3.5'
+
 services:
     nginx:
-        image: nginx:1.25.1-alpine
-        container_name: brandford_nginx
-        working_dir: /var/www/html
-        restart: unless-stopped
-        volumes:
-            - ./:/var/www/html
-            - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
-            - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
-        depends_on:
-            - database
-            - redis
+        image: ${CONTAINER_NAME}-nginx:latest
+        build:
+            context: ./docker/
+            args:
+                BUILD_ARGUMENT_ENV: dev
+            dockerfile: ./nginx/Dockerfile
+        container_name: ${CONTAINER_NAME}-nginx
+        restart: always
         ports:
             - '80:80'
             - '443:443'
-        networks:
-            - brandford
-
-    app:
-        container_name: brandford_app
-        build:
-            args:
-                user: brandford
-                uid: 1000
-            context: docker/php
-            dockerfile: Dockerfile
-        environment:
-            APP_NAME: brandford
         volumes:
-            - ./:/var/www/html
-        working_dir: /var/www/html
-        ports:
-            - '9000:9000'
-            - ${LARAVEL_WEBSOCKETS_PORT}:6001
-        links:
-            - database
+            - ./:/var/www:ro,cached
         depends_on:
-            - database
+            - laravel
         networks:
-            - brandford
+            - laravel
 
-    redis:
-        image: redis:7.2.0-alpine
-        container_name: brandford_redis
-        restart: unless-stopped
-        ports:
-            - '6379:6379'
-        networks:
-            - brandford
-
-    database:
-        image: mysql:latest
-        container_name: brandford_db
-        restart: always
+    laravel: &laravel-template
+        image: ${CONTAINER_NAME}-laravel:latest
+        build:
+            context: .
+            args:
+                BUILD_ARGUMENT_ENV: dev
+                XDEBUG_CONFIG: ${XDEBUG_CONFIG}
+            dockerfile: ./Dockerfile
+        container_name: ${CONTAINER_NAME}-laravel
         volumes:
-            - ./docker/mysql:/var/lib/mysql
+            - ./:/var/www:cached
+        links:
+            - mysql
+        depends_on:
+            - mysql
+        networks:
+            - laravel
+
+    ### Cron tasks
+    supervisord:
+        <<: *laravel-template
+        container_name: ${CONTAINER_NAME}-supervisord
+        expose: []
+        command: ['/usr/bin/supervisord']
+
+    mysql:
+        image: mysql:8.2
+        container_name: ${CONTAINER_NAME}-mysql
+        restart: always
         environment:
             MYSQL_DATABASE: ${DB_DATABASE}
             MYSQL_USERNAME: ${DB_USERNAME}
             MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
         ports:
             - '3306:3306'
-        command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
+        volumes:
+            - ./storage/mysql-data:/var/lib/mysql:delegated
         networks:
-            - brandford
+            - laravel
 
-volumes:
-    database:
-        driver: local
+    redis:
+        image: redis:alpine
+        container_name: ${CONTAINER_NAME}-redis
+        restart: unless-stopped
+        ports:
+            - '6379:6379'
+        networks:
+            - laravel
+
 networks:
-    brandford:
-        driver: bridge
+    laravel:
+        name: laravel

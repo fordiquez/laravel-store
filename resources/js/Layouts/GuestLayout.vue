@@ -1,10 +1,10 @@
 <script setup>
-import { onMounted } from 'vue';
-import { useDark } from '@vueuse/core';
-import { Link } from '@inertiajs/vue3';
-import ApplicationLogo from '@/Components/ApplicationLogo.vue';
+import { onMounted } from 'vue'
+import { useDark } from '@vueuse/core'
+import { Link } from '@inertiajs/vue3'
+import ApplicationLogo from '@/Components/ApplicationLogo.vue'
 
-onMounted(() => useDark());
+onMounted(() => useDark())
 </script>
 
 <template>
@@ -15,9 +15,7 @@ onMounted(() => useDark());
             </Link>
         </div>
 
-        <div
-            class="mt-6 w-full overflow-hidden bg-white px-6 py-4 shadow-md dark:bg-gray-800 sm:max-w-md sm:rounded-lg"
-        >
+        <div class="mt-6 w-full overflow-hidden bg-white px-6 py-4 shadow-md dark:bg-gray-800 sm:max-w-md sm:rounded-lg">
             <slot />
         </div>
     </div>

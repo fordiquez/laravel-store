@@ -1,11 +1,11 @@
 <script setup>
-import { Head } from '@inertiajs/vue3';
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import Tabs from '@/Pages/Good/Tabs.vue';
+import { Head } from '@inertiajs/vue3'
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
+import Tabs from '@/Pages/Good/Tabs.vue'
 
 defineProps({
-    good: Object,
-});
+    good: Object
+})
 </script>
 
 <template>
@@ -25,12 +25,10 @@ defineProps({
                                 'flex flex-col px-4 py-5 font-medium sm:flex-row sm:px-6',
                                 i % 2 === 0 ? 'bg-gray-100 dark:bg-gray-900' : 'bg-white dark:bg-gray-800',
                                 { 'rounded-t-lg': i === 0 },
-                                { 'rounded-b-lg': i === good.properties.length - 1 },
+                                { 'rounded-b-lg': i === good.properties.length - 1 }
                             ]"
                         >
-                            <dt
-                                class="basis-full text-sm text-gray-900 dark:text-gray-200 sm:basis-1/2 md:basis-2/5 lg:basis-1/3"
-                            >
+                            <dt class="basis-full text-sm text-gray-900 dark:text-gray-200 sm:basis-1/2 md:basis-2/5 lg:basis-1/3">
                                 {{ property.name }}
                             </dt>
                             <dd

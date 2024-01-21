@@ -1,13 +1,13 @@
 <script setup>
-import { computed, defineProps } from 'vue';
-import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue';
+import { computed, defineProps } from 'vue'
+import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue'
 
 defineProps({
     title: String,
-    classes: String,
-});
+    classes: String
+})
 
-const defaultClass = computed(() => 'mt-6 p-1 max-h-96 dark:[color-scheme:dark]');
+const defaultClass = computed(() => 'mt-6 p-1 max-h-96 dark:[color-scheme:dark]')
 </script>
 
 <template>

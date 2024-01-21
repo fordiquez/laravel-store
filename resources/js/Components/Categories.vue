@@ -1,19 +1,19 @@
 <script setup>
-import { computed, ref } from 'vue';
-import { Link } from '@inertiajs/vue3';
-import { Popover, PopoverButton, PopoverGroup, PopoverPanel } from '@headlessui/vue';
+import { computed, ref } from 'vue'
+import { Link } from '@inertiajs/vue3'
+import { Popover, PopoverButton, PopoverGroup, PopoverPanel } from '@headlessui/vue'
 
 const props = defineProps({
-    categories: Array,
-});
+    categories: Array
+})
 
-const popover = ref(false);
+const popover = ref(false)
 
-let hoveredCategoryId = ref(props.categories[0].id);
+let hoveredCategoryId = ref(props.categories[0].id)
 
-let hoveredCategory = computed(() => props.categories.find((category) => category.id === hoveredCategoryId.value));
+let hoveredCategory = computed(() => props.categories.find((category) => category.id === hoveredCategoryId.value))
 
-const onCategory = (category) => (hoveredCategoryId.value = category.id);
+const onCategory = (category) => (hoveredCategoryId.value = category.id)
 </script>
 
 <template>
@@ -26,7 +26,7 @@ const onCategory = (category) => (hoveredCategoryId.value = category.id);
                             popover
                                 ? 'border-indigo-400 text-gray-900 focus:border-indigo-700 dark:border-indigo-600 dark:text-gray-100'
                                 : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 focus:border-gray-300 focus:text-gray-700 dark:text-gray-400 dark:hover:border-gray-700 dark:hover:text-gray-300 dark:focus:border-gray-700 dark:focus:text-gray-300',
-                            'relative inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium leading-5 transition duration-150 ease-in-out focus:outline-none',
+                            'relative inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium leading-5 transition duration-150 ease-in-out focus:outline-none'
                         ]"
                     >
                         Categories
@@ -55,7 +55,7 @@ const onCategory = (category) => (hoveredCategoryId.value = category.id);
                                                     'rounded-md',
                                                     hoveredCategoryId === category.id
                                                         ? 'bg-indigo-600 text-white'
-                                                        : 'text-gray-500 dark:text-gray-300',
+                                                        : 'text-gray-500 dark:text-gray-300'
                                                 ]"
                                                 @mouseover="onCategory(category)"
                                                 @focusin="onCategory(category)"
@@ -70,11 +70,7 @@ const onCategory = (category) => (hoveredCategoryId.value = category.id);
                                         </ul>
                                     </div>
                                     <div class="flex h-[300px] grow flex-col flex-wrap overflow-hidden">
-                                        <ul
-                                            v-for="subcategory in hoveredCategory.subcategories"
-                                            :key="subcategory.id"
-                                            class="flex"
-                                        >
+                                        <ul v-for="subcategory in hoveredCategory.subcategories" :key="subcategory.id" class="flex">
                                             <li class="flex flex-col">
                                                 <Link
                                                     :id="subcategory.slug"
@@ -84,11 +80,7 @@ const onCategory = (category) => (hoveredCategoryId.value = category.id);
                                                     {{ subcategory.title }}
                                                 </Link>
                                                 <ul class="my-2 space-y-2" role="list">
-                                                    <li
-                                                        v-for="item in subcategory.subcategories"
-                                                        :key="item.id"
-                                                        class="flex"
-                                                    >
+                                                    <li v-for="item in subcategory.subcategories" :key="item.id" class="flex">
                                                         <Link
                                                             :href="route('index.category', item)"
                                                             class="text-sm text-gray-500 hover:text-gray-900 focus:text-gray-700 dark:text-gray-400 dark:hover:text-gray-100 dark:focus:text-gray-100"

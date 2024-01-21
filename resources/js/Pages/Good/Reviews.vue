@@ -1,30 +1,30 @@
 <script setup>
-import { Head, useForm } from '@inertiajs/vue3';
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import Tabs from '@/Pages/Good/Tabs.vue';
-import { ref } from 'vue';
-import Modal from '@/Components/Modal.vue';
-import Rating from '@/Components/Rating.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import SecondaryButton from '@/Components/SecondaryButton.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
+import { Head, useForm } from '@inertiajs/vue3'
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
+import Tabs from '@/Pages/Good/Tabs.vue'
+import { ref } from 'vue'
+import Modal from '@/Components/Modal.vue'
+import Rating from '@/Components/Rating.vue'
+import InputLabel from '@/Components/InputLabel.vue'
+import SecondaryButton from '@/Components/SecondaryButton.vue'
+import PrimaryButton from '@/Components/PrimaryButton.vue'
 
 defineProps({
-    good: Object,
-});
+    good: Object
+})
 
-const reviewModal = ref(false);
+const reviewModal = ref(false)
 
 const form = useForm({
     rating: null,
     advantages: '',
     disadvantages: '',
-    comment: '',
-});
+    comment: ''
+})
 
-const setRating = (stars) => (form.rating = stars);
+const setRating = (stars) => (form.rating = stars)
 
-const closeReviewModal = () => (reviewModal.value = false);
+const closeReviewModal = () => (reviewModal.value = false)
 </script>
 
 <template>
@@ -39,9 +39,7 @@ const closeReviewModal = () => (reviewModal.value = false);
                     <div
                         class="flex flex-col items-center space-x-6 rounded-xl border border-gray-200 p-4 dark:border-gray-700 md:flex-row"
                     >
-                        <h1
-                            class="bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-3xl font-bold text-transparent"
-                        >
+                        <h1 class="bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-3xl font-bold text-transparent">
                             Leave your review about this product
                         </h1>
                         <secondary-button @click="reviewModal = true">Leave a review</secondary-button>
@@ -51,12 +49,7 @@ const closeReviewModal = () => (reviewModal.value = false);
                         <div class="p-6">
                             <div class="flex justify-between text-gray-900 dark:text-white">
                                 <h5 class="text-xl font-medium">New review</h5>
-                                <font-awesome-icon
-                                    :icon="['fas', 'xmark']"
-                                    size="xl"
-                                    class="cursor-pointer"
-                                    @click="closeReviewModal"
-                                />
+                                <font-awesome-icon :icon="['fas', 'xmark']" size="xl" class="cursor-pointer" @click="closeReviewModal" />
                             </div>
 
                             <Rating class="mt-4" @rating="setRating" />
@@ -99,18 +92,11 @@ const closeReviewModal = () => (reviewModal.value = false);
                         </div>
                     </Modal>
 
-                    <div
-                        class="mt-4 flex flex-col rounded-xl border border-gray-200 dark:border-gray-700"
-                        v-for="review in good.reviews"
-                    >
+                    <div class="mt-4 flex flex-col rounded-xl border border-gray-200 dark:border-gray-700" v-for="review in good.reviews">
                         <div class="flex w-full justify-between border-b border-gray-200 p-4 dark:border-gray-700">
                             <div class="flex">
                                 <span class="flex items-center">
-                                    <font-awesome-icon
-                                        :icon="['fas', 'cart-shopping']"
-                                        size="lg"
-                                        class="text-purple-500"
-                                    />
+                                    <font-awesome-icon :icon="['fas', 'cart-shopping']" size="lg" class="text-purple-500" />
                                     <font-awesome-icon
                                         :icon="['fas', review.is_buyer ? 'circle-check' : 'circle-xmark']"
                                         class="ml-1 text-purple-500"
@@ -124,9 +110,7 @@ const closeReviewModal = () => (reviewModal.value = false);
                                 </div>
                             </div>
                             <div class="flex items-center">
-                                <span class="text-xs font-medium uppercase tracking-wide text-gray-500">{{
-                                    review.created_at
-                                }}</span>
+                                <span class="text-xs font-medium uppercase tracking-wide text-gray-500">{{ review.created_at }}</span>
                             </div>
                         </div>
                         <div class="flex flex-col p-4">
@@ -139,19 +123,12 @@ const closeReviewModal = () => (reviewModal.value = false);
                                 />
                             </div>
                             <div>
-                                <blockquote
-                                    class="my-4 border-l-4 border-gray-400 bg-gray-100 p-4 dark:border-gray-600 dark:bg-gray-900"
-                                >
-                                    <p class="font-medium italic leading-relaxed text-gray-900 dark:text-white">
-                                        "{{ review.content }}"
-                                    </p>
+                                <blockquote class="my-4 border-l-4 border-gray-400 bg-gray-100 p-4 dark:border-gray-600 dark:bg-gray-900">
+                                    <p class="font-medium italic leading-relaxed text-gray-900 dark:text-white">"{{ review.content }}"</p>
                                 </blockquote>
                                 <div class="my-4 flex flex-col">
                                     <h6 class="flex items-center text-lg font-bold dark:text-white">
-                                        <font-awesome-icon
-                                            :icon="['fas', 'check']"
-                                            class="text-green-500 dark:text-green-400"
-                                        />
+                                        <font-awesome-icon :icon="['fas', 'check']" class="text-green-500 dark:text-green-400" />
                                         <span class="ml-2">Advantages:</span>
                                     </h6>
                                     <blockquote
@@ -166,10 +143,7 @@ const closeReviewModal = () => (reviewModal.value = false);
 
                                 <div class="my-4 flex flex-col">
                                     <h6 class="text-lg font-bold dark:text-white">
-                                        <font-awesome-icon
-                                            :icon="['fas', 'xmark']"
-                                            class="text-red-600 dark:text-red-500"
-                                        />
+                                        <font-awesome-icon :icon="['fas', 'xmark']" class="text-red-600 dark:text-red-500" />
                                         <span class="ml-2">Disadvantages:</span>
                                     </h6>
                                     <blockquote

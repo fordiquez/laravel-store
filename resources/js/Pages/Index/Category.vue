@@ -1,20 +1,17 @@
 <script setup>
-import { Head, Link } from '@inertiajs/vue3';
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import { Head, Link } from '@inertiajs/vue3'
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 
 const props = defineProps({
-    category: Object,
-});
+    category: Object
+})
 </script>
 
 <template>
     <Head :title="category.title" />
 
     <AuthenticatedLayout :title="category.title">
-        <section
-            v-if="category.subcategories"
-            class="bg-gray-100 p-4 text-gray-900 dark:bg-gray-900 dark:text-gray-400 sm:p-6 lg:p-8"
-        >
+        <section v-if="category.subcategories" class="bg-gray-100 p-4 text-gray-900 dark:bg-gray-900 dark:text-gray-400 sm:p-6 lg:p-8">
             <div class="overflow-hidden rounded-lg bg-white shadow-sm dark:bg-gray-800">
                 <div class="flex flex-wrap">
                     <div
@@ -27,11 +24,7 @@ const props = defineProps({
                                 v-if="subcategory.thumbnail"
                                 class="aspect-h-1 aspect-w-1 mb-4 overflow-hidden rounded-lg group-hover:opacity-75"
                             >
-                                <img
-                                    :alt="subcategory.title"
-                                    :src="subcategory.thumbnail"
-                                    class="object-cover object-center"
-                                />
+                                <img :alt="subcategory.title" :src="subcategory.thumbnail" class="object-cover object-center" />
                             </div>
                             <Link
                                 class="text-center text-base font-medium text-gray-600 hover:text-gray-900 focus:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100 dark:focus:text-gray-100"

@@ -1,13 +1,13 @@
 <script setup>
-import { computed, onMounted, reactive, ref } from 'vue';
-import { Head, Link, useForm } from '@inertiajs/vue3';
-import { initDropdowns } from 'flowbite';
-import qs from 'qs';
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import Pagination from '@/Components/Pagination.vue';
-import FiltersDrawer from '@/Components/FiltersDrawer.vue';
-import Filters from '@/Components/Filters.vue';
-import { useFormat } from '@/composables/format';
+import { computed, onMounted, reactive, ref } from 'vue'
+import { Head, Link, useForm } from '@inertiajs/vue3'
+import { initDropdowns } from 'flowbite'
+import qs from 'qs'
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
+import Pagination from '@/Components/Pagination.vue'
+import FiltersDrawer from '@/Components/FiltersDrawer.vue'
+import Filters from '@/Components/Filters.vue'
+import { useFormat } from '@/composables/format'
 
 const props = defineProps({
     title: String,
@@ -15,53 +15,51 @@ const props = defineProps({
     brands: Array,
     properties: Object,
     prices: Object,
-    goods: Object,
-});
+    goods: Object
+})
 
-const { formatMoney } = useFormat();
+const { formatMoney } = useFormat()
 
 onMounted(() => {
-    initDropdowns();
+    initDropdowns()
     if (props.goods.data) {
-        const queries = qs.parse(window.location.search.substring(1));
-        filters.brands = queries?.brands?.map((brand) => Number.parseInt(brand)) ?? [];
-        [rangePrices.min, rangePrices.max] = [props.prices.min, props.prices.max];
-        filters.prices = queries?.prices
-            ? Object.values(queries.prices).map((value) => Number.parseInt(value))
-            : Object.values(rangePrices);
-        queries.properties ? filters.properties.push(...queries?.properties) : null;
-        sort.value = queries?.sort;
+        const queries = qs.parse(window.location.search.substring(1))
+        filters.brands = queries?.brands?.map((brand) => Number.parseInt(brand)) ?? []
+        ;[rangePrices.min, rangePrices.max] = [props.prices.min, props.prices.max]
+        filters.prices = queries?.prices ? Object.values(queries.prices).map((value) => Number.parseInt(value)) : Object.values(rangePrices)
+        queries.properties ? filters.properties.push(...queries?.properties) : null
+        sort.value = queries?.sort
     }
-});
+})
 
 const filters = useForm({
     brands: [],
     prices: [0, 100000],
-    properties: [],
-});
+    properties: []
+})
 
 const rangePrices = reactive({
     min: 0,
-    max: 100000,
-});
+    max: 100000
+})
 
-const formRoute = computed(() => (props.category ? route('goods.index', props.category) : route('goods.search')));
+const formRoute = computed(() => (props.category ? route('goods.index', props.category) : route('goods.search')))
 
 const brandFilter = (brand) => {
-    const brandIndex = filters.brands.indexOf(brand);
-    brandIndex === -1 ? filters.brands.push(brand) : filters.brands.splice(brandIndex, 1);
+    const brandIndex = filters.brands.indexOf(brand)
+    brandIndex === -1 ? filters.brands.push(brand) : filters.brands.splice(brandIndex, 1)
     filters
         .transform((data) => ({
             ...data,
             prices: {
                 from: filters.prices[0],
-                to: filters.prices[1],
+                to: filters.prices[1]
             },
             sort: sort.value,
-            search: props.title ?? '',
+            search: props.title ?? ''
         }))
-        .get(formRoute.value);
-};
+        .get(formRoute.value)
+}
 
 const priceFilter = () => {
     filters
@@ -69,18 +67,18 @@ const priceFilter = () => {
             ...data,
             prices: {
                 from: filters.prices[0],
-                to: filters.prices[1],
+                to: filters.prices[1]
             },
             sort: sort.value,
-            search: props.title ?? '',
+            search: props.title ?? ''
         }))
-        .get(formRoute.value);
-};
+        .get(formRoute.value)
+}
 
 const propertyFilter = (value) => {
-    filters.properties.push(value);
-    filters.get(formRoute.value);
-};
+    filters.properties.push(value)
+    filters.get(formRoute.value)
+}
 
 const clearFilters = () => {
     filters
@@ -88,22 +86,22 @@ const clearFilters = () => {
             brands: [],
             prices: {
                 from: rangePrices.min,
-                to: rangePrices.max,
+                to: rangePrices.max
             },
             sort: sort.value,
-            search: props.title ?? '',
+            search: props.title ?? ''
         }))
-        .get(formRoute.value);
-};
+        .get(formRoute.value)
+}
 
-const sort = ref('rating');
+const sort = ref('rating')
 
 const sortOptions = [
     // {name: 'Best Rating', key: 'rating'},
     { name: 'Newest', key: 'created_at' },
     { name: 'Price: Low to High', key: 'price' },
-    { name: 'Price: High to Low', key: '-price' },
-];
+    { name: 'Price: High to Low', key: '-price' }
+]
 
 const goodsSort = (key) => {
     filters
@@ -111,27 +109,22 @@ const goodsSort = (key) => {
             ...data,
             prices: {
                 from: filters.prices[0],
-                to: filters.prices[1],
+                to: filters.prices[1]
             },
             sort: key,
-            search: props.title ?? '',
+            search: props.title ?? ''
         }))
-        .get(formRoute.value);
-};
+        .get(formRoute.value)
+}
 </script>
 
 <template>
     <Head :title="category?.title ?? title" />
 
     <AuthenticatedLayout :title="category?.title ?? title">
-        <section
-            v-if="goods?.data"
-            class="bg-gray-100 p-4 text-gray-900 dark:bg-gray-900 dark:text-gray-400 sm:p-6 lg:p-8"
-        >
+        <section v-if="goods?.data" class="bg-gray-100 p-4 text-gray-900 dark:bg-gray-900 dark:text-gray-400 sm:p-6 lg:p-8">
             <div class="overflow-hidden bg-white px-4 shadow-sm dark:bg-gray-800 sm:rounded-lg sm:px-6 lg:px-8">
-                <div
-                    class="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-5 dark:border-gray-600"
-                >
+                <div class="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-5 dark:border-gray-600">
                     <div class="flex items-center">
                         <FiltersDrawer
                             v-if="goods.data.length"
@@ -200,16 +193,13 @@ const goodsSort = (key) => {
                             id="dropdownNavbar"
                             class="z-10 hidden w-44 divide-y divide-gray-100 rounded-lg bg-white shadow dark:divide-gray-600 dark:bg-gray-700"
                         >
-                            <ul
-                                class="py-2 text-sm text-gray-700 dark:text-gray-400"
-                                aria-labelledby="dropdownNavbarButton"
-                            >
+                            <ul class="py-2 text-sm text-gray-700 dark:text-gray-400" aria-labelledby="dropdownNavbarButton">
                                 <li
                                     v-for="option in sortOptions"
                                     :key="option.name"
                                     :class="[
                                         'hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white',
-                                        { 'bg-gray-100 dark:bg-gray-600 dark:text-white': option.key === sort },
+                                        { 'bg-gray-100 dark:bg-gray-600 dark:text-white': option.key === sort }
                                     ]"
                                 >
                                     <button @click.prevent="goodsSort(option.key)" class="flex px-4 py-2 text-sm">
@@ -258,18 +248,13 @@ const goodsSort = (key) => {
                                             </Link>
                                         </h3>
                                         <div class="mt-2 flex flex-col">
-                                            <p
-                                                v-if="good.old_price"
-                                                class="mt-1 text-sm font-medium text-gray-500 dark:text-gray-300"
-                                            >
+                                            <p v-if="good.old_price" class="mt-1 text-sm font-medium text-gray-500 dark:text-gray-300">
                                                 <span class="line-through">{{ formatMoney(good.old_price) }}</span>
                                             </p>
                                             <p
                                                 :class="[
-                                                    good.old_price
-                                                        ? 'text-red-600 dark:text-rose-600'
-                                                        : 'text-gray-900 dark:text-gray-300',
-                                                    'text-2xl font-medium',
+                                                    good.old_price ? 'text-red-600 dark:text-rose-600' : 'text-gray-900 dark:text-gray-300',
+                                                    'text-2xl font-medium'
                                                 ]"
                                             >
                                                 {{ formatMoney(good.price) }}

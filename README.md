@@ -11,18 +11,14 @@
 
 ## Must have requirements
 
--   **PHP v8.1;**
--   **Composer v2.0;**
--   **MySQL;**
--   **NPM;**
--   **Docker;**
+-   **Docker & Docker Compose.**
 
-## Local installation workflow
+## Docker installation workflow
 
 ### 1. Clone this repository to your local folder
 
 ```
-git clone https://github.com/fordiquez/laravel-store.git
+git clone git@github.com:fordiquez/laravel-store.git
 ```
 
 ```
@@ -37,24 +33,24 @@ cp .env.example .env
 
 ### 3. Setup .env variables
 
-#### 3.1 Setup base url for your application
+#### 3.1 Set up base url for your application
 
 ```
 APP_URL=
 ```
 
-#### 3.2 Setup your database configuration
+#### 3.2 Set up your database credentials
 
 ```
-DB_CONNECTION=
-DB_HOST=
-DB_PORT=
+DB_CONNECTION=mysql
+DB_HOST=mysql
+DB_PORT=3306
 DB_DATABASE=
 DB_USERNAME=
 DB_PASSWORD=
 ```
 
-#### 3.3 Setup mail SMTP options
+#### 3.3 Set up mail SMTP options
 
 ```
 MAIL_MAILER=
@@ -67,31 +63,19 @@ MAIL_FROM_ADDRESS=
 MAIL_FROM_NAME=
 ```
 
-#### 3.4 If you are using Redis for queue jobs, then change connection & setup requirement credentials
-
-```
-QUEUE_CONNECTION=redis
-```
-
-```
-REDIS_HOST=
-REDIS_PASSWORD=
-REDIS_PORT=
-```
-
-#### 3.5 Setup multiavatar API key
+#### 3.4 Set up `multiavatar` API key
 
 ```
 MULTIAVATAR_API_KEY=
 ```
 
-#### 3.6 Setup Countries States Cities API key
+#### 3.5 Set up `Countries States Cities` API key
 
 ```
 CSC_API_KEY=
 ```
 
-#### 3.7 Setup Stripe keys
+#### 3.7 Setup `Stripe` keys
 
 ```
 STRIPE_KEY=
@@ -116,7 +100,11 @@ docker-compose up --build -d
 ```
 
 ```bash
-docker exec -it brandford_app /bin/bash
+docker exec -it store-laravel php artisan horizon
+```
+
+```bash
+docker exec -it store-laravel /bin/bash
 ```
 
 ### 6. Run artisan commands
@@ -141,18 +129,10 @@ php artisan shield:install --fresh
 php artisan optimize:clear
 ```
 
-### 7. Run application server & SSR rendering
+### 7. Run dev server
 
 ```bash
 npm run dev
-```
-
-```bash
-php artisan inertia:start-ssr
-```
-
-```bash
-php artisan serve --host=brandford.local.io
 ```
 
 ### 8. Run stripe webhook
@@ -162,23 +142,17 @@ stripe login
 ```
 
 ```bash
-stripe listen --forward-to brandford.local.io/stripe/webhook
-```
-
-```bash
-stripe trigger payment_intent.succeeded
+stripe listen --forward-to laravel.store/stripe/webhook
 ```
 
 ### 9. Edit hosts file (Windows 10)
-
-**Add your application domain**
 
 ```
 C:\Windows\System32\drivers\etc
 ```
 
-**Add the next line:**
+**Add your application domain:**
 
 ```
-127.0.0.1 brandford.local.io
+127.0.0.1       laravel.store
 ```

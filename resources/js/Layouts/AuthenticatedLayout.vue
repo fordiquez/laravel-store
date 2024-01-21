@@ -1,72 +1,69 @@
 <script setup>
-import { computed, onMounted, onUpdated, reactive, ref } from 'vue';
-import { Link, useForm, usePage } from '@inertiajs/vue3';
-import { useDark, useToggle } from '@vueuse/core';
-import { initTooltips } from 'flowbite';
-import ApplicationLogo from '@/Components/ApplicationLogo.vue';
-import Categories from '@/Components/Categories.vue';
-import Cart from '@/Components/Cart.vue';
-import Dropdown from '@/Components/Dropdown.vue';
-import DropdownLink from '@/Components/DropdownLink.vue';
-import ResponsiveCategories from '@/Components/ResponsiveCategories.vue';
-import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
-import SecondaryButton from '@/Components/SecondaryButton.vue';
-import { notify } from '@kyvg/vue3-notification';
+import { computed, onMounted, onUpdated, reactive, ref } from 'vue'
+import { Link, useForm, usePage } from '@inertiajs/vue3'
+import { useDark, useToggle } from '@vueuse/core'
+import { initTooltips } from 'flowbite'
+import ApplicationLogo from '@/Components/ApplicationLogo.vue'
+import Categories from '@/Components/Categories.vue'
+import Cart from '@/Components/Cart.vue'
+import Dropdown from '@/Components/Dropdown.vue'
+import DropdownLink from '@/Components/DropdownLink.vue'
+import ResponsiveCategories from '@/Components/ResponsiveCategories.vue'
+import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue'
+import SecondaryButton from '@/Components/SecondaryButton.vue'
+import { notify } from '@kyvg/vue3-notification'
 
 defineProps({
-    title: String,
-});
+    title: String
+})
 
-const { user, categories, breadcrumbs, notification } = reactive(usePage().props);
+const { user, categories, breadcrumbs, notification } = reactive(usePage().props)
 
-const isDark = useDark();
-const toggleDark = useToggle(isDark);
+const isDark = useDark()
+const toggleDark = useToggle(isDark)
 
-const notificationsHistory = reactive([]);
+const notificationsHistory = reactive([])
 
-const showingNavigationDropdown = ref(false);
-const showingResponsiveCategories = ref(false);
-const cartModal = ref(false);
+const showingNavigationDropdown = ref(false)
+const showingResponsiveCategories = ref(false)
+const cartModal = ref(false)
 
 const form = useForm({
-    search: '',
-});
-const search = ref(null);
+    search: ''
+})
+const search = ref(null)
 
 onMounted(() => {
-    initTooltips();
-    makeNotification(notification);
-});
+    initTooltips()
+    makeNotification(notification)
+})
 
-onUpdated(() => makeNotification(notification));
+onUpdated(() => makeNotification(notification))
 
-const cart = computed(() => usePage().props.cart);
-const fullName = computed(() => (user ? `${user.first_name} ${user.last_name}` : null));
+const cart = computed(() => usePage().props.cart)
+const fullName = computed(() => (user ? `${user.first_name} ${user.last_name}` : null))
 const breadcrumbsRoutes = computed(
-    () =>
-        route().current('goods.good.general') ||
-        route().current('goods.good.properties') ||
-        route().current('goods.good.reviews'),
-);
+    () => route().current('goods.good.general') || route().current('goods.good.properties') || route().current('goods.good.reviews')
+)
 
 const makeNotification = (notification) => {
     if (notification && !notificationsHistory.find((item) => item.id === notification.id)) {
-        console.log(notification);
+        console.log(notification)
         notify({
             id: notification.id,
             type: notification.type,
             title: notification.title,
             text: notification.text,
             duration: 10000,
-            pauseOnHover: true,
-        });
-        notificationsHistory.push(notification);
+            pauseOnHover: true
+        })
+        notificationsHistory.push(notification)
     }
-};
+}
 
-const closeResponsiveCategories = () => (showingResponsiveCategories.value = false);
+const closeResponsiveCategories = () => (showingResponsiveCategories.value = false)
 
-const searchGoods = () => form.get(route('goods.search'));
+const searchGoods = () => form.get(route('goods.search'))
 </script>
 
 <template>
@@ -81,9 +78,7 @@ const searchGoods = () => form.get(route('goods.search'));
                         <!-- Logo -->
                         <div class="flex shrink-0 items-center">
                             <Link :href="route('index.dashboard')">
-                                <ApplicationLogo
-                                    class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200"
-                                />
+                                <ApplicationLogo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
                             </Link>
                         </div>
 
@@ -96,7 +91,7 @@ const searchGoods = () => form.get(route('goods.search'));
                                     showingResponsiveCategories
                                         ? 'border-indigo-400 text-gray-900 focus:border-indigo-700 dark:border-indigo-600 dark:text-gray-100'
                                         : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 focus:border-gray-300 focus:text-gray-700 dark:text-gray-400 dark:hover:border-gray-700 dark:hover:text-gray-300 dark:focus:border-gray-700 dark:focus:text-gray-300',
-                                    'relative inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium leading-5 transition duration-150 ease-in-out focus:outline-none lg:hidden',
+                                    'relative inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium leading-5 transition duration-150 ease-in-out focus:outline-none lg:hidden'
                                 ]"
                             >
                                 <span>Categories</span>
@@ -107,10 +102,7 @@ const searchGoods = () => form.get(route('goods.search'));
                     <form @submit.prevent="searchGoods" class="hidden items-center md:flex lg:pl-2">
                         <div class="relative self-center lg:w-96">
                             <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                                <font-awesome-icon
-                                    icon="fa-solid fa-magnifying-glass"
-                                    class="text-gray-500 dark:text-gray-400"
-                                />
+                                <font-awesome-icon icon="fa-solid fa-magnifying-glass" class="text-gray-500 dark:text-gray-400" />
                             </div>
                             <input
                                 v-model="form.search"
@@ -176,12 +168,7 @@ const searchGoods = () => form.get(route('goods.search'));
                         <Dropdown v-if="user" class="ml-4 hidden sm:flex">
                             <template #trigger>
                                 <button class="inline-flex focus:outline-none" title="Profile">
-                                    <img
-                                        :src="user.avatar"
-                                        :alt="fullName"
-                                        :title="fullName"
-                                        class="h-10 w-10 rounded-full object-cover"
-                                    />
+                                    <img :src="user.avatar" :alt="fullName" :title="fullName" class="h-10 w-10 rounded-full object-cover" />
                                 </button>
                             </template>
 
@@ -192,9 +179,7 @@ const searchGoods = () => form.get(route('goods.search'));
                                     </p>
                                     <p class="truncate text-gray-600 dark:text-gray-400">{{ user.email }}</p>
                                 </div>
-                                <DropdownLink :href="route('profile.personal-information.edit')">
-                                    Profile
-                                </DropdownLink>
+                                <DropdownLink :href="route('profile.personal-information.edit')"> Profile </DropdownLink>
                                 <div class="border-t border-gray-200 dark:border-gray-600" />
                                 <DropdownLink :href="route('logout')" method="post" as="button"> Log Out </DropdownLink>
                             </template>
@@ -222,10 +207,7 @@ const searchGoods = () => form.get(route('goods.search'));
                             @click="showingNavigationDropdown = !showingNavigationDropdown"
                             class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 transition duration-150 ease-in-out hover:bg-gray-100 hover:text-gray-500 focus:bg-gray-100 focus:text-gray-500 focus:outline-none dark:text-gray-500 dark:hover:bg-gray-900 dark:hover:text-gray-400 dark:focus:bg-gray-900 dark:focus:text-gray-400"
                         >
-                            <font-awesome-icon
-                                :icon="['fa-solid', showingNavigationDropdown ? 'fa-xmark' : 'fa-bars']"
-                                size="xl"
-                            />
+                            <font-awesome-icon :icon="['fa-solid', showingNavigationDropdown ? 'fa-xmark' : 'fa-bars']" size="xl" />
                         </button>
                     </div>
                 </div>
@@ -243,7 +225,7 @@ const searchGoods = () => form.get(route('goods.search'));
                             showingResponsiveCategories
                                 ? 'border-indigo-400 bg-indigo-50 text-indigo-700 dark:border-indigo-600 dark:bg-indigo-900 dark:text-indigo-300'
                                 : 'border-transparent text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800 focus:border-gray-300 focus:bg-gray-50 focus:text-gray-800 dark:text-gray-400 dark:hover:border-gray-600 dark:hover:bg-gray-700 dark:hover:text-gray-200 dark:focus:border-gray-600 dark:focus:bg-gray-700 dark:focus:text-gray-200',
-                            'block w-full border-l-4 py-2 pl-3 pr-4 text-left text-base font-medium transition duration-150 ease-in-out focus:outline-none',
+                            'block w-full border-l-4 py-2 pl-3 pr-4 text-left text-base font-medium transition duration-150 ease-in-out focus:outline-none'
                         ]"
                     >
                         <span>Categories</span>
@@ -265,12 +247,8 @@ const searchGoods = () => form.get(route('goods.search'));
                     </div>
 
                     <div class="mt-3 space-y-1">
-                        <ResponsiveNavLink :href="route('profile.personal-information.edit')">
-                            Profile
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink :href="route('logout')" method="post" as="button">
-                            Log Out
-                        </ResponsiveNavLink>
+                        <ResponsiveNavLink :href="route('profile.personal-information.edit')"> Profile </ResponsiveNavLink>
+                        <ResponsiveNavLink :href="route('logout')" method="post" as="button"> Log Out </ResponsiveNavLink>
                     </div>
                 </div>
 
@@ -282,10 +260,7 @@ const searchGoods = () => form.get(route('goods.search'));
         </header>
 
         <nav aria-label="Breadcrumbs" v-if="breadcrumbs">
-            <ol
-                role="list"
-                class="mx-auto mt-6 flex max-w-2xl items-center space-x-2 px-4 sm:px-6 lg:max-w-9xl lg:px-8"
-            >
+            <ol role="list" class="mx-auto mt-6 flex max-w-2xl items-center space-x-2 px-4 sm:px-6 lg:max-w-9xl lg:px-8">
                 <li class="flex items-center">
                     <Link
                         :href="route('index.dashboard')"
@@ -300,13 +275,7 @@ const searchGoods = () => form.get(route('goods.search'));
                     :class="{ 'hidden sm:block': i !== breadcrumbs.length - 2 }"
                 >
                     <div class="flex items-center">
-                        <svg
-                            width="16"
-                            height="20"
-                            viewBox="0 0 16 20"
-                            fill="currentColor"
-                            class="mr-2 text-gray-400 dark:text-gray-300"
-                        >
+                        <svg width="16" height="20" viewBox="0 0 16 20" fill="currentColor" class="mr-2 text-gray-400 dark:text-gray-300">
                             <path d="M5.697 4.34L8.98 16.532h1.327L7.025 4.341H5.697z" />
                         </svg>
                         <Link

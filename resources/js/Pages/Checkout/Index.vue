@@ -1,77 +1,73 @@
 <script setup>
-import { Head, Link, useForm, usePage } from '@inertiajs/vue3';
-import { computed, reactive } from 'vue';
-import { useFormat } from '@/composables/format';
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import SecondaryButton from '@/Components/SecondaryButton.vue';
-import Modal from '@/Components/Modal.vue';
-import TextInput from '@/Components/TextInput.vue';
-import InputError from '@/Components/InputError.vue';
-import axios from 'axios';
+import { Head, Link, useForm, usePage } from '@inertiajs/vue3'
+import { computed, reactive } from 'vue'
+import { useFormat } from '@/composables/format'
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
+import PrimaryButton from '@/Components/PrimaryButton.vue'
+import SecondaryButton from '@/Components/SecondaryButton.vue'
+import Modal from '@/Components/Modal.vue'
+import TextInput from '@/Components/TextInput.vue'
+import InputError from '@/Components/InputError.vue'
+import axios from 'axios'
 
 const props = defineProps({
     cart: Object,
     deliveries: Array,
-    payments: Object,
-});
+    payments: Object
+})
 
-const { full_name, email, phone } = reactive(usePage().props.user);
+const { full_name, email, phone } = reactive(usePage().props.user)
 
-const { formatMoney } = useFormat();
+const { formatMoney } = useFormat()
 
 const form = useForm({
     delivery_method: '',
     payment_method: '',
-    promo_code_id: null,
-});
+    promo_code_id: null
+})
 const promoCode = reactive({
     key: '',
     data: null,
     error: null,
     modal: false,
-    loading: false,
-});
+    loading: false
+})
 
 const deliveryCost = computed(() =>
-    form.delivery_method
-        ? Number.parseFloat(props.deliveries.find((delivery) => delivery.key === form.delivery_method).value)
-        : 0,
-);
-const totalCost = computed(() => deliveryCost.value + props.cart.total);
-const promoCodePercentagePrice = computed(() =>
-    promoCode.data ? (totalCost.value * promoCode.data.value) / 100 : null,
-);
+    form.delivery_method ? Number.parseFloat(props.deliveries.find((delivery) => delivery.key === form.delivery_method).value) : 0
+)
+const totalCost = computed(() => deliveryCost.value + props.cart.total)
+const promoCodePercentagePrice = computed(() => (promoCode.data ? (totalCost.value * promoCode.data.value) / 100 : null))
 const totalCostPromoCode = computed(() =>
     promoCode.data
         ? promoCode.data.type === 'fixed'
             ? totalCost.value - promoCode.data.value
             : totalCost.value - promoCodePercentagePrice.value
-        : totalCost.value,
-);
+        : totalCost.value
+)
 
-const itemId = (id) => props.cart.items.findIndex((item) => item.good_id === id);
+const itemId = (id) => props.cart.items.findIndex((item) => item.good_id === id)
 
 const verifyPromoCode = () => {
-    promoCode.loading = true;
+    promoCode.loading = true
     axios
         .post(route('api.verify-promo-code'), {
             key: promoCode.key,
-            total: props.cart.total,
+            total: props.cart.total
         })
         .then(({ data }) => {
             if (!data.hasOwnProperty('message')) {
-                promoCode.error = null;
-                promoCode.modal = false;
-                promoCode.data = data;
-                form.promo_code_id = data.id;
+                promoCode.error = null
+                promoCode.modal = false
+                promoCode.data = data
+                form.promo_code_id = data.id
             } else {
-                promoCode.error = data.message;
+                promoCode.error = data.message
             }
         })
         .catch((error) => (promoCode.error = error.response.data.message))
-        .finally(() => (promoCode.loading = false));
-};
+        .finally(() => (promoCode.loading = false))
+}
 
 const confirmOrder = () => {
     form.transform((data) => ({
@@ -79,9 +75,9 @@ const confirmOrder = () => {
         items: props.cart.items,
         goods_cost: props.cart.total,
         delivery_cost: deliveryCost.value,
-        total_cost: totalCostPromoCode.value,
-    })).post(route('checkout.store'));
-};
+        total_cost: totalCostPromoCode.value
+    })).post(route('checkout.store'))
+}
 </script>
 
 <template>
@@ -127,10 +123,7 @@ const confirmOrder = () => {
                                 </thead>
                                 <tbody>
                                     <tr class="bg-white dark:bg-gray-800" v-for="good in cart.goods" :key="good.id">
-                                        <th
-                                            scope="row"
-                                            class="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white"
-                                        >
+                                        <th scope="row" class="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white">
                                             <Link
                                                 :href="route('goods.good.general', good.slug)"
                                                 :title="good.title"
@@ -151,17 +144,12 @@ const confirmOrder = () => {
                                             <p
                                                 class="whitespace-nowrap font-medium"
                                                 :class="
-                                                    good.old_price
-                                                        ? 'text-red-600 dark:text-red-500'
-                                                        : 'text-gray-800 dark:text-gray-400'
+                                                    good.old_price ? 'text-red-600 dark:text-red-500' : 'text-gray-800 dark:text-gray-400'
                                                 "
                                             >
                                                 {{ formatMoney(good.price) }}
                                             </p>
-                                            <p
-                                                v-if="good.old_price"
-                                                class="text-xs leading-4 text-gray-400 line-through"
-                                            >
+                                            <p v-if="good.old_price" class="text-xs leading-4 text-gray-400 line-through">
                                                 {{ formatMoney(good.old_price) }}
                                             </p>
                                         </td>
@@ -169,9 +157,7 @@ const confirmOrder = () => {
                                             <span>{{ cart.items[itemId(good.id)].quantity }}</span>
                                         </td>
                                         <td class="px-6 py-4 text-center text-gray-800 dark:text-gray-400">
-                                            <span>{{
-                                                formatMoney(good.price * cart.items[itemId(good.id)].quantity)
-                                            }}</span>
+                                            <span>{{ formatMoney(good.price * cart.items[itemId(good.id)].quantity) }}</span>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -187,11 +173,7 @@ const confirmOrder = () => {
                             </span>
                             <p class="text-gray-700 dark:text-gray-400">Delivery method</p>
                         </div>
-                        <div
-                            class="mt-4 flex items-center justify-between px-10"
-                            v-for="delivery in deliveries"
-                            :key="delivery.id"
-                        >
+                        <div class="mt-4 flex items-center justify-between px-10" v-for="delivery in deliveries" :key="delivery.id">
                             <div class="flex items-center space-x-4">
                                 <input
                                     type="radio"
@@ -200,10 +182,7 @@ const confirmOrder = () => {
                                     :id="delivery.key"
                                     :value="delivery.key"
                                 />
-                                <label
-                                    :for="delivery.key"
-                                    class="cursor-pointer text-sm font-medium text-gray-900 dark:text-gray-300"
-                                >
+                                <label :for="delivery.key" class="cursor-pointer text-sm font-medium text-gray-900 dark:text-gray-300">
                                     {{ delivery.name }}
                                 </label>
                             </div>
@@ -222,11 +201,7 @@ const confirmOrder = () => {
                             </span>
                             <p class="text-gray-700 dark:text-gray-400">Payment method</p>
                         </div>
-                        <div
-                            class="mt-4 flex items-center px-10"
-                            v-for="(payment, index) in Object.entries(payments)"
-                            :key="index"
-                        >
+                        <div class="mt-4 flex items-center px-10" v-for="(payment, index) in Object.entries(payments)" :key="index">
                             <div class="flex items-center space-x-4">
                                 <input
                                     type="radio"
@@ -235,10 +210,7 @@ const confirmOrder = () => {
                                     :id="payment[0]"
                                     :value="payment[0]"
                                 />
-                                <label
-                                    :for="payment[0]"
-                                    class="cursor-pointer text-sm font-medium text-gray-900 dark:text-gray-300"
-                                >
+                                <label :for="payment[0]" class="cursor-pointer text-sm font-medium text-gray-900 dark:text-gray-300">
                                     {{ payment[1] }}
                                 </label>
                             </div>
@@ -261,20 +233,14 @@ const confirmOrder = () => {
                     <div v-if="promoCode.data" class="mt-2 flex justify-between text-sm">
                         <p class="text-gray-900 dark:text-gray-300">Applied promo code</p>
                         <p class="text-red-600 dark:text-red-500">
-                            -{{
-                                formatMoney(
-                                    promoCode.data.type === 'fixed' ? promoCode.data.value : promoCodePercentagePrice,
-                                )
-                            }}
+                            -{{ formatMoney(promoCode.data.type === 'fixed' ? promoCode.data.value : promoCodePercentagePrice) }}
                         </p>
                     </div>
                     <div class="mt-2 flex justify-between border-y border-gray-200 py-2 dark:border-gray-700">
                         <p class="text-gray-900 dark:text-gray-300">Total cost</p>
                         <p class="text-gray-900 dark:text-gray-300">{{ formatMoney(totalCostPromoCode) }}</p>
                     </div>
-                    <secondary-button class="mt-8 w-full lg:mt-auto" @click="promoCode.modal = true">
-                        Apply promo code
-                    </secondary-button>
+                    <secondary-button class="mt-8 w-full lg:mt-auto" @click="promoCode.modal = true"> Apply promo code </secondary-button>
                     <primary-button class="mt-4 w-full" @click.prevent="confirmOrder">Confirm order</primary-button>
                 </div>
             </div>
@@ -285,12 +251,7 @@ const confirmOrder = () => {
         <form class="p-6" @submit.prevent="verifyPromoCode">
             <div class="flex justify-between text-gray-900 dark:text-white">
                 <h5 class="text-xl font-medium">Apply promo code</h5>
-                <font-awesome-icon
-                    :icon="['fas', 'xmark']"
-                    size="xl"
-                    class="cursor-pointer"
-                    @click="promoCode.modal = false"
-                />
+                <font-awesome-icon :icon="['fas', 'xmark']" size="xl" class="cursor-pointer" @click="promoCode.modal = false" />
             </div>
 
             <div class="my-4">

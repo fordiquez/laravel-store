@@ -1,6 +1,6 @@
 <script setup>
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, Link, usePage } from '@inertiajs/vue3';
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
+import { Head, Link, usePage } from '@inertiajs/vue3'
 </script>
 
 <template>
@@ -9,9 +9,7 @@ import { Head, Link, usePage } from '@inertiajs/vue3';
     <AuthenticatedLayout>
         <div class="px-4 py-12 sm:px-6 lg:px-8">
             <div class="overflow-hidden rounded-lg bg-white shadow-sm dark:bg-gray-800">
-                <div
-                    class="p-6 text-center text-xl font-semibold uppercase tracking-wider text-gray-900 dark:text-gray-100"
-                >
+                <div class="p-6 text-center text-xl font-semibold uppercase tracking-wider text-gray-900 dark:text-gray-100">
                     Find exactly what you need!
                 </div>
                 <div class="flex flex-wrap">
@@ -25,11 +23,7 @@ import { Head, Link, usePage } from '@inertiajs/vue3';
                                 v-if="category.thumbnail"
                                 class="aspect-h-1 aspect-w-1 mb-4 overflow-hidden rounded-lg group-hover:opacity-75"
                             >
-                                <img
-                                    :alt="category.title"
-                                    :src="category.thumbnail"
-                                    class="object-cover object-center"
-                                />
+                                <img :alt="category.title" :src="category.thumbnail" class="object-cover object-center" />
                             </div>
                             <Link
                                 class="text-center text-base font-medium text-gray-600 hover:text-gray-900 focus:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100 dark:focus:text-gray-100"

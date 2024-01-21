@@ -1,40 +1,40 @@
 <script setup>
-import { onMounted, defineProps, defineEmits, ref } from 'vue';
-import { Drawer } from 'flowbite';
-import Filters from '@/Components/Filters.vue';
-import SecondaryButton from '@/Components/SecondaryButton.vue';
+import { onMounted, defineProps, defineEmits, ref } from 'vue'
+import { Drawer } from 'flowbite'
+import Filters from '@/Components/Filters.vue'
+import SecondaryButton from '@/Components/SecondaryButton.vue'
 
 const props = defineProps({
     brands: Array,
     properties: Object,
     filters: Object,
-    rangePrices: Object,
-});
+    rangePrices: Object
+})
 
-const emits = defineEmits(['brandFilter', 'priceFilter', 'propertyFilter']);
+const emits = defineEmits(['brandFilter', 'priceFilter', 'propertyFilter'])
 
-const drawer = ref(null);
-const drawerRef = ref(null);
+const drawer = ref(null)
+const drawerRef = ref(null)
 
-onMounted(() => (drawer.value = new Drawer(drawerRef.value)));
+onMounted(() => (drawer.value = new Drawer(drawerRef.value)))
 
-const show = () => drawer.value.show();
-const hide = () => drawer.value.hide();
+const show = () => drawer.value.show()
+const hide = () => drawer.value.hide()
 
 const brandFilter = (brand) => {
-    emits('brandFilter', brand);
-    hide();
-};
+    emits('brandFilter', brand)
+    hide()
+}
 
 const priceFilter = () => {
-    emits('priceFilter');
-    hide();
-};
+    emits('priceFilter')
+    hide()
+}
 
 const propertyFilter = (value) => {
-    emits('propertyFilter', value);
-    hide();
-};
+    emits('propertyFilter', value)
+    hide()
+}
 </script>
 
 <template>

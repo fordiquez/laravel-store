@@ -1,28 +1,28 @@
 <script setup>
-import GuestLayout from '@/Layouts/GuestLayout.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
-import { Head, useForm } from '@inertiajs/vue3';
+import GuestLayout from '@/Layouts/GuestLayout.vue'
+import InputError from '@/Components/InputError.vue'
+import InputLabel from '@/Components/InputLabel.vue'
+import PrimaryButton from '@/Components/PrimaryButton.vue'
+import TextInput from '@/Components/TextInput.vue'
+import { Head, useForm } from '@inertiajs/vue3'
 
 const props = defineProps({
     email: String,
-    token: String,
-});
+    token: String
+})
 
 const form = useForm({
     token: props.token,
     email: props.email,
     password: '',
-    password_confirmation: '',
-});
+    password_confirmation: ''
+})
 
 const submit = () => {
     form.post(route('password.store'), {
-        onFinish: () => form.reset('password', 'password_confirmation'),
-    });
-};
+        onFinish: () => form.reset('password', 'password_confirmation')
+    })
+}
 </script>
 
 <template>
@@ -77,9 +77,7 @@ const submit = () => {
             </div>
 
             <div class="mt-4 flex items-center justify-end">
-                <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Reset Password
-                </PrimaryButton>
+                <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing"> Reset Password </PrimaryButton>
             </div>
         </form>
     </GuestLayout>

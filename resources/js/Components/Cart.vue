@@ -1,36 +1,36 @@
 <script setup>
-import { Link, router } from '@inertiajs/vue3';
-import Modal from '@/Components/Modal.vue';
-import { useFormat } from '@/composables/format';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import SecondaryButton from '@/Components/SecondaryButton.vue';
-import DangerButton from '@/Components/DangerButton.vue';
+import { Link, router } from '@inertiajs/vue3'
+import Modal from '@/Components/Modal.vue'
+import { useFormat } from '@/composables/format'
+import PrimaryButton from '@/Components/PrimaryButton.vue'
+import SecondaryButton from '@/Components/SecondaryButton.vue'
+import DangerButton from '@/Components/DangerButton.vue'
 
 const props = defineProps({
     show: {
         type: Boolean,
-        default: false,
+        default: false
     },
     count: Number,
     total: Number,
     items: Array,
-    goods: Array,
-});
+    goods: Array
+})
 
-defineEmits(['close']);
+defineEmits(['close'])
 
-const { formatMoney } = useFormat();
+const { formatMoney } = useFormat()
 
-const itemId = (id) => props.items.findIndex((item) => item.good_id === id);
+const itemId = (id) => props.items.findIndex((item) => item.good_id === id)
 
 const update = (good, quantity) =>
     router.patch(route('cart.update', good), {
-        quantity,
-    });
+        quantity
+    })
 
-const remove = (good) => router.delete(route('cart.delete', good));
+const remove = (good) => router.delete(route('cart.delete', good))
 
-const bulkDelete = () => router.delete(route('cart.bulk-delete'));
+const bulkDelete = () => router.delete(route('cart.bulk-delete'))
 </script>
 
 <template>
@@ -43,9 +43,7 @@ const bulkDelete = () => router.delete(route('cart.bulk-delete'));
                 <font-awesome-icon :icon="['fas', 'xmark']" size="xl" />
             </button>
         </div>
-        <div
-            class="max-h-[80vh] overflow-y-auto p-4 scrollbar-thin scrollbar-track-purple-300 scrollbar-thumb-purple-600 md:p-6"
-        >
+        <div class="max-h-[80vh] overflow-y-auto p-4 scrollbar-thin scrollbar-track-purple-300 scrollbar-thumb-purple-600 md:p-6">
             <template v-if="items.length">
                 <div class="mb-4 flex flex-col justify-between space-y-4 sm:flex-row sm:space-y-0">
                     <secondary-button @click="$emit('close')">
@@ -101,7 +99,7 @@ const bulkDelete = () => router.delete(route('cart.bulk-delete'));
                                         'mr-3',
                                         items[itemId(good.id)].quantity > 1
                                             ? 'cursor-pointer text-purple-600'
-                                            : 'cursor-not-allowed text-gray-300 dark:text-gray-500',
+                                            : 'cursor-not-allowed text-gray-300 dark:text-gray-500'
                                     ]"
                                     :disabled="items[itemId(good.id)].quantity <= 1"
                                     @click.prevent="update(good, items[itemId(good.id)].quantity - 1)"
@@ -149,18 +147,8 @@ const bulkDelete = () => router.delete(route('cart.bulk-delete'));
                 </div>
             </template>
             <div v-else class="flex flex-col items-center justify-center">
-                <img
-                    loading="lazy"
-                    alt="Cart"
-                    title="Cart"
-                    class="mb-12 w-full max-w-xs"
-                    src="@/assets/modal-cart-dummy.svg"
-                />
-                <h4
-                    class="mb-4 text-xl font-medium uppercase tracking-wide text-gray-900 dark:text-gray-200 md:text-2xl"
-                >
-                    Cart is empty
-                </h4>
+                <img loading="lazy" alt="Cart" title="Cart" class="mb-12 w-full max-w-xs" src="@/assets/modal-cart-dummy.svg" />
+                <h4 class="mb-4 text-xl font-medium uppercase tracking-wide text-gray-900 dark:text-gray-200 md:text-2xl">Cart is empty</h4>
                 <p class="text-sm text-gray-800 dark:text-gray-400">But it's never too late to fix it :)</p>
             </div>
         </div>

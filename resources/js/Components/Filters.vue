@@ -1,19 +1,19 @@
 <script setup>
-import { defineProps, defineEmits } from 'vue';
-import Filter from '@/Components/Filter.vue';
-import Slider from '@vueform/slider';
-import SecondaryButton from '@/Components/SecondaryButton.vue';
+import { defineProps, defineEmits } from 'vue'
+import Filter from '@/Components/Filter.vue'
+import Slider from '@vueform/slider'
+import SecondaryButton from '@/Components/SecondaryButton.vue'
 
 const props = defineProps({
     brands: Array,
     properties: Object,
     filters: Object,
-    rangePrices: Object,
-});
+    rangePrices: Object
+})
 
-defineEmits(['brandFilter', 'priceFilter', 'propertyFilter']);
+defineEmits(['brandFilter', 'priceFilter', 'propertyFilter'])
 
-const sliderFormat = (value) => `${Math.round(value)} $`;
+const sliderFormat = (value) => `${Math.round(value)} $`
 </script>
 
 <template>
@@ -40,12 +40,7 @@ const sliderFormat = (value) => `${Math.round(value)} $`;
         <Filter title="Prices">
             <div class="flex items-center justify-between space-x-3">
                 <div class="basis-1/3">
-                    <label
-                        for="filters-price-from"
-                        class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-                    >
-                        From
-                    </label>
+                    <label for="filters-price-from" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"> From </label>
 
                     <input
                         type="number"
@@ -57,9 +52,7 @@ const sliderFormat = (value) => `${Math.round(value)} $`;
                 </div>
 
                 <div class="basis-1/3">
-                    <label for="filters-price-to" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
-                        To
-                    </label>
+                    <label for="filters-price-to" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"> To </label>
 
                     <input
                         type="number"
@@ -70,9 +63,7 @@ const sliderFormat = (value) => `${Math.round(value)} $`;
                     />
                 </div>
 
-                <secondary-button class="self-end" :disabled="filters.processing" @click="$emit('priceFilter')">
-                    Ok
-                </secondary-button>
+                <secondary-button class="self-end" :disabled="filters.processing" @click="$emit('priceFilter')"> Ok </secondary-button>
             </div>
 
             <Slider

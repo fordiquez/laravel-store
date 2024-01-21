@@ -1,19 +1,19 @@
 <script setup>
-import { reactive } from 'vue';
-import { Link, useForm, usePage } from '@inertiajs/vue3';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
-import { VueTelInput } from 'vue-tel-input';
-import 'vue-tel-input/vue-tel-input.css';
+import { reactive } from 'vue'
+import { Link, useForm, usePage } from '@inertiajs/vue3'
+import InputError from '@/Components/InputError.vue'
+import InputLabel from '@/Components/InputLabel.vue'
+import PrimaryButton from '@/Components/PrimaryButton.vue'
+import TextInput from '@/Components/TextInput.vue'
+import { VueTelInput } from 'vue-tel-input'
+import 'vue-tel-input/vue-tel-input.css'
 
 const props = defineProps({
     mustVerifyEmail: Boolean,
-    status: String,
-});
+    status: String
+})
 
-const { user } = reactive(usePage().props);
+const { user } = reactive(usePage().props)
 
 const form = useForm({
     first_name: user.first_name,
@@ -21,8 +21,8 @@ const form = useForm({
     email: user.email,
     phone: user.phone,
     birth_date: user.birth_date,
-    gender: user.gender,
-});
+    gender: user.gender
+})
 </script>
 
 <template>
@@ -30,9 +30,7 @@ const form = useForm({
         <header>
             <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">Profile Information</h2>
 
-            <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
-                Update your account's profile information and email address.
-            </p>
+            <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">Update your account's profile information and email address.</p>
         </header>
 
         <form @submit.prevent="form.patch(route('profile.personal-information.update'))" class="mt-6 space-y-6">
@@ -70,14 +68,7 @@ const form = useForm({
             <div>
                 <InputLabel for="email" value="Email" />
 
-                <TextInput
-                    id="email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    v-model="form.email"
-                    required
-                    autocomplete="email"
-                />
+                <TextInput id="email" type="email" class="mt-1 block w-full" v-model="form.email" required autocomplete="email" />
 
                 <InputError class="mt-2" :message="form.errors.email" />
             </div>
@@ -95,10 +86,7 @@ const form = useForm({
                     </Link>
                 </p>
 
-                <div
-                    v-show="props.status === 'verification-link-sent'"
-                    class="mt-2 text-sm font-medium text-green-600 dark:text-green-400"
-                >
+                <div v-show="props.status === 'verification-link-sent'" class="mt-2 text-sm font-medium text-green-600 dark:text-green-400">
                     A new verification link has been sent to your email address.
                 </div>
             </div>
@@ -116,12 +104,12 @@ const form = useForm({
                         showDialCodeInSelection: false,
                         showFlags: true,
                         showSearchBox: false,
-                        tabindex: 0,
+                        tabindex: 0
                     }"
                     :input-options="{
                         placeholder: 'Phone number',
                         styleClasses: '!rounded-lg h-[42px] dark:bg-gray-900 dark:text-gray-300',
-                        showDialCode: true,
+                        showDialCode: true
                     }"
                     auto-format
                     auto-default-country

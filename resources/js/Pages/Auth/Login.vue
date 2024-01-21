@@ -1,28 +1,28 @@
 <script setup>
-import { Head, Link, useForm } from '@inertiajs/vue3';
-import Checkbox from '@/Components/Checkbox.vue';
-import GuestLayout from '@/Layouts/GuestLayout.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
+import { Head, Link, useForm } from '@inertiajs/vue3'
+import Checkbox from '@/Components/Checkbox.vue'
+import GuestLayout from '@/Layouts/GuestLayout.vue'
+import InputError from '@/Components/InputError.vue'
+import InputLabel from '@/Components/InputLabel.vue'
+import PrimaryButton from '@/Components/PrimaryButton.vue'
+import TextInput from '@/Components/TextInput.vue'
 
 defineProps({
     canResetPassword: Boolean,
-    status: String,
-});
+    status: String
+})
 
 const form = useForm({
     email: '',
     password: '',
-    remember: false,
-});
+    remember: false
+})
 
 const submit = () => {
     form.post(route('login'), {
-        onFinish: () => form.reset('password'),
-    });
-};
+        onFinish: () => form.reset('password')
+    })
+}
 </script>
 
 <template>
@@ -98,9 +98,7 @@ const submit = () => {
                     Forgot your password?
                 </Link>
 
-                <PrimaryButton class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Log in
-                </PrimaryButton>
+                <PrimaryButton class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing"> Log in </PrimaryButton>
             </div>
         </form>
     </GuestLayout>

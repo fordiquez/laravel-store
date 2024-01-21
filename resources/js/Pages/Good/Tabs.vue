@@ -1,40 +1,39 @@
 <script setup>
-import { Link } from '@inertiajs/vue3';
-import { reactive } from 'vue';
+import { Link } from '@inertiajs/vue3'
+import { reactive } from 'vue'
 
 defineProps({
-    good: String,
-});
+    good: String
+})
 
 const classes = reactive({
     link: {
-        default:
-            'border-transparent transition-all duration-300 hover:border-purple-300 hover:text-purple-600 dark:hover:text-purple-300',
-        active: 'active border-purple-600 text-purple-600 dark:border-purple-400 dark:text-purple-500',
+        default: 'border-transparent transition-all duration-300 hover:border-purple-300 hover:text-purple-600 dark:hover:text-purple-300',
+        active: 'active border-purple-600 text-purple-600 dark:border-purple-400 dark:text-purple-500'
     },
     icon: {
         default: 'text-gray-400 group-hover:text-purple-500 dark:text-gray-500 dark:group-hover:text-purple-300',
-        active: 'text-purple-600 dark:text-purple-500',
-    },
-});
+        active: 'text-purple-600 dark:text-purple-500'
+    }
+})
 
 const tabs = reactive([
     {
         title: 'General',
         route: 'goods.good.general',
-        icon: ['fas', 'bag-shopping'],
+        icon: ['fas', 'bag-shopping']
     },
     {
         title: 'Properties',
         route: 'goods.good.properties',
-        icon: ['fas', 'clipboard-list'],
+        icon: ['fas', 'clipboard-list']
     },
     {
         title: 'Reviews',
         route: 'goods.good.reviews',
-        icon: ['fas', 'comments'],
-    },
-]);
+        icon: ['fas', 'comments']
+    }
+])
 </script>
 
 <template>

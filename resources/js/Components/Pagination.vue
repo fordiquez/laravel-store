@@ -1,76 +1,76 @@
 <script setup>
-import { computed } from 'vue';
-import { Link } from '@inertiajs/vue3';
-import { range } from 'lodash';
-import qs from 'qs';
+import { computed } from 'vue'
+import { Link } from '@inertiajs/vue3'
+import { range } from 'lodash'
+import qs from 'qs'
 
 const props = defineProps({
     links: Object,
-    meta: Object,
-});
+    meta: Object
+})
 
 const pageLinks = computed(() => {
-    const pageLimit = 7;
-    const parsed = qs.parse(window.location.search.substring(1));
+    const pageLimit = 7
+    const parsed = qs.parse(window.location.search.substring(1))
 
     const pageRange = range(1, props.meta.last_page + 1).map((page) => {
-        parsed.page = page;
+        parsed.page = page
 
         return {
             label: page,
             url: `${props.meta.path}?${qs.stringify(parsed, { encodeValuesOnly: true })}`,
-            active: page === props.meta.current_page,
-        };
-    });
+            active: page === props.meta.current_page
+        }
+    })
 
-    return pageRange.length > pageLimit ? trimPageRange(pageRange) : pageRange;
-});
+    return pageRange.length > pageLimit ? trimPageRange(pageRange) : pageRange
+})
 
 const prevPage = computed(() => {
-    const parsed = qs.parse(window.location.search.substring(1));
-    parsed.page = parsed.page ? parseFloat(parsed.page) : 1;
+    const parsed = qs.parse(window.location.search.substring(1))
+    parsed.page = parsed.page ? parseFloat(parsed.page) : 1
 
     if (parsed.page > 1) {
-        parsed.page = parsed.page - 1;
+        parsed.page = parsed.page - 1
 
-        return `${props.meta.path}?${qs.stringify(parsed, { encodeValuesOnly: true })}`;
+        return `${props.meta.path}?${qs.stringify(parsed, { encodeValuesOnly: true })}`
     }
 
-    return null;
-});
+    return null
+})
 
 const nextPage = computed(() => {
-    const parsed = qs.parse(window.location.search.substring(1));
-    parsed.page = parsed.page ? parseFloat(parsed.page) : 1;
+    const parsed = qs.parse(window.location.search.substring(1))
+    parsed.page = parsed.page ? parseFloat(parsed.page) : 1
 
     if (parsed.page < props.meta.last_page) {
-        parsed.page = parsed.page + 1;
+        parsed.page = parsed.page + 1
 
-        return `${props.meta.path}?${qs.stringify(parsed, { encodeValuesOnly: true })}`;
+        return `${props.meta.path}?${qs.stringify(parsed, { encodeValuesOnly: true })}`
     }
 
-    return null;
-});
+    return null
+})
 
 const trimPageRange = (pageRange) => {
     if (props.meta.current_page < 3 || props.meta.current_page > pageRange.length - 2) {
-        const beginning = pageRange.slice(0, 3);
-        beginning.push({ url: '#' });
-        const end = pageRange.slice(pageRange.length - 3);
+        const beginning = pageRange.slice(0, 3)
+        beginning.push({ url: '#' })
+        const end = pageRange.slice(pageRange.length - 3)
 
-        return beginning.concat(end);
+        return beginning.concat(end)
     }
 
-    const first = pageRange.slice(0, 1);
-    first.push({ url: '#' });
+    const first = pageRange.slice(0, 1)
+    first.push({ url: '#' })
 
-    const middle = pageRange.slice(props.meta.current_page - 2, props.meta.current_page + 1);
-    middle.push({ url: '#1' });
+    const middle = pageRange.slice(props.meta.current_page - 2, props.meta.current_page + 1)
+    middle.push({ url: '#1' })
 
-    const last = pageRange.slice(pageRange.length - 1);
+    const last = pageRange.slice(pageRange.length - 1)
 
-    return first.concat(middle, last);
-};
+    return first.concat(middle, last)
+}
 </script>
 
 <template>

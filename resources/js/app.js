@@ -1,22 +1,22 @@
-import './bootstrap';
-import '../css/app.css';
+import './bootstrap'
+import '../css/app.css'
 
-import { createApp, h } from 'vue';
-import { createInertiaApp } from '@inertiajs/vue3';
-import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
-import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
-import { library, dom } from '@fortawesome/fontawesome-svg-core';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { fas } from '@fortawesome/free-solid-svg-icons';
-import { far } from '@fortawesome/free-regular-svg-icons';
-import { fab } from '@fortawesome/free-brands-svg-icons';
-import VueSplide from '@splidejs/vue-splide';
-import Notifications from '@kyvg/vue3-notification';
+import { createApp, h } from 'vue'
+import { createInertiaApp } from '@inertiajs/vue3'
+import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers'
+import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m'
+import { library, dom } from '@fortawesome/fontawesome-svg-core'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { fas } from '@fortawesome/free-solid-svg-icons'
+import { far } from '@fortawesome/free-regular-svg-icons'
+import { fab } from '@fortawesome/free-brands-svg-icons'
+import VueSplide from '@splidejs/vue-splide'
+import Notifications from '@kyvg/vue3-notification'
 
-library.add(fas, far, fab);
-dom.watch();
+library.add(fas, far, fab)
+dom.watch()
 
-const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'brandford.';
+const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'brandford.'
 
 createInertiaApp({
     title: (title) => `${title} – ${appName}`,
@@ -28,9 +28,9 @@ createInertiaApp({
             .use(ZiggyVue, Ziggy)
             .use(VueSplide)
             .use(Notifications)
-            .mount(el);
+            .mount(el)
     },
     progress: {
-        color: '#5850ec',
-    },
-});
+        color: '#5850ec'
+    }
+})

@@ -1,24 +1,24 @@
 <script setup>
-import { onMounted, reactive, ref } from 'vue';
-import { useForm, router } from '@inertiajs/vue3';
-import { initTooltips } from 'flowbite';
-import Multiselect from 'vue-multiselect';
-import axios from 'axios';
-import DangerButton from '@/Components/DangerButton.vue';
-import InputError from '@/Components/InputError.vue';
-import InputLabel from '@/Components/InputLabel.vue';
-import Modal from '@/Components/Modal.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import SecondaryButton from '@/Components/SecondaryButton.vue';
-import TextInput from '@/Components/TextInput.vue';
-import 'vue-multiselect/dist/vue-multiselect.css';
+import { onMounted, reactive, ref } from 'vue'
+import { useForm, router } from '@inertiajs/vue3'
+import { initTooltips } from 'flowbite'
+import Multiselect from 'vue-multiselect'
+import axios from 'axios'
+import DangerButton from '@/Components/DangerButton.vue'
+import InputError from '@/Components/InputError.vue'
+import InputLabel from '@/Components/InputLabel.vue'
+import Modal from '@/Components/Modal.vue'
+import PrimaryButton from '@/Components/PrimaryButton.vue'
+import SecondaryButton from '@/Components/SecondaryButton.vue'
+import TextInput from '@/Components/TextInput.vue'
+import 'vue-multiselect/dist/vue-multiselect.css'
 
 const props = defineProps({
     addresses: Array,
-    countries: Array,
-});
+    countries: Array
+})
 
-onMounted(() => initTooltips());
+onMounted(() => initTooltips())
 
 const form = useForm({
     country_id: null,
@@ -27,93 +27,93 @@ const form = useForm({
     street: '',
     house: '',
     flat: null,
-    postal_code: null,
-});
+    postal_code: null
+})
 
-const defaultAddress = ref(props.addresses?.find((item) => item.is_main)?.id || null);
-const addressModal = ref(false);
-const addressUpdateModal = ref(false);
-const country = ref();
-const state = ref();
-const city = ref();
-const states = reactive([]);
-const cities = reactive([]);
-const loading = reactive([]);
+const defaultAddress = ref(props.addresses?.find((item) => item.is_main)?.id || null)
+const addressModal = ref(false)
+const addressUpdateModal = ref(false)
+const country = ref()
+const state = ref()
+const city = ref()
+const states = reactive([])
+const cities = reactive([])
+const loading = reactive([])
 
-const isLoading = (field) => !!loading.find((item) => field === item);
+const isLoading = (field) => !!loading.find((item) => field === item)
 
 const onCountrySelected = async (selectedCountry) => {
-    form.country_id = selectedCountry.id;
-    loading.push('state');
+    form.country_id = selectedCountry.id
+    loading.push('state')
     await axios
         .get(route('api.locations.states', selectedCountry.iso2.toLowerCase()))
         .then(({ data }) => {
-            states.splice(0, states.length, ...data);
-            state.value = city.value = null;
-            form.reset('state_id', 'city_id');
+            states.splice(0, states.length, ...data)
+            state.value = city.value = null
+            form.reset('state_id', 'city_id')
         })
         .catch((error) => {
-            console.log(error);
+            console.log(error)
         })
-        .finally(() => loading.pop());
-};
+        .finally(() => loading.pop())
+}
 
 const onStateSelected = async (selectedState) => {
-    form.state_id = selectedState.id;
-    loading.push('city');
+    form.state_id = selectedState.id
+    loading.push('city')
     await axios
         .get(route('api.locations.cities', selectedState.id))
         .then(({ data }) => {
-            cities.splice(0, cities.length, ...data);
-            city.value = null;
-            form.reset('city_id');
+            cities.splice(0, cities.length, ...data)
+            city.value = null
+            form.reset('city_id')
         })
         .catch((error) => {
-            console.log(error);
+            console.log(error)
         })
-        .finally(() => loading.pop());
-};
+        .finally(() => loading.pop())
+}
 
-const onCitySelected = (selectedCity) => (form.city_id = selectedCity.id);
+const onCitySelected = (selectedCity) => (form.city_id = selectedCity.id)
 
 const submit = () =>
     !addressUpdateModal.value
         ? form.post(route('profile.address.store'), {
-              onSuccess: () => closeAddressModal(),
+              onSuccess: () => closeAddressModal()
           })
         : form.put(route('profile.address.update', form), {
-              onSuccess: () => closeAddressModal(),
-          });
+              onSuccess: () => closeAddressModal()
+          })
 
 const closeAddressModal = () => {
-    form.reset();
-    form.clearErrors();
-    addressModal.value = false;
-    country.value = state.value = city.value = null;
-};
+    form.reset()
+    form.clearErrors()
+    addressModal.value = false
+    country.value = state.value = city.value = null
+}
 
 const onEditAddress = (address) => {
-    country.value = address.country;
+    country.value = address.country
     onCountrySelected(address.country).then(() => {
-        state.value = address.state;
+        state.value = address.state
         onStateSelected(address.state).then(() => {
-            city.value = address.city;
-            onCitySelected(address.city);
-        });
-    });
-    form.id = address.id;
-    form.street = address.street;
-    form.house = address.house;
-    form.flat = address.flat;
-    form.postal_code = address.postal_code;
-    addressModal.value = true;
-    addressUpdateModal.value = true;
-};
+            city.value = address.city
+            onCitySelected(address.city)
+        })
+    })
+    form.id = address.id
+    form.street = address.street
+    form.house = address.house
+    form.flat = address.flat
+    form.postal_code = address.postal_code
+    addressModal.value = true
+    addressUpdateModal.value = true
+}
 
 const onChangeDefaultAddress = (event) => {
-    defaultAddress.value = Number.parseInt(event.target.value) || null;
-    router.patch(route('profile.address.patch', defaultAddress.value));
-};
+    defaultAddress.value = Number.parseInt(event.target.value) || null
+    router.patch(route('profile.address.patch', defaultAddress.value))
+}
 </script>
 
 <template>
@@ -127,9 +127,7 @@ const onChangeDefaultAddress = (event) => {
         </header>
 
         <div v-if="addresses.length" class="mt-4 lg:max-w-lg">
-            <label for="addresses" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
-                Default delivery address
-            </label>
+            <label for="addresses" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"> Default delivery address </label>
             <select
                 @change="onChangeDefaultAddress"
                 id="addresses"
@@ -141,9 +139,7 @@ const onChangeDefaultAddress = (event) => {
                     :key="address.id"
                     :value="address.id"
                     :selected="address.id === defaultAddress"
-                    v-html="
-                        `${address.country.name}, ${address.state.name}, ${address.city.name}, ${address.street}, ${address.house}`
-                    "
+                    v-html="`${address.country.name}, ${address.state.name}, ${address.city.name}, ${address.street}, ${address.house}`"
                 />
             </select>
         </div>
@@ -325,13 +321,7 @@ const onChangeDefaultAddress = (event) => {
                             <div class="basis-1/5">
                                 <InputLabel for="flat" value="Flat" />
 
-                                <TextInput
-                                    id="flat"
-                                    type="text"
-                                    class="mt-1 block w-full"
-                                    v-model="form.flat"
-                                    autocomplete="flat"
-                                />
+                                <TextInput id="flat" type="text" class="mt-1 block w-full" v-model="form.flat" autocomplete="flat" />
 
                                 <InputError class="mt-2" :message="form.errors.flat" />
                             </div>

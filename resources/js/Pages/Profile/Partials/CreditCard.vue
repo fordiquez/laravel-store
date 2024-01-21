@@ -41,9 +41,7 @@
                         />
                     </div>
                 </div>
-                <div
-                    class="mb-4 inline-block p-2.5 text-sm font-medium text-white 2xs:text-xl xs:mb-6 xs:px-4 xs:py-2.5 xs:text-2xl"
-                >
+                <div class="mb-4 inline-block p-2.5 text-sm font-medium text-white 2xs:text-xl xs:mb-6 xs:px-4 xs:py-2.5 xs:text-2xl">
                     <template v-for="(n, index) in currentPlaceholder" :key="index">
                         <span class="inline-block w-2 2xs:w-3 xs:w-4" v-if="getIsNumberMasked(index, n)">*</span>
                         <span
@@ -84,9 +82,7 @@
                             Full Name
                         </span>
                     </div>
-                    <div
-                        class="ml-auto inline-flex w-20 shrink-0 flex-wrap justify-end whitespace-nowrap px-2.5 text-base xs:text-lg"
-                    >
+                    <div class="ml-auto inline-flex w-20 shrink-0 flex-wrap justify-end whitespace-nowrap px-2.5 text-base xs:text-lg">
                         <div class="w-full pb-1 text-right text-xs opacity-70 xs:pb-1.5 xs:text-sm">Expires</div>
                         <div class="relative">
                             <span v-if="labels.exp_month" :key="labels.exp_month">
@@ -136,72 +132,65 @@
 </template>
 
 <script setup>
-import { computed, onMounted, reactive, ref } from 'vue';
-import { usePage } from '@inertiajs/vue3';
+import { computed, onMounted, reactive, ref } from 'vue'
+import { usePage } from '@inertiajs/vue3'
 
 const props = defineProps({
     labels: Object,
     isNumberMasked: Boolean,
     randomBackgrounds: {
         type: Boolean,
-        default: true,
+        default: true
     },
-    backgroundImage: String,
-});
+    backgroundImage: String
+})
 
-const isCardFlipped = ref(false);
+const isCardFlipped = ref(false)
 const placeholders = reactive({
     amex: '#### ###### #####',
     diners: '#### ###### ####',
-    default: '#### #### #### ####',
-});
-const currentPlaceholder = ref('');
+    default: '#### #### #### ####'
+})
+const currentPlaceholder = ref('')
 
 onMounted(() => {
     currentPlaceholder.value =
-        brand.value === 'amex'
-            ? placeholders.amex
-            : brand.value === 'dinersclub'
-            ? placeholders.diners
-            : placeholders.default;
-});
+        brand.value === 'amex' ? placeholders.amex : brand.value === 'dinersclub' ? placeholders.diners : placeholders.default
+})
 
 const currentCardBackground = computed(() => {
-    let random = Math.floor(Math.random() * 25 + 1);
-    return !props.backgroundImage && props.randomBackgrounds
-        ? `${usePage().props.ziggy.url}/static/cards/${random}.jpeg`
-        : null;
-});
+    let random = Math.floor(Math.random() * 25 + 1)
+    return !props.backgroundImage && props.randomBackgrounds ? `${usePage().props.ziggy.url}/static/cards/${random}.jpeg` : null
+})
 
-const getIsNumberMasked = (index, n) =>
-    index < 14 && props.labels.number.length > index && n.trim() !== '' && props.isNumberMasked;
+const getIsNumberMasked = (index, n) => index < 14 && props.labels.number.length > index && n.trim() !== '' && props.isNumberMasked
 
 const brand = computed(() => {
-    if (props.labels.brand) return props.labels.brand;
+    if (props.labels.brand) return props.labels.brand
 
-    let number = props.labels.number;
+    let number = props.labels.number
 
     switch (!number) {
         case /^4/.test(number):
-            return 'visa';
+            return 'visa'
         case /^(34|37)/.test(number):
-            return 'amex';
+            return 'amex'
         case /^5[1-5]/.test(number):
-            return 'mastercard';
+            return 'mastercard'
         case /^6011/.test(number):
-            return 'discover';
+            return 'discover'
         case /^62/.test(number):
-            return 'unionpay';
+            return 'unionpay'
         case /^9792/.test(number):
-            return 'troy';
+            return 'troy'
         case /^3(?:0([0-5]|9)|[689]\d?)\d{0,11}/.test(number):
-            return 'dinersclub';
+            return 'dinersclub'
         case /^35(2[89]|[3-8])/.test(number):
-            return 'jcb';
+            return 'jcb'
         default:
-            return '';
+            return ''
     }
-});
+})
 </script>
 
 <style>

@@ -1,16 +1,16 @@
 <script setup>
-import { Head, router } from '@inertiajs/vue3';
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import Tabs from '@/Pages/Good/Tabs.vue';
-import { computed, onMounted, reactive, ref } from 'vue';
-import '@splidejs/vue-splide/css/sea-green';
-import { initTooltips } from 'flowbite';
-import { useFormat } from '@/composables/format';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
+import { Head, router } from '@inertiajs/vue3'
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
+import Tabs from '@/Pages/Good/Tabs.vue'
+import { computed, onMounted, reactive, ref } from 'vue'
+import '@splidejs/vue-splide/css/sea-green'
+import { initTooltips } from 'flowbite'
+import { useFormat } from '@/composables/format'
+import PrimaryButton from '@/Components/PrimaryButton.vue'
 
 const props = defineProps({
-    good: Object,
-});
+    good: Object
+})
 
 const mainOptions = reactive({
     type: 'fade',
@@ -18,8 +18,8 @@ const mainOptions = reactive({
     gap: '1rem',
     pagination: false,
     rewind: true,
-    trimSpace: true,
-});
+    trimSpace: true
+})
 
 const thumbsOptions = reactive({
     type: 'slide',
@@ -33,23 +33,23 @@ const thumbsOptions = reactive({
     isNavigation: true,
     dragMinThreshold: {
         mouse: 4,
-        touch: 10,
-    },
-});
+        touch: 10
+    }
+})
 
-const main = ref();
-const thumbs = ref();
-const { formatMoney } = useFormat();
+const main = ref()
+const thumbs = ref()
+const { formatMoney } = useFormat()
 
 onMounted(() => {
-    initTooltips();
-    const thumbsSplide = thumbs.value?.splide;
+    initTooltips()
+    const thumbsSplide = thumbs.value?.splide
     if (thumbsSplide) {
-        main.value?.sync(thumbsSplide);
+        main.value?.sync(thumbsSplide)
     }
-});
+})
 
-const stars = reactive([0, 1, 2, 3, 4]);
+const stars = reactive([0, 1, 2, 3, 4])
 
 const ratingStars = computed(() =>
     stars.map((star) =>
@@ -57,11 +57,11 @@ const ratingStars = computed(() =>
             ? ['fas', 'star-half-stroke']
             : props.good.rating > star
             ? ['fas', 'star']
-            : ['far', 'star'],
-    ),
-);
+            : ['far', 'star']
+    )
+)
 
-const store = () => router.post(route('cart.store', props.good));
+const store = () => router.post(route('cart.store', props.good))
 </script>
 
 <template>
@@ -126,18 +126,13 @@ const store = () => router.post(route('cart.store', props.good));
                         </div>
                         <div class="flex items-center space-x-4">
                             <div class="mt-2 flex flex-col">
-                                <p
-                                    v-if="good.old_price"
-                                    class="mt-1 text-sm font-medium text-gray-500 dark:text-gray-300"
-                                >
+                                <p v-if="good.old_price" class="mt-1 text-sm font-medium text-gray-500 dark:text-gray-300">
                                     <span class="line-through">{{ formatMoney(good.old_price) }}</span>
                                 </p>
                                 <p
                                     :class="[
-                                        good.old_price
-                                            ? 'text-red-600 dark:text-rose-600'
-                                            : 'text-gray-900 dark:text-gray-300',
-                                        'text-3xl font-medium',
+                                        good.old_price ? 'text-red-600 dark:text-rose-600' : 'text-gray-900 dark:text-gray-300',
+                                        'text-3xl font-medium'
                                     ]"
                                 >
                                     {{ formatMoney(good.price) }}
@@ -152,10 +147,9 @@ const store = () => router.post(route('cart.store', props.good));
                             <div
                                 class="flex items-center justify-center rounded border bg-purple-100 px-2 py-2 dark:border-purple-600 dark:bg-purple-900"
                             >
-                                <span
-                                    class="font-[Inter] text-xs uppercase tracking-wider text-purple-600 dark:text-purple-400"
-                                    >{{ good.status }}</span
-                                >
+                                <span class="font-[Inter] text-xs uppercase tracking-wider text-purple-600 dark:text-purple-400">{{
+                                    good.status
+                                }}</span>
                             </div>
                         </div>
                         <p class="mt-4 leading-relaxed">{{ good.description }}</p>

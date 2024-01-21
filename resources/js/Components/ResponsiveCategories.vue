@@ -1,34 +1,34 @@
 <script setup>
-import { computed, onMounted, onUnmounted, reactive, ref } from 'vue';
-import { TransitionRoot, TransitionChild, Dialog, DialogPanel, DialogTitle } from '@headlessui/vue';
+import { computed, onMounted, onUnmounted, reactive, ref } from 'vue'
+import { TransitionRoot, TransitionChild, Dialog, DialogPanel, DialogTitle } from '@headlessui/vue'
 
 const props = defineProps({
     showing: Boolean,
-    categories: Array,
-});
-const emit = defineEmits(['close']);
+    categories: Array
+})
+const emit = defineEmits(['close'])
 
-const showingSubcategories = ref(false);
-const selectedCategory = reactive({});
+const showingSubcategories = ref(false)
+const selectedCategory = reactive({})
 
-onMounted(() => document.querySelector('body').classList.add('overflow-hidden'));
-onUnmounted(() => document.querySelector('body').classList.remove('overflow-hidden'));
+onMounted(() => document.querySelector('body').classList.add('overflow-hidden'))
+onUnmounted(() => document.querySelector('body').classList.remove('overflow-hidden'))
 
-const selectedCategoryTitle = computed(() => selectedCategory?.title ?? 'Categories of goods');
+const selectedCategoryTitle = computed(() => selectedCategory?.title ?? 'Categories of goods')
 
-const closeModal = () => emit('close');
+const closeModal = () => emit('close')
 
 const renderSubcategories = (categoryId) => {
     Object.assign(
         selectedCategory,
-        props.categories.find((category) => category.id === categoryId),
-    );
-    showingSubcategories.value = true;
-};
+        props.categories.find((category) => category.id === categoryId)
+    )
+    showingSubcategories.value = true
+}
 const rollbackCategories = () => {
-    Object.keys(selectedCategory).forEach((key) => delete selectedCategory[key]);
-    showingSubcategories.value = false;
-};
+    Object.keys(selectedCategory).forEach((key) => delete selectedCategory[key])
+    showingSubcategories.value = false
+}
 </script>
 
 <template>
@@ -61,10 +61,7 @@ const rollbackCategories = () => {
                             class="w-full transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all dark:bg-gray-800"
                             style="height: calc(100vh - 32px)"
                         >
-                            <DialogTitle
-                                as="h3"
-                                class="flex items-center justify-between text-lg font-medium leading-6 text-gray-100"
-                            >
+                            <DialogTitle as="h3" class="flex items-center justify-between text-lg font-medium leading-6 text-gray-100">
                                 <span>{{ selectedCategoryTitle }}</span>
                                 <button
                                     type="button"
@@ -86,10 +83,7 @@ const rollbackCategories = () => {
                                             <font-awesome-icon :icon="['fas', 'ellipsis']" class="h-6 w-6" />
                                             <span class="ml-2">{{ category.title }}</span>
                                         </div>
-                                        <font-awesome-icon
-                                            :icon="['fas', 'arrow-right-long']"
-                                            class="ml-auto h-6 w-6"
-                                        />
+                                        <font-awesome-icon :icon="['fas', 'arrow-right-long']" class="ml-auto h-6 w-6" />
                                     </li>
                                 </ul>
                                 <div v-else>
@@ -98,9 +92,7 @@ const rollbackCategories = () => {
                                         class="flex w-full items-center justify-center rounded bg-indigo-600 py-2.5 text-gray-400 shadow-md transition duration-150 ease-in-out hover:bg-indigo-700 hover:shadow-lg focus:bg-indigo-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-indigo-800 active:shadow-lg dark:text-gray-200"
                                     >
                                         <font-awesome-icon :icon="['fas', 'arrow-left-long']" class="h-6 w-6" />
-                                        <span class="ml-2 text-base font-semibold uppercase leading-6 tracking-widest"
-                                            >Categories</span
-                                        >
+                                        <span class="ml-2 text-base font-semibold uppercase leading-6 tracking-widest">Categories</span>
                                     </button>
                                     <ul v-if="selectedCategory.subcategories" class="mt-4 flex flex-col space-y-3">
                                         <li v-for="subcategory in selectedCategory.subcategories" :key="subcategory.id">

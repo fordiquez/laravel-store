@@ -1,15 +1,15 @@
 <script setup>
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import Sidebar from '@/Pages/Profile/Partials/Sidebar.vue';
-import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue';
-import { useFormat } from '@/composables/format';
-import { Link } from '@inertiajs/vue3';
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
+import Sidebar from '@/Pages/Profile/Partials/Sidebar.vue'
+import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue'
+import { useFormat } from '@/composables/format'
+import { Link } from '@inertiajs/vue3'
 
 const props = defineProps({
-    orders: Array,
-});
+    orders: Array
+})
 
-const { formatMoney } = useFormat();
+const { formatMoney } = useFormat()
 </script>
 
 <template>
@@ -17,38 +17,22 @@ const { formatMoney } = useFormat();
         <div class="flex flex-col justify-between space-x-0 px-4 py-12 sm:px-6 md:flex-row md:space-x-10 lg:px-8">
             <Sidebar />
             <div class="w-full space-y-4">
-                <h2 class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200 md:leading-[64px]">
-                    Orders
-                </h2>
+                <h2 class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200 md:leading-[64px]">Orders</h2>
                 <div v-if="orders.length" class="bg-white p-4 shadow dark:bg-gray-800 sm:rounded-lg sm:p-8">
                     <template v-for="order in orders" :key="order.id">
-                        <Disclosure
-                            as="div"
-                            class="border-b border-gray-200 py-6 dark:border-gray-600"
-                            v-slot="{ open }"
-                        >
+                        <Disclosure as="div" class="border-b border-gray-200 py-6 dark:border-gray-600" v-slot="{ open }">
                             <h3 class="-my-3 flow-root">
                                 <DisclosureButton
                                     class="group mb-2 flex w-full items-center justify-between px-2 py-2 text-gray-900 focus:rounded focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-4 dark:text-gray-300 dark:focus:ring-offset-gray-800"
                                 >
-                                    <div
-                                        class="text-left font-medium group-hover:text-purple-600 dark:group-hover:text-gray-50"
-                                    >
+                                    <div class="text-left font-medium group-hover:text-purple-600 dark:group-hover:text-gray-50">
                                         <span class="text-xs">Order # {{ order.id }} – {{ order.created_at }}</span>
                                     </div>
-                                    <span
-                                        v-if="!open"
-                                        class="text-sm group-hover:text-purple-600 dark:group-hover:text-gray-50"
-                                    >
+                                    <span v-if="!open" class="text-sm group-hover:text-purple-600 dark:group-hover:text-gray-50">
                                         {{ formatMoney(order.total_cost) }}
                                     </span>
-                                    <div
-                                        class="ml-6 flex items-center group-hover:text-purple-600 dark:group-hover:text-gray-50"
-                                    >
-                                        <font-awesome-icon
-                                            :icon="['fa-solid', !open ? 'fa-plus' : 'fa-minus']"
-                                            size="lg"
-                                        />
+                                    <div class="ml-6 flex items-center group-hover:text-purple-600 dark:group-hover:text-gray-50">
+                                        <font-awesome-icon :icon="['fa-solid', !open ? 'fa-plus' : 'fa-minus']" size="lg" />
                                     </div>
                                 </DisclosureButton>
                             </h3>
@@ -106,9 +90,7 @@ const { formatMoney } = useFormat();
                                                         <span>{{ orderItem.quantity }}</span>
                                                     </td>
                                                     <td class="py-4 text-center text-gray-800 dark:text-gray-400">
-                                                        <span>{{
-                                                            formatMoney(orderItem.good.price * orderItem.quantity)
-                                                        }}</span>
+                                                        <span>{{ formatMoney(orderItem.good.price * orderItem.quantity) }}</span>
                                                     </td>
                                                 </tr>
                                             </tbody>
