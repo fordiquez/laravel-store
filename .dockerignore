@@ -1,0 +1,19 @@
+### User-specific stuff:
+/.git*
+/.idea/workspace.xml
+.dockerignore
+
+### Other data
+storage/mysql-data
+vendor/
+bootstrap/cache
+!bootstrap/cache/.gitignore
+_ide_helper.php
+
+### Vendor bin dependencies
+/tools/*/vendor/
+.phpunit.result.cache
+
+### Docker
+Dockerfile
+docker-compose.yml

@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Default Queue Connection Name
@@ -9,7 +8,7 @@ return [
     |
     | Laravel's queue API supports an assortment of back-ends via a single
     | API, giving you convenient access to each back-end using the same
-    | syntax for every one. Here you may define a default connection.
+    | syntax for everyone. Here you may define a default connection.
     |
     */
 
@@ -29,7 +28,6 @@ return [
     */
 
     'connections' => [
-
         'sync' => [
             'driver' => 'sync',
         ],
@@ -80,7 +78,7 @@ return [
     |
     | The following options configure the database and table that store job
     | batching information. These options can be updated to any database
-    | connection and table which has been defined by your application.
+    | connection and table that has been defined by your application.
     |
     */
 
@@ -105,5 +103,4 @@ return [
         'database' => env('DB_CONNECTION', 'mysql'),
         'table' => 'failed_jobs',
     ],
-
 ];

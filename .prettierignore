@@ -1,0 +1,6 @@
+**/bootstrap
+**/storage
+**/public
+**/vendor
+**/composer.lock
+**/package-lock.json

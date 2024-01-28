@@ -1,0 +1,73 @@
+version: '3.5'
+
+services:
+    nginx:
+        image: ${CONTAINER_NAME}-nginx:latest
+        build:
+            context: ./docker/
+            args:
+                BUILD_ARGUMENT_ENV: dev
+            dockerfile: ./nginx/Dockerfile
+        container_name: ${CONTAINER_NAME}-nginx
+        restart: always
+        ports:
+            - '80:80'
+            - '443:443'
+        volumes:
+            - ./:/var/www:ro,cached
+        depends_on:
+            - laravel
+        networks:
+            - laravel
+
+    laravel: &laravel-template
+        image: ${CONTAINER_NAME}-laravel:latest
+        build:
+            context: .
+            args:
+                BUILD_ARGUMENT_ENV: dev
+            dockerfile: ./Dockerfile
+        container_name: ${CONTAINER_NAME}-laravel
+        volumes:
+            - ./:/var/www:cached
+        links:
+            - mysql
+        depends_on:
+            - mysql
+        networks:
+            - laravel
+
+    ### Cron tasks
+    supervisord:
+        <<: *laravel-template
+        container_name: ${CONTAINER_NAME}-supervisord
+        expose: []
+        command: ['/usr/bin/supervisord']
+
+    mysql:
+        image: mysql:8.2
+        container_name: ${CONTAINER_NAME}-mysql
+        restart: always
+        environment:
+            MYSQL_DATABASE: ${DB_DATABASE}
+            MYSQL_USERNAME: ${DB_USERNAME}
+            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+        ports:
+            - '3306:3306'
+        volumes:
+            - ./storage/mysql-data:/var/lib/mysql:delegated
+        networks:
+            - laravel
+
+    redis:
+        image: redis:alpine
+        container_name: ${CONTAINER_NAME}-redis
+        restart: unless-stopped
+        ports:
+            - '6379:6379'
+        networks:
+            - laravel
+
+networks:
+    laravel:
+        name: laravel

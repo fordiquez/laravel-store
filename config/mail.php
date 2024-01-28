@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Default Mailer
@@ -20,16 +19,15 @@ return [
     | Mailer Configurations
     |--------------------------------------------------------------------------
     |
-    | Here you may configure all of the mailers used by your application plus
+    | Here you may configure all the mailers used by your application plus
     | their respective settings. Several examples have been configured for
-    | you and you are free to add your own as your application requires.
+    | you, and you are free to add your own as your application requires.
     |
     | Laravel supports a variety of mail "transport" drivers to be used while
     | sending an e-mail. You will specify which one you are using for your
     | mailers below. You are free to add additional mailers as required.
     |
-    | Supported: "smtp", "sendmail", "mailgun", "ses", "ses-v2",
-    |            "postmark", "log", "array", "failover", "roundrobin"
+    | Supported: "smtp", "sendmail", "mailgun", "ses", "postmark", "log", "array", "failover"
     |
     */
 
@@ -102,7 +100,7 @@ return [
     |--------------------------------------------------------------------------
     |
     | You may wish for all e-mails sent by your application to be sent from
-    | the same address. Here, you may specify a name and address that is
+    | the same address. Here, you may specify a name and address
     | used globally for all e-mails that are sent by your application.
     |
     */

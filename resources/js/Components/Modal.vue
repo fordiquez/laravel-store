@@ -1,50 +1,50 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, watch } from 'vue';
+import { computed, onMounted, onUnmounted, watch } from 'vue'
 
 const props = withDefaults(
     defineProps<{
-        show?: boolean;
-        maxWidth?: 'sm' | 'md' | 'lg' | 'xl' | '2xl';
-        closeable?: boolean;
+        show?: boolean
+        maxWidth?: 'sm' | 'md' | 'lg' | 'xl' | '2xl'
+        closeable?: boolean
     }>(),
     {
         show: false,
         maxWidth: '2xl',
-        closeable: true,
+        closeable: true
     }
-);
+)
 
-const emit = defineEmits(['close']);
+const emit = defineEmits(['close'])
 
 watch(
     () => props.show,
     () => {
         if (props.show) {
-            document.body.style.overflow = 'hidden';
+            document.body.style.overflow = 'hidden'
         } else {
-            document.body.style.overflow = 'visible';
+            document.body.style.overflow = 'visible'
         }
     }
-);
+)
 
 const close = () => {
     if (props.closeable) {
-        emit('close');
+        emit('close')
     }
-};
+}
 
 const closeOnEscape = (e: KeyboardEvent) => {
     if (e.key === 'Escape' && props.show) {
-        close();
+        close()
     }
-};
+}
 
-onMounted(() => document.addEventListener('keydown', closeOnEscape));
+onMounted(() => document.addEventListener('keydown', closeOnEscape))
 
 onUnmounted(() => {
-    document.removeEventListener('keydown', closeOnEscape);
-    document.body.style.overflow = 'visible';
-});
+    document.removeEventListener('keydown', closeOnEscape)
+    document.body.style.overflow = 'visible'
+})
 
 const maxWidthClass = computed(() => {
     return {
@@ -52,15 +52,15 @@ const maxWidthClass = computed(() => {
         md: 'sm:max-w-md',
         lg: 'sm:max-w-lg',
         xl: 'sm:max-w-xl',
-        '2xl': 'sm:max-w-2xl',
-    }[props.maxWidth];
-});
+        '2xl': 'sm:max-w-2xl'
+    }[props.maxWidth]
+})
 </script>
 
 <template>
     <Teleport to="body">
         <Transition leave-active-class="duration-200">
-            <div v-show="show" class="fixed inset-0 overflow-y-auto px-4 py-6 sm:px-0 z-50" scroll-region>
+            <div v-show="show" class="fixed inset-0 z-50 overflow-y-auto px-4 py-6 sm:px-0" scroll-region>
                 <Transition
                     enter-active-class="ease-out duration-300"
                     enter-from-class="opacity-0"
@@ -70,7 +70,7 @@ const maxWidthClass = computed(() => {
                     leave-to-class="opacity-0"
                 >
                     <div v-show="show" class="fixed inset-0 transform transition-all" @click="close">
-                        <div class="absolute inset-0 bg-gray-500 dark:bg-gray-900 opacity-75" />
+                        <div class="absolute inset-0 bg-gray-500 opacity-75 dark:bg-gray-900" />
                     </div>
                 </Transition>
 
@@ -84,7 +84,7 @@ const maxWidthClass = computed(() => {
                 >
                     <div
                         v-show="show"
-                        class="mb-6 bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-xl transform transition-all sm:w-full sm:mx-auto"
+                        class="mb-6 transform overflow-hidden rounded-lg bg-white shadow-xl transition-all dark:bg-gray-800 sm:mx-auto sm:w-full"
                         :class="maxWidthClass"
                     >
                         <slot v-if="show" />

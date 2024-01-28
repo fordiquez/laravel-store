@@ -1,19 +1,19 @@
-import { PageProps as InertiaPageProps } from '@inertiajs/core';
-import { AxiosInstance } from 'axios';
-import ziggyRoute from 'ziggy-js';
-import { PageProps as AppPageProps } from './';
+import { PageProps as InertiaPageProps } from '@inertiajs/core'
+import { AxiosInstance } from 'axios'
+import ziggyRoute from 'ziggy-js'
+import { PageProps as AppPageProps } from './'
 
 declare global {
     interface Window {
-        axios: AxiosInstance;
+        axios: AxiosInstance
     }
 
-    var route: typeof ziggyRoute;
+    var route: typeof ziggyRoute
 }
 
 declare module 'vue' {
     interface ComponentCustomProperties {
-        route: typeof ziggyRoute;
+        route: typeof ziggyRoute
     }
 }
 
