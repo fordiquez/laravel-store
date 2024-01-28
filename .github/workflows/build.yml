@@ -24,7 +24,7 @@ jobs:
             - name: Setup node
               uses: actions/setup-node@v3
               with:
-                  node-version: 18
+                  node-version: 20
 
             - name: Setup mysql
               uses: mirromutth/mysql-action@v1.1
@@ -42,11 +42,14 @@ jobs:
               run: php artisan env:decrypt --key=${{ secrets.ENV_KEY }}
 
             - name: Run artisan commands & build npm assets
+              env:
+                  DB_HOST: 127.0.0.1
               run: |
                   php artisan optimize:clear
                   php artisan key:generate
                   php artisan migrate:fresh --seed
                   npm run build
+
             - name: Setup directory permissions
               run: chmod -R 755 storage bootstrap/cache
 

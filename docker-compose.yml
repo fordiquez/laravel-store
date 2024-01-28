@@ -26,7 +26,6 @@ services:
             context: .
             args:
                 BUILD_ARGUMENT_ENV: dev
-                XDEBUG_CONFIG: ${XDEBUG_CONFIG}
             dockerfile: ./Dockerfile
         container_name: ${CONTAINER_NAME}-laravel
         volumes:
