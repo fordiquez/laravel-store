@@ -23,6 +23,7 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y \
       nano \
       git \
       unzip \
+      libzip-dev \
       libicu-dev \
       zlib1g-dev \
       libxml2 \
@@ -31,7 +32,6 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y \
       supervisor \
       cron \
       sudo \
-      libzip-dev \
     && docker-php-ext-configure pdo_mysql --with-pdo-mysql=mysqlnd \
     && docker-php-ext-configure intl \
     && docker-php-ext-install \

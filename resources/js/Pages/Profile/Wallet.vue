@@ -1,6 +1,6 @@
 <script setup>
 import { computed, nextTick, ref } from 'vue'
-import { Head, router, useForm } from '@inertiajs/vue3'
+import { router, useForm } from '@inertiajs/vue3'
 import { loadStripe } from '@stripe/stripe-js'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 import CreditCard from '@/Pages/Profile/Partials/CreditCard.vue'
@@ -101,9 +101,7 @@ const closeDeletionModal = () => {
 </script>
 
 <template>
-    <Head title="Wallet" />
-
-    <AuthenticatedLayout>
+    <AuthenticatedLayout title="Wallet">
         <div class="flex flex-col justify-between space-x-0 px-4 py-12 sm:px-6 md:flex-row md:space-x-10 lg:px-8">
             <Sidebar />
             <div class="w-full space-y-4">

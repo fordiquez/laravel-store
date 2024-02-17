@@ -126,6 +126,10 @@ php artisan shield:install --fresh
 ```
 
 ```bash
+php artisan db:seed --class=RoleSeeder
+```
+
+```bash
 php artisan optimize:clear
 ```
 

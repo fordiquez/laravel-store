@@ -1,5 +1,4 @@
 <script setup>
-import { Head } from '@inertiajs/vue3'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 import DeleteUserForm from '@/Pages/Profile/Partials/DeleteUserForm.vue'
 import UpdatePasswordForm from '@/Pages/Profile/Partials/UpdatePasswordForm.vue'
@@ -16,9 +15,7 @@ defineProps({
 </script>
 
 <template>
-    <Head title="Personal Information" />
-
-    <AuthenticatedLayout>
+    <AuthenticatedLayout title="Personal Information">
         <div class="flex flex-col justify-between space-x-0 px-4 py-12 sm:px-6 md:flex-row md:space-x-10 lg:px-8">
             <Sidebar />
             <div class="w-full space-y-4">

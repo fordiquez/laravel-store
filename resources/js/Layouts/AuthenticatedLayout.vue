@@ -39,7 +39,7 @@ onMounted(() => {
 onUpdated(() => makeNotification(pageProps.notification))
 
 const cart = computed(() => pageProps.cart)
-const user = computed(() => pageProps.auth.user ?? null)
+const user = computed(() => pageProps.user ?? null)
 const breadcrumbRoutes = computed(
     () => route().current('goods.good.general') || route().current('goods.good.properties') || route().current('goods.good.reviews')
 )

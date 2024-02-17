@@ -5,20 +5,15 @@ namespace Database\Factories;
 use App\Enums\OrderDelivery;
 use App\Enums\OrderPayment;
 use App\Enums\OrderStatus;
+use App\Models\Order;
 use App\Models\User;
 use App\Models\UserAddress;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends Factory
- */
 class OrderFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
+    protected $model = Order::class;
+
     public function definition(): array
     {
         return [

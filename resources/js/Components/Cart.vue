@@ -6,7 +6,16 @@ import PrimaryButton from '@/Components/PrimaryButton.vue'
 import SecondaryButton from '@/Components/SecondaryButton.vue'
 import DangerButton from '@/Components/DangerButton.vue'
 
-const props = withDefaults(defineProps<{ show: boolean; count: number; total: number; items: any[]; goods: any[] }>(), { show: false })
+const props = withDefaults(
+    defineProps<{
+        show: boolean
+        count: number
+        total: number
+        items: any[]
+        goods: any[]
+    }>(),
+    { show: false }
+)
 
 defineEmits(['close'])
 

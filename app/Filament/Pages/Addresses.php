@@ -5,6 +5,7 @@ namespace App\Filament\Pages;
 use App\Models\Country;
 use App\Models\State;
 use App\Models\UserAddress;
+use BezhanSalleh\FilamentShield\Traits\HasPageShield;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\Hidden;
@@ -23,6 +24,7 @@ use Filament\Pages\Page;
 
 class Addresses extends Page implements HasForms
 {
+    use HasPageShield;
     use InteractsWithForms;
 
     protected static ?string $navigationIcon = 'heroicon-o-document-text';

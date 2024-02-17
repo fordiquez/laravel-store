@@ -5,6 +5,7 @@ namespace App\Filament\Pages;
 use App\Enums\UserGender;
 use App\Models\Country;
 use App\Models\User;
+use BezhanSalleh\FilamentShield\Traits\HasPageShield;
 use Filament\Actions\Action;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
@@ -28,6 +29,7 @@ use Ysfkaya\FilamentPhoneInput\PhoneInputNumberType;
 
 class Profile extends Page implements HasForms
 {
+    use HasPageShield;
     use InteractsWithForms;
 
     protected static ?string $navigationIcon = 'heroicon-o-user';

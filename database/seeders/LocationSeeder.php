@@ -3,69 +3,58 @@
 namespace Database\Seeders;
 
 use App\Models\Country;
-use App\Models\State;
-use Database\Factories\CityFactory;
-use Database\Factories\CountryFactory;
-use Database\Factories\StateFactory;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Http;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileCannotBeAdded;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileDoesNotExist;
+use Spatie\MediaLibrary\MediaCollections\Exceptions\FileIsTooBig;
 
 class LocationSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
+    /** @throws FileCannotBeAdded|FileIsTooBig|FileDoesNotExist */
     public function run(): void
     {
-        $countries = Http::acceptJson()
-            ->get('https://raw.githubusercontent.com/dr5hn/countries-states-cities-database/master/countries.json')
-            ->json();
+        $countries = Http::acceptJson()->withHeader('X-CSCAPI-KEY', config('services.csc.key'))->get(config('services.csc.url'))->json();
 
-        foreach ($countries as $country) {
-            if (in_array($country['iso2'], Country::$validCountries)) {
-                CountryFactory::new()->create([
-                    'name' => $country['name'],
-                    'capital' => $country['capital'] === 'Kiev' ? 'Kyiv' : $country['capital'],
-                    'iso2' => $country['iso2'],
-                    'iso3' => $country['iso3'],
-                    'phone_code' => $country['phone_code'],
-                    'currency' => $country['currency'],
-                    'tld' => $country['tld'],
-                    'region' => $country['region'],
-                    'subregion' => $country['subregion'],
-                    'is_active' => true,
-                ]);
-            }
-        }
+        collect($countries)->each(
+            function (array $country) {
+                $countryDetails = Http::acceptJson()
+                    ->withHeader('X-CSCAPI-KEY', config('services.csc.key'))
+                    ->get(config('services.csc.url') . $country['iso2'])
+                    ->json();
 
-        $states = Http::acceptJson()
-            ->get('https://raw.githubusercontent.com/dr5hn/countries-states-cities-database/master/states.json')
-            ->json();
-
-        foreach ($states as $state) {
-            if (in_array($state['country_code'], Country::$validCountries)) {
-                StateFactory::new()->create([
-                    'name' => $state['name'],
-                    'country_id' => Country::whereIso2($state['country_code'])->value('id'),
-                    'type' => $state['type'],
+                $createdCountry = Country::create([
+                    'name' => $countryDetails['name'],
+                    'capital' => $countryDetails['capital'],
+                    'iso2' => $countryDetails['iso2'],
+                    'iso3' => $countryDetails['iso3'],
+                    'phone_code' => $countryDetails['phonecode'],
+                    'currency' => $countryDetails['currency'],
+                    'region' => $countryDetails['region'],
+                    'subregion' => $countryDetails['subregion'],
                 ]);
 
-                if ($state['country_code'] === Country::DEFAULT_COUNTRY) {
-                    $stateCode = $state['state_code'];
-                    $cities = Http::acceptJson()->withHeaders([
-                        'X-CSCAPI-KEY' => config('services.csc.key'),
-                    ])->get(config('services.csc.url') . Country::DEFAULT_COUNTRY . "/states/$stateCode/cities")->json();
+                $countryISO2 = strtolower($country['iso2']);
+                $createdCountry->addMediaFromUrl("https://flagcdn.com/$countryISO2.svg")->toMediaCollection('flag', 'public');
 
-                    foreach ($cities as $city) {
-                        if (!empty($city['name'])) {
-                            CityFactory::new()->create([
-                                'name' => $city['name'],
-                                'state_id' => State::whereName($state['name'])->value('id'),
-                            ]);
-                        }
-                    }
-                }
-            }
-        }
+                $states = Http::acceptJson()
+                    ->withHeader('X-CSCAPI-KEY', config('services.csc.key'))
+                    ->get(config('services.csc.url') . "$countryISO2/states")
+                    ->json();
+
+                collect($states)->sortBy('name')->each(function (array $state) use ($createdCountry, $countryISO2) {
+                    $createdState = $createdCountry->states()->create(['name' => $state['name']]);
+
+                    $cities = Http::acceptJson()
+                        ->withHeader('X-CSCAPI-KEY', config('services.csc.key'))
+                        ->get(config('services.csc.url') . "$countryISO2/states/" . $state['iso2'] . '/cities')
+                        ->json();
+
+                    collect($cities)
+                        ->filter(fn ($city) => !empty($city['name']))
+                        ->sortBy('name')
+                        ->each(fn (array $city) => $createdState->cities()->create(['name' => $city['name']]));
+                });
+            });
     }
 }

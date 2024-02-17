@@ -2,9 +2,11 @@
 withDefaults(
     defineProps<{
         type?: 'button' | 'submit' | 'reset'
+        disabled?: boolean
     }>(),
     {
-        type: 'button'
+        type: 'button',
+        disabled: false
     }
 )
 </script>
@@ -12,8 +14,21 @@ withDefaults(
 <template>
     <button
         :type="type"
-        class="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-xs font-semibold uppercase tracking-widest text-gray-700 shadow-sm transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-25 dark:border-gray-500 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 dark:focus:ring-offset-gray-800"
+        :disabled="disabled"
+        :class="[
+            'group relative inline-flex items-center justify-center rounded-lg bg-gradient-to-br from-purple-600 to-blue-500 p-0.5 font-medium text-gray-900 dark:text-white',
+            disabled
+                ? 'cursor-not-allowed opacity-40'
+                : 'group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800'
+        ]"
     >
-        <slot />
+        <span
+            :class="[
+                'relative w-full rounded-md bg-white px-4 py-2.5 text-sm uppercase tracking-wider',
+                disabled ? 'dark:bg-gray-900' : 'transition duration-300 ease-in-out group-hover:bg-opacity-0 dark:bg-gray-900'
+            ]"
+        >
+            <slot />
+        </span>
     </button>
 </template>

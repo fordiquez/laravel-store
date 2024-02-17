@@ -2,27 +2,23 @@
 
 namespace Database\Factories;
 
-use App\Models\City;
+use App\Models\Country;
+use App\Models\UserAddress;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends Factory
- */
 class UserAddressFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
+    protected $model = UserAddress::class;
+
     public function definition(): array
     {
-        $city = City::inRandomOrder()->first();
+        $country = Country::inRandomOrder()->first();
+        $state = $country->has('states') ? $country->states()->inRandomOrder()->first() : null;
 
         return [
-            'country_id' => $city->state->country_id,
-            'state_id' => $city->state_id,
-            'city_id' => $city->id,
+            'country_id' => $country->id,
+            'state_id' => $state?->id,
+            'city_id' => $state?->has('cities') ? $state->cities()->inRandomOrder()->value('id') : null,
             'street' => fake()->streetName,
             'house' => fake()->buildingNumber,
             'flat' => fake()->boolean ?: fake()->numberBetween(0, 100),

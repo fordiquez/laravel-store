@@ -13,7 +13,7 @@ const { formatMoney } = useFormat()
 </script>
 
 <template>
-    <AuthenticatedLayout>
+    <AuthenticatedLayout title="Orders">
         <div class="flex flex-col justify-between space-x-0 px-4 py-12 sm:px-6 md:flex-row md:space-x-10 lg:px-8">
             <Sidebar />
             <div class="w-full space-y-4">

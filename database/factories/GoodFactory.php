@@ -5,19 +5,14 @@ namespace Database\Factories;
 use App\Enums\GoodStatus;
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\Good;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
-/**
- * @extends Factory
- */
 class GoodFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
+    protected $model = Good::class;
+
     public function definition(): array
     {
         return [
