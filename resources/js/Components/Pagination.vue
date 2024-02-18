@@ -2,10 +2,10 @@
 import { computed } from 'vue'
 import { Link } from '@inertiajs/vue3'
 import { range } from 'lodash'
-import {parse, stringify} from 'qs'
+import { parse, stringify } from 'qs'
 
 const props = defineProps<{
-    links: any,
+    links: any
     meta: any
 }>()
 

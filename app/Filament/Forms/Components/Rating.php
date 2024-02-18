@@ -14,7 +14,7 @@ class Rating extends Field
 
     protected string $disabledColor = '#6B7280';
 
-    protected string $clearIconColor = ' #EF4444 ';
+    protected string $clearIconColor = '#EF4444';
 
     protected string|Closure $icon = 'heroicon-o-star';
 

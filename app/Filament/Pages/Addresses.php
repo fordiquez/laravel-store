@@ -21,6 +21,7 @@ use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Filament\Notifications\Notification;
 use Filament\Pages\Page;
+use Illuminate\Support\Arr;
 
 class Addresses extends Page implements HasForms
 {
@@ -28,8 +29,6 @@ class Addresses extends Page implements HasForms
     use InteractsWithForms;
 
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
-
-    protected static ?string $navigationGroup = 'Account';
 
     protected static ?int $navigationSort = 1;
 
@@ -62,9 +61,11 @@ class Addresses extends Page implements HasForms
 
         UserAddress::whereNotIn('id', $addresses->pluck('id'))->each(fn (UserAddress $address) => $address->delete());
 
-        $addresses->filter(fn (array $address) => !empty($address['id']))->each(fn (array $address) => UserAddress::find($address['id'])->update($address));
+        $addresses->filter(fn (array $address) => !empty($address['id']))
+            ->each(fn (array $address) => UserAddress::find($address['id'])->update(Arr::except($address, ['id', 'created_at', 'updated_at'])));
 
-        $addresses->filter(fn (array $address) => empty($address['id']))->each(fn (array $address) => UserAddress::create($address));
+        $addresses->filter(fn (array $address) => empty($address['id']))
+            ->each(fn (array $address) => UserAddress::create(Arr::except($address, 'id')));
 
         Notification::make()->title('Your addresses has been updated.')->success()->send();
     }
@@ -87,24 +88,27 @@ class Addresses extends Page implements HasForms
                         Hidden::make('id'),
                         Hidden::make('user_id')->default(auth()->id()),
                         Select::make('country_id')
+                            ->label('Country')
                             ->options(Country::all()->pluck('name', 'id')->toArray())
                             ->required()
                             ->reactive()
                             ->searchable()
                             ->afterStateUpdated(fn (callable $set) => $set('state_id', null)),
                         Select::make('state_id')
+                            ->label('State')
                             ->options(fn (Get $get) => Country::find($get('country_id'))?->states->pluck('name', 'id'))
                             ->required()
                             ->reactive()
                             ->searchable()
-                            ->hidden(fn (Get $get) => !$get('country_id'))
+                            ->disabled(fn (Get $get) => !$get('country_id'))
                             ->afterStateUpdated(fn (Set $set) => $set('city_id', null)),
                         Select::make('city_id')
+                            ->label('City')
                             ->options(fn (Get $get) => $get('state_id') ? State::find($get('state_id'))?->cities->pluck('name', 'id') : [])
                             ->required()
                             ->reactive()
                             ->searchable()
-                            ->hidden(fn (Get $get) => !$get('state_id')),
+                            ->disabled(fn (Get $get) => !$get('state_id')),
                         TextInput::make('street')->required()->maxLength(50),
                         Grid::make()->schema([
                             TextInput::make('house')->required()->maxLength(10),

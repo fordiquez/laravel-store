@@ -231,58 +231,58 @@ const onChangeDefaultAddress = (event) => {
                             <div class="basis-1/3">
                                 <InputLabel for="country" value="Country" />
 
-<!--                                <multiselect-->
-<!--                                    id="country"-->
-<!--                                    v-model="country"-->
-<!--                                    :options="countries"-->
-<!--                                    :close-on-select="true"-->
-<!--                                    :clear-on-select="false"-->
-<!--                                    @select="onCountrySelected"-->
-<!--                                    class="mt-1"-->
-<!--                                    placeholder="Select the country"-->
-<!--                                    label="name"-->
-<!--                                    track-by="id"-->
-<!--                                />-->
+                                <!--                                <multiselect-->
+                                <!--                                    id="country"-->
+                                <!--                                    v-model="country"-->
+                                <!--                                    :options="countries"-->
+                                <!--                                    :close-on-select="true"-->
+                                <!--                                    :clear-on-select="false"-->
+                                <!--                                    @select="onCountrySelected"-->
+                                <!--                                    class="mt-1"-->
+                                <!--                                    placeholder="Select the country"-->
+                                <!--                                    label="name"-->
+                                <!--                                    track-by="id"-->
+                                <!--                                />-->
 
                                 <InputError class="mt-2" :message="form.errors.country_id" />
                             </div>
                             <div class="basis-1/3">
                                 <InputLabel for="state" value="State" />
 
-<!--                                <multiselect-->
-<!--                                    id="state"-->
-<!--                                    v-model="state"-->
-<!--                                    :options="states"-->
-<!--                                    :close-on-select="true"-->
-<!--                                    :clear-on-select="false"-->
-<!--                                    :disabled="!form.country_id || isLoading('state')"-->
-<!--                                    :loading="isLoading('state')"-->
-<!--                                    @select="onStateSelected"-->
-<!--                                    class="mt-1"-->
-<!--                                    placeholder="Select the state"-->
-<!--                                    label="name"-->
-<!--                                    track-by="id"-->
-<!--                                />-->
+                                <!--                                <multiselect-->
+                                <!--                                    id="state"-->
+                                <!--                                    v-model="state"-->
+                                <!--                                    :options="states"-->
+                                <!--                                    :close-on-select="true"-->
+                                <!--                                    :clear-on-select="false"-->
+                                <!--                                    :disabled="!form.country_id || isLoading('state')"-->
+                                <!--                                    :loading="isLoading('state')"-->
+                                <!--                                    @select="onStateSelected"-->
+                                <!--                                    class="mt-1"-->
+                                <!--                                    placeholder="Select the state"-->
+                                <!--                                    label="name"-->
+                                <!--                                    track-by="id"-->
+                                <!--                                />-->
 
                                 <InputError class="mt-2" :message="form.errors.state_id" />
                             </div>
                             <div class="basis-1/3">
                                 <InputLabel for="city" value="City" />
 
-<!--                                <multiselect-->
-<!--                                    id="city"-->
-<!--                                    v-model="city"-->
-<!--                                    :options="cities"-->
-<!--                                    :disabled="!form.country_id || !form.state_id || isLoading('city')"-->
-<!--                                    :loading="isLoading('city')"-->
-<!--                                    @select="onCitySelected"-->
-<!--                                    :close-on-select="true"-->
-<!--                                    :clear-on-select="false"-->
-<!--                                    class="mt-1"-->
-<!--                                    placeholder="Select the city"-->
-<!--                                    label="name"-->
-<!--                                    track-by="id"-->
-<!--                                />-->
+                                <!--                                <multiselect-->
+                                <!--                                    id="city"-->
+                                <!--                                    v-model="city"-->
+                                <!--                                    :options="cities"-->
+                                <!--                                    :disabled="!form.country_id || !form.state_id || isLoading('city')"-->
+                                <!--                                    :loading="isLoading('city')"-->
+                                <!--                                    @select="onCitySelected"-->
+                                <!--                                    :close-on-select="true"-->
+                                <!--                                    :clear-on-select="false"-->
+                                <!--                                    class="mt-1"-->
+                                <!--                                    placeholder="Select the city"-->
+                                <!--                                    label="name"-->
+                                <!--                                    track-by="id"-->
+                                <!--                                />-->
 
                                 <InputError class="mt-2" :message="form.errors.city_id" />
                             </div>

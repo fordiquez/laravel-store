@@ -34,8 +34,8 @@ class CountryResource extends Resource
                 SpatieMediaLibraryImageColumn::make('flag')->collection('flag')->circular()->size(48),
                 Tables\Columns\TextColumn::make('name')->sortable()->searchable(),
                 Tables\Columns\TextColumn::make('capital')->sortable()->searchable()->toggleable(),
-                Tables\Columns\TextColumn::make('iso2')->sortable()->searchable()->toggleable(),
-                Tables\Columns\TextColumn::make('iso3')->sortable()->searchable()->toggleable(),
+                Tables\Columns\TextColumn::make('iso2')->label('ISO-2')->sortable()->searchable()->toggleable(),
+                Tables\Columns\TextColumn::make('iso3')->label('ISO-3')->sortable()->searchable()->toggleable(),
                 Tables\Columns\TextColumn::make('currency')->sortable()->toggleable(),
                 Tables\Columns\TextColumn::make('region')->sortable()->toggleable(),
                 Tables\Columns\TextColumn::make('subregion')->sortable()->toggleable(),
@@ -43,7 +43,7 @@ class CountryResource extends Resource
                 Tables\Columns\TextColumn::make('cities_count')->counts('cities')->label('Cities')->badge()->sortable(),
                 Tables\Columns\IconColumn::make('is_active')->boolean()->toggleable()
                     ->tooltip('Toggle value')
-                    ->action(fn ($record, $column) => $record->update([$column->getName() => !$record->name])),
+                    ->action(fn (Country $record, Tables\Columns\Column $column) => $record->update([$column->getName() => !$record->is_active])),
                 Tables\Columns\TextColumn::make('created_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
             ])

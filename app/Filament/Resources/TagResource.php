@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\TagResource\Pages;
 use App\Models\Tag;
+use Closure;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -29,21 +30,30 @@ class TagResource extends Resource
                     Forms\Components\TextInput::make('name')
                         ->required()
                         ->maxLength(100)
-                        ->autofocus()
-                        ->live(debounce: 500)
-                        ->afterStateUpdated(function (Forms\Get $get, Forms\Set $set, ?string $state) {
-                            if (!$get('is_slug_changed_manually')) {
+                        ->debounce()
+                        ->afterStateUpdated(function (Forms\Get $get, Forms\Set $set, ?string $state, ?Tag $record) {
+                            if (!$get('is_slug_changed_manually') && filled($state) && blank($record)) {
                                 $set('slug', Str::slug($state));
                             }
                         }),
+
+                    Forms\Components\Hidden::make('is_slug_changed_manually')->default(false)->dehydrated(false),
+
                     Forms\Components\TextInput::make('slug')
-                        ->rule('alpha_dash:ascii')
                         ->unique('tags', 'slug', ignoreRecord: true)
-                        ->afterStateUpdated(function (Forms\Set $set) {
-                            $set('is_slug_changed_manually', true);
-                        })
                         ->required()
-                        ->maxLength(100),
+                        ->maxLength(100)
+                        ->afterStateUpdated(fn (Forms\Set $set) => $set('is_slug_changed_manually', true))
+                        ->rules([
+                            'alpha_dash:ascii',
+                            function ($state) {
+                                return function (string $attribute, $value, Closure $fail) use ($state) {
+                                    if ($state !== '/' && (Str::startsWith($value, '/') || Str::endsWith($value, '/'))) {
+                                        $fail('Slug cannot starts or ends with slash.');
+                                    }
+                                };
+                            },
+                        ]),
                 ]),
             ]);
     }
@@ -52,7 +62,7 @@ class TagResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id')->sortable(),
+                Tables\Columns\TextColumn::make('id')->label('ID')->sortable(),
                 Tables\Columns\TextColumn::make('name')->sortable()->searchable(),
                 Tables\Columns\TextColumn::make('slug'),
                 Tables\Columns\TextColumn::make('created_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),

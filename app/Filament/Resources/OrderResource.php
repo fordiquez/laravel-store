@@ -9,12 +9,14 @@ use App\Filament\Resources\OrderResource\Pages;
 use App\Models\Good;
 use App\Models\Order;
 use App\Models\Setting;
+use App\Models\UserAddress;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Support\Str;
+use Illuminate\Support\Stringable;
 
 class OrderResource extends Resource
 {
@@ -33,13 +35,24 @@ class OrderResource extends Resource
                 Forms\Components\Section::make()->schema([
                     Forms\Components\Select::make('user_id')
                         ->relationship('user', 'email')
+                        ->searchable()
                         ->required(),
                     Forms\Components\Select::make('user_address_id')
-                        ->relationship('userAddress', 'title')
+                        ->relationship('userAddress', 'id')
+                        ->searchable()
+                        ->getOptionLabelFromRecordUsing(fn (UserAddress $address) => Str::of($address->country->name)
+                            ->when($address->state_id, fn (Stringable $string) => $string->append(', ' . $address->state->name))
+                            ->when($address->city_id, fn (Stringable $string) => $string->append(', ' . $address->city->name))
+                            ->append(',' . $address->street)
+                            ->append(',' . $address->house)
+                            ->when($address->flat, fn (Stringable $string) => $string->append(', ' . $address->flat))
+                            ->when($address->postal_code, fn (Stringable $string) => $string->append(', ' . $address->postal_code)))
                         ->required(),
                     Forms\Components\Select::make('promo_code_id')
+                        ->searchable()
                         ->relationship('promoCode', 'key'),
                     Forms\Components\TextInput::make('uuid')
+                        ->label('UUID')
                         ->required()
                         ->uuid()
                         ->maxLength(36)
@@ -126,9 +139,13 @@ class OrderResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id')->sortable()->searchable(),
-                Tables\Columns\TextColumn::make('uuid')->searchable()->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('user.email')->sortable()->searchable(),
+                Tables\Columns\TextColumn::make('id')->label('ID')->sortable()->searchable(),
+                Tables\Columns\TextColumn::make('uuid')->label('UUID')->searchable()->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('user.email')
+                    ->url(fn (Order $record) => route('filament.admin.resources.users.edit', $record->user_id), true)
+                    ->badge()
+                    ->sortable()
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('delivery_method')
                     ->badge()
                     ->formatStateUsing(fn (string $state) => Str::of($state)->upper())

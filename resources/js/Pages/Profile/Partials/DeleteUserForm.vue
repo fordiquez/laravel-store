@@ -8,8 +8,8 @@ import Modal from '@/Components/Modal.vue'
 import SecondaryButton from '@/Components/SecondaryButton.vue'
 import TextInput from '@/Components/TextInput.vue'
 
-const confirmingUserDeletion = ref(false);
-const passwordInput = ref<HTMLInputElement | null>(null);
+const confirmingUserDeletion = ref(false)
+const passwordInput = ref<HTMLInputElement | null>(null)
 
 const form = useForm({
     password: ''
@@ -18,8 +18,8 @@ const form = useForm({
 const confirmUserDeletion = () => {
     confirmingUserDeletion.value = true
 
-    nextTick(() => passwordInput.value?.focus());
-};
+    nextTick(() => passwordInput.value?.focus())
+}
 
 const deleteUser = () => {
     form.delete(route('profile.personal-information.destroy'), {
@@ -78,12 +78,7 @@ const closeModal = () => {
                 <div class="mt-6 flex justify-end">
                     <SecondaryButton @click="closeModal"> Cancel </SecondaryButton>
 
-                    <DangerButton
-                        class="ms-3"
-                        :class="{ 'opacity-25': form.processing }"
-                        :disabled="form.processing"
-                        @click="deleteUser"
-                    >
+                    <DangerButton class="ms-3" :class="{ 'opacity-25': form.processing }" :disabled="form.processing" @click="deleteUser">
                         Delete Account
                     </DangerButton>
                 </div>

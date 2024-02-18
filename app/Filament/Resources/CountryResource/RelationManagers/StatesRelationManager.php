@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\CountryResource\RelationManagers;
 
+use App\Models\State;
 use Filament\Infolists\Components;
 use Filament\Infolists\Infolist;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -18,14 +19,15 @@ class StatesRelationManager extends RelationManager
     {
         return $infolist
             ->schema([
-                Components\Section::make()->schema([
-                    Components\TextEntry::make('id')->label('ID'),
-                    Components\TextEntry::make('name'),
-                    Components\IconEntry::make('is_active')->boolean()->columnSpanFull(),
-                    Components\TextEntry::make('created_at')->label('Created Date')->dateTime(),
-                    Components\TextEntry::make('updated_at')->label('Last Modified Date')->dateTime(),
-                ])->columns(),
-            ]);
+                Components\TextEntry::make('id')->label('ID'),
+                Components\TextEntry::make('name')
+                    ->url(fn (State $record) => route('filament.admin.resources.states.view', $record->id), true)
+                    ->badge(),
+                Components\IconEntry::make('is_active')->boolean(),
+                Components\TextEntry::make('cities_count')->default($this->ownerRecord->cities()->count())->label('Cities')->badge(),
+                Components\TextEntry::make('created_at')->label('Created Date')->dateTime(),
+                Components\TextEntry::make('updated_at')->label('Last Modified Date')->dateTime(),
+            ])->columns();
     }
 
     /**
@@ -36,11 +38,17 @@ class StatesRelationManager extends RelationManager
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('id')->label('ID')->sortable(),
-                Tables\Columns\TextColumn::make('name')->sortable()->searchable()->limit(50)->wrap(),
+                Tables\Columns\TextColumn::make('name')
+                    ->url(fn (State $record) => route('filament.admin.resources.states.view', $record->id), true)
+                    ->limit(50)
+                    ->tooltip(fn (Tables\Columns\TextColumn $column) => strlen($column->getState()) <= $column->getCharacterLimit() ? null : $column->getState())
+                    ->badge()
+                    ->sortable()
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('cities_count')->counts('cities')->label('Cities')->badge()->sortable(),
                 Tables\Columns\IconColumn::make('is_active')->boolean()->toggleable()
                     ->tooltip('Toggle value')
-                    ->action(fn ($record, $column) => $record->update([$column->getName() => !$record->name])),
+                    ->action(fn (State $record, Tables\Columns\Column $column) => $record->update([$column->getName() => !$record->is_active])),
                 Tables\Columns\TextColumn::make('created_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
             ])

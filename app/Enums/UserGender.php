@@ -11,4 +11,6 @@ final class UserGender extends Enum
     public const MALE = 'male';
 
     public const FEMALE = 'female';
+
+    public const OTHER = 'other';
 }

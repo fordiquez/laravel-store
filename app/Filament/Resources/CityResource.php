@@ -26,19 +26,27 @@ class CityResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('id')->label('ID')->sortable(),
-                Tables\Columns\TextColumn::make('country.name')->sortable()->badge(),
-                Tables\Columns\TextColumn::make('state.name')->sortable()->badge(),
-                Tables\Columns\TextColumn::make('name')->sortable()->searchable()->limit(50)->wrap(),
+                Tables\Columns\TextColumn::make('country.name')
+                    ->url(fn (City $record) => route('filament.admin.resources.cities.view', $record->country->iso2), true)
+                    ->sortable()
+                    ->badge(),
+                Tables\Columns\TextColumn::make('state.name')
+                    ->url(fn (City $record) => route('filament.admin.resources.states.view', $record->state_id), true)
+                    ->sortable()
+                    ->badge(),
+                Tables\Columns\TextColumn::make('name')
+                    ->limit(50)
+                    ->tooltip(fn (Tables\Columns\TextColumn $column) => strlen($column->getState()) <= $column->getCharacterLimit() ? null : $column->getState())
+                    ->sortable()
+                    ->searchable(),
                 Tables\Columns\IconColumn::make('is_active')->boolean()->toggleable()
                     ->tooltip('Toggle value')
-                    ->action(fn ($record, $column) => $record->update([$column->getName() => !$record->name])),
+                    ->action(fn (City $record, Tables\Columns\Column $column) => $record->update([$column->getName() => !$record->is_active])),
                 Tables\Columns\TextColumn::make('created_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('state')
-                    ->relationship('state', 'name')
-                    ->searchable()->multiple(),
+                Tables\Filters\SelectFilter::make('state')->relationship('state', 'name')->searchable()->multiple(),
                 Tables\Filters\TernaryFilter::make('is_active'),
             ])
             ->actions([

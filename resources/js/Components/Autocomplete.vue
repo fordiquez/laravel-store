@@ -34,8 +34,8 @@ const filteredOptions = computed(() =>
     query.value === ''
         ? props.options
         : props.options.filter((option: any) =>
-            option[props.optionValue].toLowerCase().replace(/\s+/g, '').includes(query.value.toLowerCase().replace(/\s+/g, ''))
-        )
+              option[props.optionValue].toLowerCase().replace(/\s+/g, '').includes(query.value.toLowerCase().replace(/\s+/g, ''))
+          )
 )
 
 const selectedModel = computed(() => props.options.find((option: any) => option[props.optionKey] === props.modelValue))
@@ -58,7 +58,7 @@ const selectedModel = computed(() => props.options.find((option: any) => option[
         </combobox-label>
         <div class="relative">
             <combobox-input
-                class="relative w-full rounded-lg border-none py-2.5 pr-8 text-left text-sm text-gray-900 shadow-input ring-1 ring-inset focus:outline-none focus:ring-2"
+                class="shadow-input relative w-full rounded-lg border-none py-2.5 pr-8 text-left text-sm text-gray-900 ring-1 ring-inset focus:outline-none focus:ring-2"
                 :class="[
                     error ? 'text-red-500 ring-red-500' : 'text-title ring-gray-200 focus:ring-primary-500',
                     disabled ? 'cursor-not-allowed bg-gray-200' : 'bg-white',
@@ -106,7 +106,7 @@ const selectedModel = computed(() => props.options.find((option: any) => option[
                 >
                     <li
                         :class="[
-                            'group relative cursor-pointer select-none py-2 pl-3 text-title hover:bg-primary-600 hover:text-white',
+                            'text-title group relative cursor-pointer select-none py-2 pl-3 hover:bg-primary-600 hover:text-white',
                             selected ? 'pr-9' : 'pr-3'
                         ]"
                     >

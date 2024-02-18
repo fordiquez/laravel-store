@@ -52,7 +52,7 @@ class ReviewResource extends Resource
                         ->required()
                         ->maxLength(255)
                         ->columnSpanFull(),
-                    Forms\Components\TextInput::make('video_src')->maxLength(255)->url(),
+                    Forms\Components\TextInput::make('video_src')->maxLength(255)->url()->columnSpanFull(),
                     Forms\Components\TextInput::make('ip_address')->maxLength(45)->ipv4(),
                 ])->columns(),
             ]);
@@ -65,14 +65,24 @@ class ReviewResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id')->sortable(),
-                Tables\Columns\TextColumn::make('user.email')->sortable()->searchable(),
-                Tables\Columns\TextColumn::make('good.title')->sortable()->searchable(),
+                Tables\Columns\TextColumn::make('id')->label('ID')->sortable(),
+                Tables\Columns\TextColumn::make('user.email')
+                    ->url(fn (Review $record) => route('filament.admin.resources.users.edit', $record->user_id), true)
+                    ->limit(25)
+                    ->badge()
+                    ->sortable()
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('good.title')
+                    ->url(fn (Review $record) => route('filament.admin.resources.goods.edit', $record->good_id), true)
+                    ->limit(25)
+                    ->badge()
+                    ->sortable()
+                    ->searchable(),
                 Tables\Columns\IconColumn::make('is_buyer')->boolean()->toggleable(),
                 RatingColumn::make('rating')->color('primary')->sortable(),
                 Tables\Columns\TextColumn::make('video_src')
                     ->searchable()
-                    ->toggleable()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->copyable(!app()->isLocal())
                     ->tooltip(!app()->isLocal() ? 'Copy to clipboard' : null),
                 IPToCountryFlagColumn::make('ip_address')->flagPosition()->sortable()->toggleable(),

@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\PropertyResource\Pages;
 use App\Models\Property;
+use Closure;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -29,21 +30,30 @@ class PropertyResource extends Resource
                     Forms\Components\TextInput::make('name')
                         ->required()
                         ->maxLength(100)
-                        ->autofocus()
-                        ->live(debounce: 500)
-                        ->afterStateUpdated(function (Forms\Get $get, Forms\Set $set, ?string $state) {
-                            if (!$get('is_slug_changed_manually')) {
+                        ->debounce()
+                        ->afterStateUpdated(function (Forms\Get $get, Forms\Set $set, ?string $state, ?Property $record) {
+                            if (!$get('is_slug_changed_manually') && filled($state) && blank($record)) {
                                 $set('slug', Str::slug($state));
                             }
                         }),
+
+                    Forms\Components\Hidden::make('is_slug_changed_manually')->default(false)->dehydrated(false),
+
                     Forms\Components\TextInput::make('slug')
-                        ->rule('alpha_dash:ascii')
                         ->unique('properties', 'slug', ignoreRecord: true)
-                        ->afterStateUpdated(function (Forms\Set $set) {
-                            $set('is_slug_changed_manually', true);
-                        })
                         ->required()
-                        ->maxLength(100),
+                        ->maxLength(100)
+                        ->afterStateUpdated(fn (Forms\Set $set) => $set('is_slug_changed_manually', true))
+                        ->rules([
+                            'alpha_dash:ascii',
+                            function ($state) {
+                                return function (string $attribute, $value, Closure $fail) use ($state) {
+                                    if ($state !== '/' && (Str::startsWith($value, '/') || Str::endsWith($value, '/'))) {
+                                        $fail('Slug cannot starts or ends with slash.');
+                                    }
+                                };
+                            },
+                        ]),
                     Forms\Components\Select::make('category_id')
                         ->required()
                         ->label('Category')
@@ -62,10 +72,22 @@ class PropertyResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id')->sortable(),
-                Tables\Columns\TextColumn::make('name')->limit(50)->sortable()->searchable(),
-                Tables\Columns\TextColumn::make('slug')->limit(25)->sortable(),
-                Tables\Columns\TextColumn::make('category.title')->limit(25)->sortable()->toggleable(),
+                Tables\Columns\TextColumn::make('id')->label('ID')->sortable(),
+                Tables\Columns\TextColumn::make('name')->limit(25)
+                    ->tooltip(fn (Tables\Columns\TextColumn $column) => strlen($column->getState()) <= $column->getCharacterLimit() ? null : $column->getState())
+                    ->sortable()
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('slug')->limit(25)
+                    ->tooltip(fn (Tables\Columns\TextColumn $column) => strlen($column->getState()) <= $column->getCharacterLimit() ? null : $column->getState())
+                    ->sortable()
+                    ->searchable()
+                    ->toggleable(),
+                Tables\Columns\TextColumn::make('category.title')
+                    ->url(fn (Property $record) => route('filament.admin.resources.categories.edit', $record->category_id), true)
+                    ->limit(25)
+                    ->tooltip(fn (Tables\Columns\TextColumn $column) => strlen($column->getState()) <= $column->getCharacterLimit() ? null : $column->getState())
+                    ->sortable()
+                    ->toggleable(),
                 Tables\Columns\IconColumn::make('filterable')->boolean()->toggleable(),
                 Tables\Columns\TextColumn::make('created_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),

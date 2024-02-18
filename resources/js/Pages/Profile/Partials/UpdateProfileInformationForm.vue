@@ -10,9 +10,9 @@ import { PageProps } from '@/types'
 // import 'vue-tel-input/vue-tel-input.css'
 
 defineProps<{
-    mustVerifyEmail?: Boolean;
-    status?: String;
-}>();
+    mustVerifyEmail?: Boolean
+    status?: String
+}>()
 
 const { user } = reactive<PageProps>(usePage().props)
 
@@ -95,27 +95,27 @@ const form = useForm({
             <div>
                 <InputLabel for="phone" value="Phone Number" />
 
-<!--                <vue-tel-input-->
-<!--                    v-model="form.phone"-->
-<!--                    mode="auto"-->
-<!--                    style-classes="mt-1 !border-none ring-1 ring-gray-300 dark:ring-gray-700 !rounded-lg dark:bg-gray-900 dark:text-gray-300"-->
-<!--                    :dropdown-options="{-->
-<!--                        disabled: false,-->
-<!--                        showDialCodeInList: true,-->
-<!--                        showDialCodeInSelection: false,-->
-<!--                        showFlags: true,-->
-<!--                        showSearchBox: false,-->
-<!--                        tabindex: 0-->
-<!--                    }"-->
-<!--                    :input-options="{-->
-<!--                        placeholder: 'Phone number',-->
-<!--                        styleClasses: '!rounded-lg h-[42px] dark:bg-gray-900 dark:text-gray-300',-->
-<!--                        showDialCode: true-->
-<!--                    }"-->
-<!--                    auto-format-->
-<!--                    auto-default-country-->
-<!--                    valid-characters-only-->
-<!--                />-->
+                <!--                <vue-tel-input-->
+                <!--                    v-model="form.phone"-->
+                <!--                    mode="auto"-->
+                <!--                    style-classes="mt-1 !border-none ring-1 ring-gray-300 dark:ring-gray-700 !rounded-lg dark:bg-gray-900 dark:text-gray-300"-->
+                <!--                    :dropdown-options="{-->
+                <!--                        disabled: false,-->
+                <!--                        showDialCodeInList: true,-->
+                <!--                        showDialCodeInSelection: false,-->
+                <!--                        showFlags: true,-->
+                <!--                        showSearchBox: false,-->
+                <!--                        tabindex: 0-->
+                <!--                    }"-->
+                <!--                    :input-options="{-->
+                <!--                        placeholder: 'Phone number',-->
+                <!--                        styleClasses: '!rounded-lg h-[42px] dark:bg-gray-900 dark:text-gray-300',-->
+                <!--                        showDialCode: true-->
+                <!--                    }"-->
+                <!--                    auto-format-->
+                <!--                    auto-default-country-->
+                <!--                    valid-characters-only-->
+                <!--                />-->
 
                 <InputError class="mt-2" :message="form.errors.phone" />
             </div>

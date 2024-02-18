@@ -81,6 +81,6 @@ class Category extends Model implements HasMedia
 
     protected function thumbnail(): Attribute
     {
-        return Attribute::get(fn () => $this->hasMedia('categories') ? $this->getFirstMediaUrl('categories') : url('static/not-found.svg'));
+        return Attribute::get(fn () => $this->hasMedia('thumbnail') ? $this->getFirstMediaUrl('thumbnail') : url('static/not-found.svg'));
     }
 }

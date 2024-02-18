@@ -28,11 +28,15 @@ class StateResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('id')->label('ID')->sortable(),
                 Tables\Columns\TextColumn::make('country.name')->searchable()->sortable()->badge(),
-                Tables\Columns\TextColumn::make('name')->sortable()->searchable()->limit(50)->wrap(),
+                Tables\Columns\TextColumn::make('name')
+                    ->limit(50)
+                    ->tooltip(fn (Tables\Columns\TextColumn $column) => strlen($column->getState()) <= $column->getCharacterLimit() ? null : $column->getState())
+                    ->sortable()
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('cities_count')->counts('cities')->label('Cities')->badge()->sortable(),
                 Tables\Columns\IconColumn::make('is_active')->boolean()->toggleable()
                     ->tooltip('Toggle value')
-                    ->action(fn ($record, $column) => $record->update([$column->getName() => !$record->name])),
+                    ->action(fn (State $record, Tables\Columns\Column $column) => $record->update([$column->getName() => !$record->is_active])),
                 Tables\Columns\TextColumn::make('created_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
             ])

@@ -37,8 +37,8 @@ return [
     'media_model' => Spatie\MediaLibrary\MediaCollections\Models\Media::class,
 
     /*
-     * When enabled, media collections will be serialised using the default
-     * laravel model serialization behaviour.
+     * When enabled, media collections will be serialized using the default
+     * laravel model serialization behavior.
      *
      * Keep this option disabled if using Media Library Pro components (https://medialibrary.pro)
      */
@@ -52,9 +52,9 @@ return [
     'temporary_upload_model' => Spatie\MediaLibraryPro\Models\TemporaryUpload::class,
 
     /*
-     * When enabled, Media Library Pro will only process temporary uploads that were uploaded
+     * When enabled, Media Library Pro will only process temporary uploads uploaded
      * in the same session. You can opt to disable this for stateless usage of
-     * the pro components.
+     * the pro-components.
      */
     'enable_temporary_uploads_session_affinity' => true,
 

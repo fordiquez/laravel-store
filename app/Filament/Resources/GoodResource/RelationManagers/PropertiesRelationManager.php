@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\GoodResource\RelationManagers;
 
+use App\Models\Property;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -32,15 +33,19 @@ class PropertiesRelationManager extends RelationManager
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id')->sortable(),
+                Tables\Columns\TextColumn::make('id')->label('ID')->sortable(),
+                Tables\Columns\TextColumn::make('category.title')
+                    ->url(fn (Property $record) => route('filament.admin.resources.categories.edit', $record->category_id), true)
+                    ->limit(25)
+                    ->tooltip(fn (Tables\Columns\TextColumn $column) => strlen($column->getState()) <= $column->getCharacterLimit() ? null : $column->getState())
+                    ->badge()
+                    ->sortable()
+                    ->toggleable(),
                 Tables\Columns\TextColumn::make('name')->sortable(),
-                Tables\Columns\TextColumn::make('category.title')->sortable()->toggleable(),
                 Tables\Columns\TextColumn::make('value'),
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('category')
-                    ->multiple()
-                    ->relationship('category', 'title'),
+                Tables\Filters\SelectFilter::make('category')->multiple()->relationship('category', 'title'),
             ])
             ->headerActions([
                 AttachAction::make()->preloadRecordSelect()

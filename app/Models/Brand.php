@@ -24,6 +24,6 @@ class Brand extends Model implements HasMedia
 
     protected function logo(): Attribute
     {
-        return Attribute::get(fn () => $this->hasMedia('brands') ? $this->getFirstMediaUrl('brands') : url('static/not-found.svg'));
+        return Attribute::get(fn () => $this->hasMedia('logo') ? $this->getFirstMediaUrl('logo') : url('static/not-found.svg'));
     }
 }
