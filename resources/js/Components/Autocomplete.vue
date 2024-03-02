@@ -48,20 +48,26 @@ const selectedModel = computed(() => props.options.find((option: any) => option[
         :model-value="selectedModel"
         :disabled="disabled || loading"
         :by="optionKey"
+        v-slot="{ open }"
         @update:model-value="(value) => $emit('update:modelValue', value)"
     >
         <combobox-label
             v-if="label"
-            :class="['mb-2 block cursor-pointer select-none text-left text-sm font-medium', error ? 'text-red-500' : 'text-gray-900']"
+            :class="[
+                'mb-2 block cursor-pointer select-none text-left text-sm font-medium',
+                error ? 'text-red-500' : 'text-gray-900 dark:text-gray-300'
+            ]"
         >
             {{ label }}
         </combobox-label>
         <div class="relative">
             <combobox-input
-                class="shadow-input relative w-full rounded-lg border-none py-2.5 pr-8 text-left text-sm text-gray-900 ring-1 ring-inset focus:outline-none focus:ring-2"
+                class="shadow-input relative w-full rounded-lg border-none py-2.5 pr-8 text-left text-sm ring-1 ring-inset focus:outline-none focus:ring-2"
                 :class="[
-                    error ? 'text-red-500 ring-red-500' : 'text-title ring-gray-200 focus:ring-primary-500',
-                    disabled ? 'cursor-not-allowed bg-gray-200' : 'bg-white',
+                    error
+                        ? 'text-red-500 ring-red-500'
+                        : 'text-gray-900 ring-gray-300 focus:ring-indigo-500 dark:text-gray-300 dark:ring-gray-700 dark:focus:ring-indigo-600',
+                    disabled ? 'cursor-not-allowed bg-gray-200 dark:bg-gray-800' : 'bg-white dark:bg-gray-900',
                     optionIcon && selectedModel ? 'pl-10' : 'pl-3'
                 ]"
                 :displayValue="(option: any) => (selectedModel ? (optionValue ? option[optionValue] : option) : null)"
@@ -73,9 +79,13 @@ const selectedModel = computed(() => props.options.find((option: any) => option[
                 :alt="selectedModel[optionKey]"
                 class="absolute left-3 top-2.5 size-5 rounded-full"
             />
-            <font-awesome-icon v-if="loading" :icon="['fas', 'circle-notch']" class="absolute right-2.5 top-3 animate-spin text-gray-700" />
+            <font-awesome-icon
+                v-if="loading"
+                :icon="['fas', 'circle-notch']"
+                class="absolute right-2.5 top-3 animate-spin text-gray-700 dark:text-gray-200"
+            />
             <combobox-button v-else class="absolute inset-y-0 right-0 flex items-center pr-2">
-                <font-awesome-icon :icon="['fas', 'up-down']" class="size-4 text-gray-600" />
+                <font-awesome-icon :icon="['fas', open ? 'up-long' : 'down-long']" class="size-4 text-gray-600 dark:text-gray-200" />
             </combobox-button>
         </div>
         <transition
@@ -89,11 +99,14 @@ const selectedModel = computed(() => props.options.find((option: any) => option[
         >
             <combobox-options
                 :class="[
-                    'absolute z-50 mt-1 w-full overflow-auto rounded-lg bg-white text-base shadow-lg ring-1 ring-black/5 scrollbar-thin scrollbar-track-primary-600 scrollbar-thumb-primary-500 focus:outline-none sm:text-sm',
+                    'absolute z-50 mt-1 w-full overflow-auto rounded-lg bg-white text-base shadow-lg ring-1 ring-black/5 scrollbar-thin scrollbar-track-indigo-600 scrollbar-thumb-indigo-400 focus:outline-none dark:bg-gray-900 sm:text-sm',
                     maxHeight
                 ]"
             >
-                <div v-if="!filteredOptions.length && query" class="relative cursor-default select-none px-4 py-2 text-gray-700">
+                <div
+                    v-if="!filteredOptions.length && query"
+                    class="relative cursor-default select-none px-4 py-2 text-gray-700 dark:text-gray-400"
+                >
                     Nothing found.
                 </div>
 
@@ -106,7 +119,7 @@ const selectedModel = computed(() => props.options.find((option: any) => option[
                 >
                     <li
                         :class="[
-                            'text-title group relative cursor-pointer select-none py-2 pl-3 hover:bg-primary-600 hover:text-white',
+                            'group relative cursor-pointer select-none py-2 pl-3 text-gray-900 hover:bg-indigo-600 hover:text-white dark:text-gray-200',
                             selected ? 'pr-9' : 'pr-3'
                         ]"
                     >
@@ -135,7 +148,7 @@ const selectedModel = computed(() => props.options.find((option: any) => option[
                                 selected ||
                                 (modelValue && optionValue ? modelValue[optionValue] === option[optionValue] : modelValue === option)
                             "
-                            class="absolute inset-y-0 right-0 inline-flex items-center pr-3 text-primary-600 group-hover:text-white"
+                            class="absolute inset-y-0 right-0 inline-flex items-center pr-3 text-indigo-600 group-hover:text-white"
                         >
                             <font-awesome-icon :icon="['fas', 'check']" class="size-4" />
                         </span>

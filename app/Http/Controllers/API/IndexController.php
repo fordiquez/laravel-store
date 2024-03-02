@@ -4,11 +4,15 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CategoryResource;
+use App\Http\Resources\CityResource;
+use App\Http\Resources\CountryResource;
+use App\Http\Resources\StateResource;
 use App\Models\Category;
 use App\Models\Country;
 use App\Models\PromoCode;
 use App\Models\State;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class IndexController extends Controller
 {
@@ -22,7 +26,7 @@ class IndexController extends Controller
         $name = $request->get('name');
 
         if (str($name)->length() > 1) {
-            return response()->json(Country::where('name', 'like', "%$name%")->get());
+            return response()->json(CountryResource::collection(Country::where('name', 'like', "%$name%")->get()));
         }
 
         return response()->json(['message' => 'Not enough length']);
@@ -30,12 +34,12 @@ class IndexController extends Controller
 
     public function states(Country $country)
     {
-        return response()->json($country->states->setVisible(['id', 'uuid', 'name']));
+        return response()->json(StateResource::collection(Cache::rememberForever("$country->iso2-states", fn () => $country->states)));
     }
 
     public function cities(State $state)
     {
-        return response()->json($state->cities->setVisible(['id', 'uuid', 'name']));
+        return response()->json(CityResource::collection(Cache::rememberForever("$state->id-cities", fn () => $state->cities)));
     }
 
     public function verifyPromoCode(Request $request)

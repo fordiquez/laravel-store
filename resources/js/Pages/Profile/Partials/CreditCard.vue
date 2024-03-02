@@ -1,3 +1,65 @@
+<script setup>
+import { computed, onMounted, reactive, ref } from 'vue'
+import { usePage } from '@inertiajs/vue3'
+
+const props = defineProps({
+    labels: Object,
+    isNumberMasked: Boolean,
+    randomBackgrounds: {
+        type: Boolean,
+        default: true
+    },
+    backgroundImage: String
+})
+
+const isCardFlipped = ref(false)
+const placeholders = reactive({
+    amex: '#### ###### #####',
+    diners: '#### ###### ####',
+    default: '#### #### #### ####'
+})
+const currentPlaceholder = ref('')
+
+onMounted(() => {
+    currentPlaceholder.value =
+        brand.value === 'amex' ? placeholders.amex : brand.value === 'dinersclub' ? placeholders.diners : placeholders.default
+})
+
+const currentCardBackground = computed(() => {
+    let random = Math.floor(Math.random() * 25 + 1)
+    return !props.backgroundImage && props.randomBackgrounds ? `${usePage().props.ziggy.url}/static/cards/${random}.jpeg` : null
+})
+
+const getIsNumberMasked = (index, n) => index < 14 && props.labels.number.length > index && n.trim() !== '' && props.isNumberMasked
+
+const brand = computed(() => {
+    if (props.labels.brand) return props.labels.brand
+
+    let number = props.labels.number
+
+    switch (!number) {
+        case /^4/.test(number):
+            return 'visa'
+        case /^(34|37)/.test(number):
+            return 'amex'
+        case /^5[1-5]/.test(number):
+            return 'mastercard'
+        case /^6011/.test(number):
+            return 'discover'
+        case /^62/.test(number):
+            return 'unionpay'
+        case /^9792/.test(number):
+            return 'troy'
+        case /^3(?:0([0-5]|9)|[689]\d?)\d{0,11}/.test(number):
+            return 'dinersclub'
+        case /^35(2[89]|[3-8])/.test(number):
+            return 'jcb'
+        default:
+            return ''
+    }
+})
+</script>
+
 <template>
     <div
         class="card-item relative z-20 mx-auto h-44 w-11/12 max-w-sm cursor-pointer 2xs:h-52 xs:h-72 xs:w-full xs:max-w-lg"
@@ -130,68 +192,6 @@
         </div>
     </div>
 </template>
-
-<script setup>
-import { computed, onMounted, reactive, ref } from 'vue'
-import { usePage } from '@inertiajs/vue3'
-
-const props = defineProps({
-    labels: Object,
-    isNumberMasked: Boolean,
-    randomBackgrounds: {
-        type: Boolean,
-        default: true
-    },
-    backgroundImage: String
-})
-
-const isCardFlipped = ref(false)
-const placeholders = reactive({
-    amex: '#### ###### #####',
-    diners: '#### ###### ####',
-    default: '#### #### #### ####'
-})
-const currentPlaceholder = ref('')
-
-onMounted(() => {
-    currentPlaceholder.value =
-        brand.value === 'amex' ? placeholders.amex : brand.value === 'dinersclub' ? placeholders.diners : placeholders.default
-})
-
-const currentCardBackground = computed(() => {
-    let random = Math.floor(Math.random() * 25 + 1)
-    return !props.backgroundImage && props.randomBackgrounds ? `${usePage().props.ziggy.url}/static/cards/${random}.jpeg` : null
-})
-
-const getIsNumberMasked = (index, n) => index < 14 && props.labels.number.length > index && n.trim() !== '' && props.isNumberMasked
-
-const brand = computed(() => {
-    if (props.labels.brand) return props.labels.brand
-
-    let number = props.labels.number
-
-    switch (!number) {
-        case /^4/.test(number):
-            return 'visa'
-        case /^(34|37)/.test(number):
-            return 'amex'
-        case /^5[1-5]/.test(number):
-            return 'mastercard'
-        case /^6011/.test(number):
-            return 'discover'
-        case /^62/.test(number):
-            return 'unionpay'
-        case /^9792/.test(number):
-            return 'troy'
-        case /^3(?:0([0-5]|9)|[689]\d?)\d{0,11}/.test(number):
-            return 'dinersclub'
-        case /^35(2[89]|[3-8])/.test(number):
-            return 'jcb'
-        default:
-            return ''
-    }
-})
-</script>
 
 <style>
 .card-item.-active .card-item__side.-front {

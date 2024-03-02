@@ -36,9 +36,9 @@ const form = useForm({
 
         <form @submit.prevent="form.patch(route('profile.personal-information.update'))" class="mt-6 space-y-6">
             <div>
-                <InputLabel for="first_name" value="First Name" />
+                <input-label for="first_name" value="First Name" />
 
-                <TextInput
+                <text-input
                     id="first_name"
                     type="text"
                     class="mt-1 block w-full"
@@ -48,13 +48,13 @@ const form = useForm({
                     autocomplete="first_name"
                 />
 
-                <InputError class="mt-2" :message="form.errors.first_name" />
+                <input-error class="mt-2" :message="form.errors.first_name" />
             </div>
 
             <div>
-                <InputLabel for="last_name" value="Last Name" />
+                <input-label for="last_name" value="Last Name" />
 
-                <TextInput
+                <text-input
                     id="last_name"
                     type="text"
                     class="mt-1 block w-full"
@@ -63,15 +63,15 @@ const form = useForm({
                     autocomplete="last_name"
                 />
 
-                <InputError class="mt-2" :message="form.errors.last_name" />
+                <input-error class="mt-2" :message="form.errors.last_name" />
             </div>
 
             <div>
-                <InputLabel for="email" value="Email" />
+                <input-label for="email" value="Email" />
 
-                <TextInput id="email" type="email" class="mt-1 block w-full" v-model="form.email" required autocomplete="email" />
+                <text-input id="email" type="email" class="mt-1 block w-full" v-model="form.email" required autocomplete="email" />
 
-                <InputError class="mt-2" :message="form.errors.email" />
+                <input-error class="mt-2" :message="form.errors.email" />
             </div>
 
             <div v-if="mustVerifyEmail && user.email_verified_at === null">
@@ -93,7 +93,7 @@ const form = useForm({
             </div>
 
             <div>
-                <InputLabel for="phone" value="Phone Number" />
+                <input-label for="phone" value="Phone Number" />
 
                 <!--                <vue-tel-input-->
                 <!--                    v-model="form.phone"-->
@@ -117,15 +117,15 @@ const form = useForm({
                 <!--                    valid-characters-only-->
                 <!--                />-->
 
-                <InputError class="mt-2" :message="form.errors.phone" />
+                <input-error class="mt-2" :message="form.errors.phone" />
             </div>
 
             <div class="flex items-center gap-4">
-                <PrimaryButton :disabled="form.processing">Save</PrimaryButton>
+                <primary-button :disabled="form.processing">Save</primary-button>
 
-                <Transition enter-from-class="opacity-0" leave-to-class="opacity-0" class="transition ease-in-out">
+                <transition enter-from-class="opacity-0" leave-to-class="opacity-0" class="transition ease-in-out">
                     <p v-if="form.recentlySuccessful" class="text-sm text-gray-600 dark:text-gray-400">Saved.</p>
-                </Transition>
+                </transition>
             </div>
         </form>
     </section>

@@ -10,7 +10,7 @@ const props = withDefaults(
     defineProps<{
         show: boolean
         count: number
-        total: number
+        total: number | null
         items: any[]
         goods: any[]
     }>(),

@@ -1,5 +1,5 @@
 <script setup>
-import { Head, Link, useForm, usePage } from '@inertiajs/vue3'
+import { Link, useForm, usePage } from '@inertiajs/vue3'
 import { computed, reactive } from 'vue'
 import { useFormat } from '@/composables/format'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
@@ -81,9 +81,7 @@ const confirmOrder = () => {
 </script>
 
 <template>
-    <Head title="Checkout" />
-
-    <AuthenticatedLayout>
+    <AuthenticatedLayout title="Checkout">
         <div class="px-4 py-12 sm:px-6 lg:px-8">
             <h1 class="text-4xl font-extrabold dark:text-white">Checkout</h1>
             <div class="flex flex-col justify-between lg:flex-row lg:space-x-10">

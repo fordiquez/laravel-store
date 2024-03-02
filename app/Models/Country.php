@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
@@ -28,6 +29,8 @@ class Country extends Model implements HasMedia
         'is_active' => 'boolean',
     ];
 
+    protected $appends = ['flag'];
+
     public function states(): HasMany
     {
         return $this->hasMany(State::class);
@@ -41,5 +44,10 @@ class Country extends Model implements HasMedia
     public function getRouteKeyName(): string
     {
         return 'iso2';
+    }
+
+    protected function flag(): Attribute
+    {
+        return Attribute::get(fn () => $this->getFirstMediaUrl('flag'));
     }
 }

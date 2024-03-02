@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { computed, onMounted, onUpdated, reactive, ref } from 'vue'
-import { Link, useForm, usePage } from '@inertiajs/vue3'
+import { Head, Link, useForm, usePage } from '@inertiajs/vue3'
 import { useDark, useToggle } from '@vueuse/core'
 import { initTooltips } from 'flowbite'
-import { notify } from '@kyvg/vue3-notification'
+import { Notifications, notify } from '@kyvg/vue3-notification'
 import ApplicationLogo from '@/Components/ApplicationLogo.vue'
 import Categories from '@/Components/Categories.vue'
 import Cart from '@/Components/Cart.vue'
@@ -66,6 +66,8 @@ const searchGoods = () => form.get(route('goods.search'))
 <template>
     <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
         <notifications position="top right" />
+
+        <Head :title="title" />
 
         <header class="border-b border-gray-100 bg-white dark:border-gray-700 dark:bg-gray-800">
             <!-- Primary Navigation Menu -->
