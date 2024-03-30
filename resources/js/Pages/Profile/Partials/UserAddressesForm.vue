@@ -1,8 +1,7 @@
-<script setup>
-import { onMounted, reactive, ref } from 'vue'
+<script setup lang="ts">
+import { onMounted, ref } from 'vue'
 import { useForm, router } from '@inertiajs/vue3'
 import { initTooltips } from 'flowbite'
-import Multiselect from 'vue-multiselect'
 import axios from 'axios'
 import DangerButton from '@/Components/DangerButton.vue'
 import InputError from '@/Components/InputError.vue'
@@ -11,93 +10,102 @@ import Modal from '@/Components/Modal.vue'
 import PrimaryButton from '@/Components/PrimaryButton.vue'
 import SecondaryButton from '@/Components/SecondaryButton.vue'
 import TextInput from '@/Components/TextInput.vue'
-import 'vue-multiselect/dist/vue-multiselect.css'
+import { Address, City, Country, State } from '@/types'
+import Autocomplete from '@/Components/Autocomplete.vue'
 
-const props = defineProps({
-    addresses: Array,
-    countries: Array
-})
+const props = defineProps<{
+    addresses: Address[]
+    countries: Country[]
+}>()
 
 onMounted(() => initTooltips())
 
-const form = useForm({
+const form = useForm<{
+    id?: number
+    country_id: number | null
+    state_id: number | null
+    city_id: number | null
+    street: string
+    house: string
+    flat: string | null
+    postal_code: string | null
+}>({
     country_id: null,
     state_id: null,
     city_id: null,
     street: '',
     house: '',
-    flat: null,
-    postal_code: null
+    flat: '',
+    postal_code: ''
 })
 
-const defaultAddress = ref(props.addresses?.find((item) => item.is_main)?.id || null)
+const defaultAddress = ref(props.addresses?.find((address: Address) => address.is_main)?.id || null)
 const addressModal = ref(false)
 const addressUpdateModal = ref(false)
-const country = ref()
-const state = ref()
-const city = ref()
-const states = reactive([])
-const cities = reactive([])
-const loading = reactive([])
+const locations = useForm<{
+    countries: Country[]
+    states: State[]
+    cities: City[]
+    loading: 'states' | 'cities' | 'none'
+}>({
+    countries: props.countries,
+    states: [],
+    cities: [],
+    loading: 'none'
+})
 
-const isLoading = (field) => !!loading.find((item) => field === item)
-
-const onCountrySelected = async (selectedCountry) => {
-    form.country_id = selectedCountry.id
-    loading.push('state')
-    await axios
-        .get(route('api.locations.states', selectedCountry.iso2.toLowerCase()))
-        .then(({ data }) => {
-            states.splice(0, states.length, ...data)
-            state.value = city.value = null
-            form.reset('state_id', 'city_id')
-        })
-        .catch((error) => {
-            console.log(error)
-        })
-        .finally(() => loading.pop())
+const onCountrySelected = async (country: Country) => {
+    if (country.id !== form.country_id) {
+        form.country_id = country.id
+        form.reset('state_id', 'city_id')
+        locations.loading = 'states'
+        locations.states.splice(0, locations.states.length)
+        axios
+            .get(route('api.locations.states', country.iso2.toLowerCase()))
+            .then(({ data }) => locations.states.push(...data))
+            .finally(() => (locations.loading = 'none'))
+    }
 }
 
-const onStateSelected = async (selectedState) => {
-    form.state_id = selectedState.id
-    loading.push('city')
-    await axios
-        .get(route('api.locations.cities', selectedState.id))
-        .then(({ data }) => {
-            cities.splice(0, cities.length, ...data)
-            city.value = null
-            form.reset('city_id')
-        })
-        .catch((error) => {
-            console.log(error)
-        })
-        .finally(() => loading.pop())
+const onStateSelected = async (state: State) => {
+    if (state.id !== form.state_id) {
+        form.state_id = state.id
+        form.reset('city_id')
+        locations.loading = 'cities'
+        locations.cities.splice(0, locations.cities.length)
+        axios
+            .get(route('api.locations.cities', state.id))
+            .then(({ data }) => locations.cities.push(...data))
+            .finally(() => (locations.loading = 'none'))
+    }
 }
 
-const onCitySelected = (selectedCity) => (form.city_id = selectedCity.id)
+const onCitySelected = (selectedCity: City) => (form.city_id = selectedCity.id)
 
 const submit = () =>
     !addressUpdateModal.value
         ? form.post(route('profile.address.store'), {
-              onSuccess: () => closeAddressModal()
+              onSuccess: () => closeAddressModal(),
+              preserveScroll: true
           })
-        : form.put(route('profile.address.update', form), {
-              onSuccess: () => closeAddressModal()
+        : form.put(route('profile.address.update', form.id), {
+              onSuccess: () => closeAddressModal(),
+              preserveScroll: true
           })
 
 const closeAddressModal = () => {
     form.reset()
     form.clearErrors()
     addressModal.value = false
-    country.value = state.value = city.value = null
 }
 
-const onEditAddress = (address) => {
-    country.value = address.country
+const onEditAddress = (address: Address) => {
+    console.log(address)
+    form.country_id = address.country.id
     onCountrySelected(address.country).then(() => {
-        state.value = address.state
+        form.state_id = address.state.id
         onStateSelected(address.state).then(() => {
-            city.value = address.city
+            form.city_id = address.city.id
             onCitySelected(address.city)
         })
     })
@@ -110,9 +118,9 @@ const onEditAddress = (address) => {
     addressUpdateModal.value = true
 }
 
-const onChangeDefaultAddress = (event) => {
+const onChangeDefaultAddress = (event: any) => {
     defaultAddress.value = Number.parseInt(event.target.value) || null
-    router.patch(route('profile.address.patch', defaultAddress.value))
+    router.patch(route('profile.address.patch', { id: defaultAddress.value }))
 }
 </script>
 
@@ -228,72 +236,48 @@ const onChangeDefaultAddress = (event) => {
                 </div>
 
                 <div class="mt-6">
-                    <form @submit.prevent="submit" class="mt-6 flex flex-col space-y-6">
+                    <form @submit.prevent="submit" class="mt-6 flex flex-col">
                         <div class="flex w-full flex-col space-y-4 lg:flex-row lg:space-x-4 lg:space-y-0">
                             <div class="basis-1/3">
-                                <InputLabel for="country" value="Country" />
-
-                                <multiselect
-                                    id="country"
-                                    v-model="country"
-                                    :options="countries"
-                                    :close-on-select="true"
-                                    :clear-on-select="false"
-                                    @select="onCountrySelected"
-                                    class="mt-1"
-                                    placeholder="Select the country"
-                                    label="name"
-                                    track-by="id"
+                                <autocomplete
+                                    :options="locations.countries"
+                                    :model-value="form.country_id"
+                                    :error="form.errors.country_id"
+                                    option-icon="flag"
+                                    label="Country"
+                                    @update:model-value="onCountrySelected"
                                 />
 
                                 <InputError class="mt-2" :message="form.errors.country_id" />
                             </div>
                             <div class="basis-1/3">
-                                <InputLabel for="state" value="State" />
-
-                                <multiselect
-                                    id="state"
-                                    v-model="state"
-                                    :options="states"
-                                    :close-on-select="true"
-                                    :clear-on-select="false"
-                                    :disabled="!form.country_id || isLoading('state')"
-                                    :loading="isLoading('state')"
-                                    @select="onStateSelected"
-                                    class="mt-1"
-                                    placeholder="Select the state"
-                                    label="name"
-                                    track-by="id"
+                                <autocomplete
+                                    :options="locations.states"
+                                    :model-value="form.state_id"
+                                    :error="form.errors.state_id"
+                                    :disabled="!form.country_id"
+                                    :loading="locations.loading === 'states'"
+                                    label="State"
+                                    @update:model-value="onStateSelected"
                                 />
-
-                                <InputError class="mt-2" :message="form.errors.state_id" />
                             </div>
                             <div class="basis-1/3">
-                                <InputLabel for="city" value="City" />
-
-                                <multiselect
-                                    id="city"
-                                    v-model="city"
-                                    :options="cities"
-                                    :disabled="!form.country_id || !form.state_id || isLoading('city')"
-                                    :loading="isLoading('city')"
-                                    @select="onCitySelected"
-                                    :close-on-select="true"
-                                    :clear-on-select="false"
-                                    class="mt-1"
-                                    placeholder="Select the city"
-                                    label="name"
-                                    track-by="id"
+                                <autocomplete
+                                    :options="locations.cities"
+                                    :model-value="form.city_id"
+                                    :error="form.errors.city_id"
+                                    :disabled="!form.state_id"
+                                    :loading="locations.loading === 'cities'"
+                                    label="City"
+                                    @update:model-value="onCitySelected"
                                 />
-
-                                <InputError class="mt-2" :message="form.errors.city_id" />
                             </div>
                         </div>
-                        <div class="flex w-full flex-col space-y-4 lg:flex-row lg:space-x-4 lg:space-y-0">
+                        <div class="mt-6 flex w-full flex-col space-y-4 lg:flex-row lg:space-x-4 lg:space-y-0">
                             <div class="basis-2/5">
-                                <InputLabel for="street" value="Street" />
+                                <input-label for="street" value="Street" />
 
-                                <TextInput
+                                <text-input
                                     id="street"
                                     type="text"
                                     class="mt-1 block w-full"
@@ -302,12 +286,12 @@ const onChangeDefaultAddress = (event) => {
                                     autocomplete="street"
                                 />
 
-                                <InputError class="mt-2" :message="form.errors.street" />
+                                <input-error class="mt-2" :message="form.errors.street" />
                             </div>
                             <div class="basis-1/5">
-                                <InputLabel for="house" value="House" />
+                                <input-label for="house" value="House" />
 
-                                <TextInput
+                                <text-input
                                     id="house"
                                     type="text"
                                     class="mt-1 block w-full"
@@ -316,19 +300,19 @@ const onChangeDefaultAddress = (event) => {
                                     autocomplete="house"
                                 />
 
-                                <InputError class="mt-2" :message="form.errors.house" />
+                                <input-error class="mt-2" :message="form.errors.house" />
                             </div>
                             <div class="basis-1/5">
-                                <InputLabel for="flat" value="Flat" />
+                                <input-label for="flat" value="Flat" />
 
-                                <TextInput id="flat" type="text" class="mt-1 block w-full" v-model="form.flat" autocomplete="flat" />
+                                <text-input id="flat" type="text" class="mt-1 block w-full" v-model="form.flat" autocomplete="flat" />
 
-                                <InputError class="mt-2" :message="form.errors.flat" />
+                                <input-error class="mt-2" :message="form.errors.flat" />
                             </div>
                             <div class="basis-1/5">
-                                <InputLabel for="postal_code" value="Postal Code" />
+                                <input-label for="postal_code" value="Postal Code" />
 
-                                <TextInput
+                                <text-input
                                     id="postal_code"
                                     type="text"
                                     class="mt-1 block w-full"
@@ -336,10 +320,10 @@ const onChangeDefaultAddress = (event) => {
                                     autocomplete="postal_code"
                                 />
 
-                                <InputError class="mt-2" :message="form.errors.postal_code" />
+                                <input-error class="mt-2" :message="form.errors.postal_code" />
                             </div>
                         </div>
-                        <div class="flex items-center justify-between">
+                        <div class="mt-20 flex items-center justify-between">
                             <danger-button :disabled="form.processing" @click="closeAddressModal">Cancel</danger-button>
                             <primary-button :disabled="form.processing">Save</primary-button>
                         </div>
@@ -349,29 +333,3 @@ const onChangeDefaultAddress = (event) => {
         </modal>
     </section>
 </template>
-
-<style>
-.multiselect__tags {
-    @apply border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300;
-}
-
-.multiselect__input {
-    @apply border-gray-300 text-gray-100 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-900 dark:!text-gray-100 dark:focus:border-indigo-600 dark:focus:ring-indigo-600;
-}
-
-.multiselect__single {
-    @apply dark:bg-transparent;
-}
-
-.multiselect__content {
-    @apply dark:bg-gray-900 dark:text-gray-300;
-}
-
-.multiselect__option--selected {
-    @apply dark:bg-gray-700 dark:text-gray-300;
-}
-
-.multiselect__content-wrapper {
-    @apply relative border-gray-300 scrollbar-thin scrollbar-track-purple-300 scrollbar-thumb-purple-600 dark:border-gray-700;
-}
-</style>

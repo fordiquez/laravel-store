@@ -17,13 +17,13 @@ class AddressRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'country_id' => ['required', Rule::exists('countries', 'id')],
-            'state_id' => ['required', Rule::exists('states', 'id')],
-            'city_id' => ['nullable', Rule::exists('cities', 'id')],
-            'street' => ['required', 'max:255'],
-            'house' => ['required', 'max:10'],
-            'flat' => ['nullable', 'max:10'],
-            'postal_code' => ['nullable', 'max:10'],
+            'country_id' => ['required', 'integer', Rule::exists('countries', 'id')],
+            'state_id' => ['nullable', 'integer', Rule::exists('states', 'id')],
+            'city_id' => ['nullable', 'integer', Rule::exists('cities', 'id')],
+            'street' => ['required', 'string', 'max:255'],
+            'house' => ['required', 'string', 'max:10'],
+            'flat' => ['nullable', 'string', 'max:10'],
+            'postal_code' => ['nullable', 'string', 'max:10'],
             'is_main' => ['required', 'boolean'],
         ];
     }

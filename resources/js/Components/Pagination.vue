@@ -1,24 +1,24 @@
-<script setup>
+<script setup lang="ts">
 import { computed } from 'vue'
 import { Link } from '@inertiajs/vue3'
 import { range } from 'lodash'
-import qs from 'qs'
+import { parse, stringify } from 'qs'
 
-const props = defineProps({
-    links: Object,
-    meta: Object
-})
+const props = defineProps<{
+    links: any
+    meta: any
+}>()
 
 const pageLinks = computed(() => {
     const pageLimit = 7
-    const parsed = qs.parse(window.location.search.substring(1))
+    const parsed = parse(window.location.search.substring(1))
 
     const pageRange = range(1, props.meta.last_page + 1).map((page) => {
-        parsed.page = page
+        parsed.page = String(page)
 
         return {
             label: page,
-            url: `${props.meta.path}?${qs.stringify(parsed, { encodeValuesOnly: true })}`,
+            url: `${props.meta.path}?${stringify(parsed, { encodeValuesOnly: true })}`,
             active: page === props.meta.current_page
         }
     })
@@ -27,32 +27,32 @@ const pageLinks = computed(() => {
 })
 
 const prevPage = computed(() => {
-    const parsed = qs.parse(window.location.search.substring(1))
-    parsed.page = parsed.page ? parseFloat(parsed.page) : 1
+    const parsed = parse(window.location.search.substring(1))
+    parsed.page = String(parsed.page ?? 1)
 
-    if (parsed.page > 1) {
-        parsed.page = parsed.page - 1
+    if (Number(parsed.page) > 1) {
+        parsed.page = String(Number(parsed.page) - 1)
 
-        return `${props.meta.path}?${qs.stringify(parsed, { encodeValuesOnly: true })}`
+        return `${props.meta.path}?${stringify(parsed, { encodeValuesOnly: true })}`
     }
 
     return null
 })
 
 const nextPage = computed(() => {
-    const parsed = qs.parse(window.location.search.substring(1))
-    parsed.page = parsed.page ? parseFloat(parsed.page) : 1
+    const parsed = parse(window.location.search.substring(1))
+    parsed.page = String(parsed.page ?? 1)
 
-    if (parsed.page < props.meta.last_page) {
-        parsed.page = parsed.page + 1
+    if (Number(parsed.page) < props.meta.last_page) {
+        parsed.page = String(Number(parsed.page) + 1)
 
-        return `${props.meta.path}?${qs.stringify(parsed, { encodeValuesOnly: true })}`
+        return `${props.meta.path}?${stringify(parsed, { encodeValuesOnly: true })}`
     }
 
     return null
 })
 
-const trimPageRange = (pageRange) => {
+const trimPageRange = (pageRange: any[]) => {
     if (props.meta.current_page < 3 || props.meta.current_page > pageRange.length - 2) {
         const beginning = pageRange.slice(0, 3)
         beginning.push({ url: '#' })

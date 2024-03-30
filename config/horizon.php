@@ -3,6 +3,7 @@
 use Illuminate\Support\Str;
 
 return [
+
     /*
     |--------------------------------------------------------------------------
     | Horizon Domain
@@ -35,7 +36,7 @@ return [
     |--------------------------------------------------------------------------
     |
     | This is the name of the Redis connection where Horizon will store the
-    | meta information required for it to function. It includes the list
+    | meta-information required for it to function. It includes the list
     | of supervisors, failed jobs, job metrics, and other information.
     |
     */
@@ -53,7 +54,10 @@ return [
     |
     */
 
-    'prefix' => env('HORIZON_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_') . '_horizon:'),
+    'prefix' => env(
+        'HORIZON_PREFIX',
+        Str::slug(env('APP_NAME', 'laravel'), '_') . '_horizon:'
+    ),
 
     /*
     |--------------------------------------------------------------------------
@@ -62,7 +66,7 @@ return [
     |
     | These middleware will get attached onto each Horizon route, giving you
     | the chance to add your own middleware to this list or change any of
-    | the existing middleware. Or, you can simply stick with this list.
+    | the existing middleware. Or, you can stick with this list.
     |
     */
 
@@ -156,7 +160,7 @@ return [
     | Memory Limit (MB)
     |--------------------------------------------------------------------------
     |
-    | This value describes the maximum amount of memory the Horizon master
+    | This value describes the maximum amount of memory the Horizon primary
     | supervisor may consume before it is terminated and restarted. For
     | configuring these limits on your workers, see the next section.
     |
@@ -180,6 +184,7 @@ return [
             'connection' => 'redis',
             'queue' => ['default'],
             'balance' => 'auto',
+            'autoScalingStrategy' => 'time',
             'maxProcesses' => 1,
             'maxTime' => 0,
             'maxJobs' => 0,

@@ -14,13 +14,8 @@ return new class extends Migration
     {
         Schema::create('cities', function (Blueprint $table) {
             $table->id();
-            $table->uuid()->unique()->index();
             $table->foreignIdFor(State::class)->constrained()->cascadeOnUpdate()->cascadeOnDelete();
-            $table->string('name', 50);
-            $table->string('old_name', 50)->nullable();
-            $table->char('type')->nullable();
-            $table->boolean('is_state_center')->default(false);
-            $table->boolean('big_city')->default(false);
+            $table->string('name');
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });

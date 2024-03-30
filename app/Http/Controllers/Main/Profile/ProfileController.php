@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Main\Profile;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Profile\AddressRequest;
 use App\Http\Requests\Profile\ProfileUpdateRequest;
+use App\Http\Resources\CountryResource;
 use App\Http\Resources\OrderResource;
 use App\Http\Resources\UserAddressResource;
 use App\Models\Country;
@@ -13,6 +14,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -32,7 +34,7 @@ class ProfileController extends Controller
                 'reviews' => $request->user()->reviews()->count(),
             ],
             'addresses' => UserAddressResource::collection($request->user()->addresses),
-            'countries' => Country::query()->orderBy('name')->get()->setVisible(['id', 'name', 'iso2'])->toArray(),
+            'countries' => CountryResource::collection(Cache::rememberForever('countries', fn () => Country::all())),
         ]);
     }
 

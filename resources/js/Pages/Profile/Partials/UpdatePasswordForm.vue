@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import InputError from '@/Components/InputError.vue'
 import InputLabel from '@/Components/InputLabel.vue'
 import PrimaryButton from '@/Components/PrimaryButton.vue'
@@ -6,8 +6,8 @@ import TextInput from '@/Components/TextInput.vue'
 import { useForm } from '@inertiajs/vue3'
 import { ref } from 'vue'
 
-const passwordInput = ref(null)
-const currentPasswordInput = ref(null)
+const passwordInput = ref<HTMLInputElement | null>(null)
+const currentPasswordInput = ref<HTMLInputElement | null>(null)
 
 const form = useForm({
     current_password: '',
@@ -22,11 +22,11 @@ const updatePassword = () => {
         onError: () => {
             if (form.errors.password) {
                 form.reset('password', 'password_confirmation')
-                passwordInput.value.focus()
+                passwordInput.value?.focus()
             }
             if (form.errors.current_password) {
                 form.reset('current_password')
-                currentPasswordInput.value.focus()
+                currentPasswordInput.value?.focus()
             }
         }
     })
@@ -45,9 +45,9 @@ const updatePassword = () => {
 
         <form @submit.prevent="updatePassword" class="mt-6 space-y-6">
             <div>
-                <InputLabel for="current_password" value="Current Password" />
+                <input-label for="current_password" value="Current Password" />
 
-                <TextInput
+                <text-input
                     id="current_password"
                     ref="currentPasswordInput"
                     v-model="form.current_password"
@@ -56,13 +56,13 @@ const updatePassword = () => {
                     autocomplete="current-password"
                 />
 
-                <InputError :message="form.errors.current_password" class="mt-2" />
+                <input-error :message="form.errors.current_password" class="mt-2" />
             </div>
 
             <div>
-                <InputLabel for="password" value="New Password" />
+                <input-label for="password" value="New Password" />
 
-                <TextInput
+                <text-input
                     id="password"
                     ref="passwordInput"
                     v-model="form.password"
@@ -71,13 +71,13 @@ const updatePassword = () => {
                     autocomplete="new-password"
                 />
 
-                <InputError :message="form.errors.password" class="mt-2" />
+                <input-error :message="form.errors.password" class="mt-2" />
             </div>
 
             <div>
-                <InputLabel for="password_confirmation" value="Confirm Password" />
+                <input-label for="password_confirmation" value="Confirm Password" />
 
-                <TextInput
+                <text-input
                     id="password_confirmation"
                     v-model="form.password_confirmation"
                     type="password"
@@ -85,15 +85,20 @@ const updatePassword = () => {
                     autocomplete="new-password"
                 />
 
-                <InputError :message="form.errors.password_confirmation" class="mt-2" />
+                <input-error :message="form.errors.password_confirmation" class="mt-2" />
             </div>
 
             <div class="flex items-center gap-4">
-                <PrimaryButton :disabled="form.processing">Save</PrimaryButton>
+                <primary-button :disabled="form.processing">Save</primary-button>
 
-                <Transition enter-from-class="opacity-0" leave-to-class="opacity-0" class="transition ease-in-out">
+                <transition
+                    enter-active-class="transition ease-in-out"
+                    enter-from-class="opacity-0"
+                    leave-active-class="transition ease-in-out"
+                    leave-to-class="opacity-0"
+                >
                     <p v-if="form.recentlySuccessful" class="text-sm text-gray-600 dark:text-gray-400">Saved.</p>
-                </Transition>
+                </transition>
             </div>
         </form>
     </section>

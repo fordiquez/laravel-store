@@ -1,19 +1,19 @@
-<script setup>
+<script setup lang="ts">
 import { defineProps, defineEmits } from 'vue'
-import Filter from '@/Components/Filter.vue'
 import Slider from '@vueform/slider'
+import Filter from '@/Components/Filter.vue'
 import SecondaryButton from '@/Components/SecondaryButton.vue'
 
-const props = defineProps({
-    brands: Array,
-    properties: Object,
-    filters: Object,
-    rangePrices: Object
-})
+defineProps<{
+    brands: any[]
+    properties: any
+    filters: any
+    rangePrices: any
+}>()
 
 defineEmits(['brandFilter', 'priceFilter', 'propertyFilter'])
 
-const sliderFormat = (value) => `${Math.round(value)} $`
+const sliderFormat = (value: number) => `${Math.round(value)} $`
 </script>
 
 <template>

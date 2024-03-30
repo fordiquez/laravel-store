@@ -1,44 +1,43 @@
 {
     "name": "laravel/laravel",
     "type": "project",
-    "description": "The Laravel Framework.",
+    "description": "The skeleton application for the Laravel framework.",
     "keywords": [
-        "framework",
-        "laravel"
+        "laravel",
+        "framework"
     ],
     "license": "MIT",
     "require": {
         "php": "^8.2",
         "bensampo/laravel-enum": "^6.3",
-        "bezhansalleh/filament-shield": "^3.0",
+        "bezhansalleh/filament-shield": "^3.2",
         "filament/filament": "^3.2",
         "filament/spatie-laravel-media-library-plugin": "^3.2",
         "guzzlehttp/guzzle": "^7.2",
-        "inertiajs/inertia-laravel": "^0.6.8",
-        "laravel/cashier": "^14.12",
-        "laravel/framework": "^10.0",
-        "laravel/horizon": "^5.13",
-        "laravel/sanctum": "^3.2",
-        "laravel/socialite": "^5.6",
-        "laravel/telescope": "^4.12",
-        "laravel/tinker": "^2.7",
+        "inertiajs/inertia-laravel": "^1.0",
+        "laravel/breeze": "^2.0",
+        "laravel/cashier": "^15.2",
+        "laravel/framework": "^11.0",
+        "laravel/horizon": "^5.22",
+        "laravel/sanctum": "^4.0",
+        "laravel/socialite": "^5.11",
+        "laravel/telescope": "^5.0",
+        "laravel/tinker": "^2.8",
         "mohammadhprp/filament-ip-to-country-flag-column": "^1.0",
-        "opcodesio/log-viewer": "^3.0",
-        "phpsa/filament-password-reveal": "^2.0.0",
-        "predis/predis": "^2.1",
-        "tightenco/ziggy": "^1.0",
-        "ysfkaya/filament-phone-input": "^2.0.0"
+        "opcodesio/log-viewer": "^3.1",
+        "phpsa/filament-password-reveal": "^2.1",
+        "predis/predis": "^2.2",
+        "tightenco/ziggy": "^2.0",
+        "ysfkaya/filament-phone-input": "^2.2"
     },
     "require-dev": {
-        "barryvdh/laravel-debugbar": "^3.7",
-        "doctrine/dbal": "^3.6",
         "fakerphp/faker": "^1.9.1",
-        "laravel/breeze": "^1.18",
         "laravel/pint": "^1.0",
-        "laravel/sail": "^1.0.1",
+        "laravel/sail": "^1.18",
         "mockery/mockery": "^1.4.4",
-        "nunomaduro/collision": "^7.0",
-        "phpunit/phpunit": "^10.0",
+        "nunomaduro/collision": "^8.1",
+        "pestphp/pest": "^2.0",
+        "pestphp/pest-plugin-laravel": "^2.0",
         "spatie/laravel-ignition": "^2.0"
     },
     "autoload": {
@@ -66,15 +65,23 @@
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
         ],
         "post-create-project-cmd": [
-            "@php artisan key:generate --ansi"
+            "@php artisan key:generate --ansi",
+            "@php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\"",
+            "@php artisan migrate --graceful --ansi"
         ]
+    },
+    "extra": {
+        "laravel": {
+            "dont-discover": []
+        }
     },
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
         "sort-packages": true,
         "allow-plugins": {
-            "pestphp/pest-plugin": true
+            "pestphp/pest-plugin": true,
+            "php-http/discovery": true
         }
     },
     "minimum-stability": "stable",

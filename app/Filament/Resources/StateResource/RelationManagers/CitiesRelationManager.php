@@ -2,12 +2,12 @@
 
 namespace App\Filament\Resources\StateResource\RelationManagers;
 
-use Filament\Forms;
-use Filament\Forms\Form;
+use App\Models\City;
+use Filament\Infolists\Components;
+use Filament\Infolists\Infolist;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
 
 class CitiesRelationManager extends RelationManager
 {
@@ -15,22 +15,16 @@ class CitiesRelationManager extends RelationManager
 
     protected static ?string $recordTitleAttribute = 'name';
 
-    public function form(Form $form): Form
+    public function infolist(Infolist $infolist): Infolist
     {
-        return $form
+        return $infolist
             ->schema([
-                Forms\Components\TextInput::make('name')
-                    ->required()
-                    ->maxlength(50)
-//                    ->hint(fn ($state, $component) => 'left: ' . $component->getMaxLength() - strlen($state) . ' characters')
-                    ->reactive(),
-                Forms\Components\TextInput::make('old_name')->maxlength(50),
-                Forms\Components\Hidden::make('state_id')
-                    ->default(fn (RelationManager $livewire) => $livewire->ownerRecord->id),
-                Forms\Components\TextInput::make('type')->nullable()->default('state')->maxLength(25),
-                Forms\Components\TextInput::make('uuid')->required()->uuid()->default(fake()->uuid),
-                Forms\Components\Toggle::make('is_active')->required()->default(true),
-            ]);
+                Components\TextEntry::make('id')->label('ID'),
+                Components\TextEntry::make('name'),
+                Components\IconEntry::make('is_active')->boolean()->columnSpanFull(),
+                Components\TextEntry::make('created_at')->label('Created Date')->dateTime(),
+                Components\TextEntry::make('updated_at')->label('Last Modified Date')->dateTime(),
+            ])->columns();
     }
 
     /**
@@ -40,48 +34,25 @@ class CitiesRelationManager extends RelationManager
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id')->sortable(),
-                Tables\Columns\TextColumn::make('uuid')->searchable()->toggleable(),
-                Tables\Columns\TextColumn::make('name')->sortable()->searchable()->limit(50)->wrap(),
-                Tables\Columns\TextColumn::make('old_name')->sortable()->searchable()->toggleable(),
-                Tables\Columns\TextColumn::make('type')->sortable()->toggleable(),
-                Tables\Columns\IconColumn::make('is_state_center')->boolean()->toggleable()
-                    ->tooltip('Toggle value')
-                    ->action(fn ($record, $column) => static::iconAction($record, $column)),
-                Tables\Columns\IconColumn::make('big_city')->boolean()->toggleable()
-                    ->tooltip('Toggle value')
-                    ->action(fn ($record, $column) => static::iconAction($record, $column)),
+                Tables\Columns\TextColumn::make('id')->label('ID')->sortable(),
+                Tables\Columns\TextColumn::make('name')
+                    ->url(fn (City $record) => route('filament.admin.resources.cities.view', $record->id), true)
+                    ->limit(50)
+                    ->tooltip(fn (Tables\Columns\TextColumn $column) => strlen($column->getState()) <= $column->getCharacterLimit() ? null : $column->getState())
+                    ->badge()
+                    ->sortable()
+                    ->searchable(),
                 Tables\Columns\IconColumn::make('is_active')->boolean()->toggleable()
                     ->tooltip('Toggle value')
-                    ->action(fn ($record, $column) => static::iconAction($record, $column)),
+                    ->action(fn (City $record, Tables\Columns\Column $column) => $record->update([$column->getName() => !$record->is_active])),
+                Tables\Columns\TextColumn::make('created_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('updated_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                Tables\Filters\Filter::make('state_center')
-                    ->query(fn (Builder $query): Builder => $query->where('is_state_center', true)),
-                Tables\Filters\Filter::make('big_city')
-                    ->query(fn (Builder $query): Builder => $query->where('big_city', true)),
-                Tables\Filters\Filter::make('inactive')
-                    ->query(fn (Builder $query): Builder => $query->where('is_active', false))
-                    ->label('Only inactive'),
-            ])
-            ->headerActions([
-                Tables\Actions\CreateAction::make(),
+                Tables\Filters\TernaryFilter::make('is_active'),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
+                Tables\Actions\ViewAction::make(),
             ]);
-    }
-
-    public static function iconAction($record, $column): void
-    {
-        $name = $column->getName();
-
-        $record->update([
-            $name => !$record->$name,
-        ]);
     }
 }

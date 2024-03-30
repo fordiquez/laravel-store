@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { Head, Link, useForm } from '@inertiajs/vue3'
 import Checkbox from '@/Components/Checkbox.vue'
 import GuestLayout from '@/Layouts/GuestLayout.vue'
@@ -7,10 +7,10 @@ import InputLabel from '@/Components/InputLabel.vue'
 import PrimaryButton from '@/Components/PrimaryButton.vue'
 import TextInput from '@/Components/TextInput.vue'
 
-defineProps({
-    canResetPassword: Boolean,
-    status: String
-})
+defineProps<{
+    canResetPassword?: boolean
+    status?: string
+}>()
 
 const form = useForm({
     email: '',
@@ -82,7 +82,7 @@ const submit = () => {
                 </Link>
                 <Link
                     :href="route('social', 'google')"
-                    class="dark:focus:ring-[#4285F4]/55 inline-flex items-center justify-center rounded-lg bg-[#4285F4] px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-[#4285F4]/90 focus:outline-none focus:ring-4 focus:ring-[#4285F4]/50"
+                    class="inline-flex items-center justify-center rounded-lg bg-[#4285F4] px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-[#4285F4]/90 focus:outline-none focus:ring-4 focus:ring-[#4285F4]/50 dark:focus:ring-[#4285F4]/55"
                 >
                     <font-awesome-icon :icon="['fab', 'google']" size="lg" class="-ml-1 mr-2" />
                     Sign in with Google

@@ -121,12 +121,12 @@ const goodsSort = (key) => {
 <template>
     <Head :title="category?.title ?? title" />
 
-    <AuthenticatedLayout :title="category?.title ?? title">
+    <authenticated-layout :title="category?.title ?? title">
         <section v-if="goods?.data" class="bg-gray-100 p-4 text-gray-900 dark:bg-gray-900 dark:text-gray-400 sm:p-6 lg:p-8">
             <div class="overflow-hidden bg-white px-4 shadow-sm dark:bg-gray-800 sm:rounded-lg sm:px-6 lg:px-8">
                 <div class="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-5 dark:border-gray-600">
                     <div class="flex items-center">
-                        <FiltersDrawer
+                        <filters-drawer
                             v-if="goods.data.length"
                             :brands="brands"
                             :properties="properties"
@@ -213,7 +213,7 @@ const goodsSort = (key) => {
 
                 <div class="pb-24 pt-6">
                     <div class="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
-                        <Filters
+                        <filters
                             v-if="goods.data.length"
                             :brands="brands"
                             :filters="filters"
@@ -232,7 +232,7 @@ const goodsSort = (key) => {
                                     class="group relative flex w-full flex-col px-4 pb-4 sm:w-1/2 lg:w-1/3 xl:w-1/4 2xl:w-1/5"
                                 >
                                     <div
-                                        class="min-h-80 aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80"
+                                        class="aspect-h-1 aspect-w-1 min-h-80 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80"
                                     >
                                         <img
                                             :src="good.preview"
@@ -269,7 +269,7 @@ const goodsSort = (key) => {
                 </div>
             </div>
         </section>
-    </AuthenticatedLayout>
+    </authenticated-layout>
 </template>
 
 <style>

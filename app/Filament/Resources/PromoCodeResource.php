@@ -27,21 +27,14 @@ class PromoCodeResource extends Resource
         return $form
             ->schema([
                 Forms\Components\Section::make()->schema([
-                    Forms\Components\TextInput::make('key')
-                        ->required()
-                        ->maxLength(50)
-                        ->unique(ignoreRecord: true)
-                        ->default(Str::random(8)),
-                    Forms\Components\Radio::make('type')
-                        ->required()
-                        ->options(\App\Enums\PromoCode::asSelectArray()),
+                    Forms\Components\TextInput::make('key')->required()->maxLength(50)->unique(ignoreRecord: true)->default(Str::random(8)),
+                    Forms\Components\Radio::make('type')->required()->options(\App\Enums\PromoCode::asSelectArray()),
                     Forms\Components\TextInput::make('value')->required()->numeric(),
                     Forms\Components\TextInput::make('description')->required()->maxLength(255),
                     Forms\Components\TextInput::make('used_times')->default(0)->disabled(),
                     Forms\Components\TextInput::make('greater_than'),
                     Forms\Components\DateTimePicker::make('starts_at')->default(now())->minDate(Date::today()),
-                    Forms\Components\DateTimePicker::make('expires_at')
-                        ->minDate(fn (Forms\Get $get) => $get('starts_at')),
+                    Forms\Components\DateTimePicker::make('expires_at')->minDate(fn (Forms\Get $get) => $get('starts_at')),
                     Forms\Components\Toggle::make('is_active')->required()->default(true),
                     Forms\Components\Toggle::make('is_public')->required(),
                 ])->columns(),
@@ -55,7 +48,7 @@ class PromoCodeResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id')->sortable(),
+                Tables\Columns\TextColumn::make('id')->label('ID')->sortable(),
                 Tables\Columns\TextColumn::make('key')->sortable()->searchable()->limit(20),
                 Tables\Columns\TextColumn::make('type')
                     ->badge()

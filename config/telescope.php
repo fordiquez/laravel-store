@@ -4,25 +4,26 @@ use Laravel\Telescope\Http\Middleware\Authorize;
 use Laravel\Telescope\Watchers;
 
 return [
+
     /*
     |--------------------------------------------------------------------------
     | Telescope Domain
     |--------------------------------------------------------------------------
     |
-    | This is the subdomain where Telescope will be accessible from. If the
+    | This is the subdomain where the Telescope will be accessible from. If the
     | setting is null, Telescope will reside under the same domain as the
     | application. Otherwise, this value will be used as the subdomain.
     |
     */
 
-    'domain' => env('TELESCOPE_DOMAIN', null),
+    'domain' => env('TELESCOPE_DOMAIN'),
 
     /*
     |--------------------------------------------------------------------------
     | Telescope Path
     |--------------------------------------------------------------------------
     |
-    | This is the URI path where Telescope will be accessible from. Feel free
+    | This is the URI path where the Telescope will be accessible from. Feel free
     | to change this path to anything you like. Note that the URI will not
     | affect the paths of its internal API that aren't exposed to users.
     |
@@ -52,7 +53,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Telescope Master Switch
+    | Telescope Primary Switch
     |--------------------------------------------------------------------------
     |
     | This option may be used to disable all Telescope watchers regardless
@@ -70,11 +71,14 @@ return [
     |
     | These middleware will be assigned to every Telescope route, giving you
     | the chance to add your own middleware to this list or change any of
-    | the existing middleware. Or, you can simply stick with this list.
+    | the existing middleware. Or, you can stick with this list.
     |
     */
 
-    'middleware' => ['web', Authorize::class],
+    'middleware' => [
+        'web',
+        Authorize::class,
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -91,7 +95,11 @@ return [
         // 'api/*'
     ],
 
-    'ignore_paths' => ['nova-api*'],
+    'ignore_paths' => [
+        'livewire*',
+        'nova-api*',
+        'pulse*',
+    ],
 
     'ignore_commands' => [
         //
@@ -143,7 +151,12 @@ return [
         ],
 
         Watchers\JobWatcher::class => env('TELESCOPE_JOB_WATCHER', true),
-        Watchers\LogWatcher::class => env('TELESCOPE_LOG_WATCHER', true),
+
+        Watchers\LogWatcher::class => [
+            'enabled' => env('TELESCOPE_LOG_WATCHER', true),
+            'level' => 'error',
+        ],
+
         Watchers\MailWatcher::class => env('TELESCOPE_MAIL_WATCHER', true),
 
         Watchers\ModelWatcher::class => [

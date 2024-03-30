@@ -1,11 +1,11 @@
-<script setup>
+<script setup lang="ts">
 import { computed, defineProps } from 'vue'
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue'
 
-defineProps({
-    title: String,
-    classes: String
-})
+defineProps<{
+    title: string
+    classes: string
+}>()
 
 const defaultClass = computed(() => 'mt-6 p-1 max-h-96 dark:[color-scheme:dark]')
 </script>

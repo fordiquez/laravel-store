@@ -1,4 +1,4 @@
-<x-forms::field-wrapper
+<x-filament-forms::field-wrapper
     :id="$getId()"
     :label="$getLabel()"
     :label-sr-only="$isLabelHidden()"
@@ -123,4 +123,4 @@
             @endif
         </ul>
     </div>
-</x-forms::field-wrapper>
+</x-filament-forms::field-wrapper>

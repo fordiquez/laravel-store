@@ -1,12 +1,10 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
-import { Head, Link, usePage } from '@inertiajs/vue3'
+import { Link, usePage } from '@inertiajs/vue3'
 </script>
 
 <template>
-    <Head title="Dashboard" />
-
-    <AuthenticatedLayout>
+    <authenticated-layout title="Dashboard">
         <div class="px-4 py-12 sm:px-6 lg:px-8">
             <div class="overflow-hidden rounded-lg bg-white shadow-sm dark:bg-gray-800">
                 <div class="p-6 text-center text-xl font-semibold uppercase tracking-wider text-gray-900 dark:text-gray-100">
@@ -44,5 +42,5 @@ import { Head, Link, usePage } from '@inertiajs/vue3'
                 </div>
             </div>
         </div>
-    </AuthenticatedLayout>
+    </authenticated-layout>
 </template>

@@ -1,29 +1,27 @@
-<script setup>
+<script setup lang="ts">
 import { computed, ref } from 'vue'
 import { Link } from '@inertiajs/vue3'
 import { Popover, PopoverButton, PopoverGroup, PopoverPanel } from '@headlessui/vue'
 
-const props = defineProps({
-    categories: Array
-})
+const props = defineProps<{
+    categories: any[]
+}>()
 
-const popover = ref(false)
+const hoveredCategoryId = ref<number>(props.categories[0].id)
 
-let hoveredCategoryId = ref(props.categories[0].id)
+const hoveredCategory = computed(() => props.categories.find((category) => category.id === hoveredCategoryId.value))
 
-let hoveredCategory = computed(() => props.categories.find((category) => category.id === hoveredCategoryId.value))
-
-const onCategory = (category) => (hoveredCategoryId.value = category.id)
+const onCategory = (category: any) => (hoveredCategoryId.value = category.id)
 </script>
 
 <template>
     <PopoverGroup class="hidden lg:ml-8 lg:block lg:self-stretch">
         <div class="flex h-full space-x-8">
-            <Popover v-slot="{ popover }" class="flex">
+            <Popover v-slot="{ open }" class="flex">
                 <div class="relative flex">
                     <PopoverButton
                         :class="[
-                            popover
+                            open
                                 ? 'border-indigo-400 text-gray-900 focus:border-indigo-700 dark:border-indigo-600 dark:text-gray-100'
                                 : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 focus:border-gray-300 focus:text-gray-700 dark:text-gray-400 dark:hover:border-gray-700 dark:hover:text-gray-300 dark:focus:border-gray-700 dark:focus:text-gray-300',
                             'relative inline-flex items-center border-b-2 px-1 pt-1 text-sm font-medium leading-5 transition duration-150 ease-in-out focus:outline-none'

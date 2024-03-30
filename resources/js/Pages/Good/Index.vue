@@ -56,8 +56,8 @@ const ratingStars = computed(() =>
         props.good.rating > star && props.good.rating < star + 1
             ? ['fas', 'star-half-stroke']
             : props.good.rating > star
-            ? ['fas', 'star']
-            : ['far', 'star']
+              ? ['fas', 'star']
+              : ['far', 'star']
     )
 )
 

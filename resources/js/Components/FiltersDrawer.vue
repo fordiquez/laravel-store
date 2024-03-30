@@ -1,27 +1,27 @@
-<script setup>
+<script setup lang="ts">
 import { onMounted, defineProps, defineEmits, ref } from 'vue'
 import { Drawer } from 'flowbite'
 import Filters from '@/Components/Filters.vue'
 import SecondaryButton from '@/Components/SecondaryButton.vue'
 
-const props = defineProps({
-    brands: Array,
-    properties: Object,
-    filters: Object,
-    rangePrices: Object
-})
+defineProps<{
+    brands: any[]
+    properties: any
+    filters: any
+    rangePrices: any
+}>()
 
 const emits = defineEmits(['brandFilter', 'priceFilter', 'propertyFilter'])
 
-const drawer = ref(null)
+const drawer = ref<Drawer | null>(null)
 const drawerRef = ref(null)
 
 onMounted(() => (drawer.value = new Drawer(drawerRef.value)))
 
-const show = () => drawer.value.show()
-const hide = () => drawer.value.hide()
+const show = () => drawer.value?.show()
+const hide = () => drawer.value?.hide()
 
-const brandFilter = (brand) => {
+const brandFilter = (brand: any) => {
     emits('brandFilter', brand)
     hide()
 }
@@ -31,7 +31,7 @@ const priceFilter = () => {
     hide()
 }
 
-const propertyFilter = (value) => {
+const propertyFilter = (value: any) => {
     emits('propertyFilter', value)
     hide()
 }

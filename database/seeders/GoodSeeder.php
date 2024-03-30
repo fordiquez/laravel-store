@@ -9,9 +9,6 @@ use Illuminate\Database\Seeder;
 
 class GoodSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         $tags = TagFactory::new()->count(22)->create();

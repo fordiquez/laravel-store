@@ -1,34 +1,34 @@
-<script setup>
+<script setup lang="ts">
 import { Link, router } from '@inertiajs/vue3'
-import Modal from '@/Components/Modal.vue'
 import { useFormat } from '@/composables/format'
+import Modal from '@/Components/Modal.vue'
 import PrimaryButton from '@/Components/PrimaryButton.vue'
 import SecondaryButton from '@/Components/SecondaryButton.vue'
 import DangerButton from '@/Components/DangerButton.vue'
 
-const props = defineProps({
-    show: {
-        type: Boolean,
-        default: false
-    },
-    count: Number,
-    total: Number,
-    items: Array,
-    goods: Array
-})
+const props = withDefaults(
+    defineProps<{
+        show: boolean
+        count: number
+        total: number | null
+        items: any[]
+        goods: any[]
+    }>(),
+    { show: false }
+)
 
 defineEmits(['close'])
 
 const { formatMoney } = useFormat()
 
-const itemId = (id) => props.items.findIndex((item) => item.good_id === id)
+const itemId = (id: number) => props.items.findIndex((item) => item.good_id === id)
 
-const update = (good, quantity) =>
+const update = (good: any, quantity: number) =>
     router.patch(route('cart.update', good), {
         quantity
     })
 
-const remove = (good) => router.delete(route('cart.delete', good))
+const remove = (good: any) => router.delete(route('cart.delete', good))
 
 const bulkDelete = () => router.delete(route('cart.bulk-delete'))
 </script>

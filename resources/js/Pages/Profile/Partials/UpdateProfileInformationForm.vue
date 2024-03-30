@@ -1,19 +1,20 @@
-<script setup>
+<script setup lang="ts">
 import { reactive } from 'vue'
 import { Link, useForm, usePage } from '@inertiajs/vue3'
 import InputError from '@/Components/InputError.vue'
 import InputLabel from '@/Components/InputLabel.vue'
 import PrimaryButton from '@/Components/PrimaryButton.vue'
 import TextInput from '@/Components/TextInput.vue'
-import { VueTelInput } from 'vue-tel-input'
-import 'vue-tel-input/vue-tel-input.css'
+import { PageProps } from '@/types'
+// import { VueTelInput } from 'vue-tel-input'
+// import 'vue-tel-input/vue-tel-input.css'
 
-const props = defineProps({
-    mustVerifyEmail: Boolean,
-    status: String
-})
+defineProps<{
+    mustVerifyEmail?: Boolean
+    status?: String
+}>()
 
-const { user } = reactive(usePage().props)
+const { user } = reactive<PageProps>(usePage().props)
 
 const form = useForm({
     first_name: user.first_name,
@@ -35,9 +36,9 @@ const form = useForm({
 
         <form @submit.prevent="form.patch(route('profile.personal-information.update'))" class="mt-6 space-y-6">
             <div>
-                <InputLabel for="first_name" value="First Name" />
+                <input-label for="first_name" value="First Name" />
 
-                <TextInput
+                <text-input
                     id="first_name"
                     type="text"
                     class="mt-1 block w-full"
@@ -47,13 +48,13 @@ const form = useForm({
                     autocomplete="first_name"
                 />
 
-                <InputError class="mt-2" :message="form.errors.first_name" />
+                <input-error class="mt-2" :message="form.errors.first_name" />
             </div>
 
             <div>
-                <InputLabel for="last_name" value="Last Name" />
+                <input-label for="last_name" value="Last Name" />
 
-                <TextInput
+                <text-input
                     id="last_name"
                     type="text"
                     class="mt-1 block w-full"
@@ -62,18 +63,18 @@ const form = useForm({
                     autocomplete="last_name"
                 />
 
-                <InputError class="mt-2" :message="form.errors.last_name" />
+                <input-error class="mt-2" :message="form.errors.last_name" />
             </div>
 
             <div>
-                <InputLabel for="email" value="Email" />
+                <input-label for="email" value="Email" />
 
-                <TextInput id="email" type="email" class="mt-1 block w-full" v-model="form.email" required autocomplete="email" />
+                <text-input id="email" type="email" class="mt-1 block w-full" v-model="form.email" required autocomplete="email" />
 
-                <InputError class="mt-2" :message="form.errors.email" />
+                <input-error class="mt-2" :message="form.errors.email" />
             </div>
 
-            <div v-if="props.mustVerifyEmail && user.email_verified_at === null">
+            <div v-if="mustVerifyEmail && user.email_verified_at === null">
                 <p class="mt-2 text-sm text-gray-800 dark:text-gray-200">
                     Your email address is unverified.
                     <Link
@@ -86,45 +87,45 @@ const form = useForm({
                     </Link>
                 </p>
 
-                <div v-show="props.status === 'verification-link-sent'" class="mt-2 text-sm font-medium text-green-600 dark:text-green-400">
+                <div v-show="status === 'verification-link-sent'" class="mt-2 text-sm font-medium text-green-600 dark:text-green-400">
                     A new verification link has been sent to your email address.
                 </div>
             </div>
 
             <div>
-                <InputLabel for="phone" value="Phone Number" />
+                <input-label for="phone" value="Phone Number" />
 
-                <vue-tel-input
-                    v-model="form.phone"
-                    mode="auto"
-                    style-classes="mt-1 !border-none ring-1 ring-gray-300 dark:ring-gray-700 !rounded-lg dark:bg-gray-900 dark:text-gray-300"
-                    :dropdown-options="{
-                        disabled: false,
-                        showDialCodeInList: true,
-                        showDialCodeInSelection: false,
-                        showFlags: true,
-                        showSearchBox: false,
-                        tabindex: 0
-                    }"
-                    :input-options="{
-                        placeholder: 'Phone number',
-                        styleClasses: '!rounded-lg h-[42px] dark:bg-gray-900 dark:text-gray-300',
-                        showDialCode: true
-                    }"
-                    auto-format
-                    auto-default-country
-                    valid-characters-only
-                />
+                <!--                <vue-tel-input-->
+                <!--                    v-model="form.phone"-->
+                <!--                    mode="auto"-->
+                <!--                    style-classes="mt-1 !border-none ring-1 ring-gray-300 dark:ring-gray-700 !rounded-lg dark:bg-gray-900 dark:text-gray-300"-->
+                <!--                    :dropdown-options="{-->
+                <!--                        disabled: false,-->
+                <!--                        showDialCodeInList: true,-->
+                <!--                        showDialCodeInSelection: false,-->
+                <!--                        showFlags: true,-->
+                <!--                        showSearchBox: false,-->
+                <!--                        tabindex: 0-->
+                <!--                    }"-->
+                <!--                    :input-options="{-->
+                <!--                        placeholder: 'Phone number',-->
+                <!--                        styleClasses: '!rounded-lg h-[42px] dark:bg-gray-900 dark:text-gray-300',-->
+                <!--                        showDialCode: true-->
+                <!--                    }"-->
+                <!--                    auto-format-->
+                <!--                    auto-default-country-->
+                <!--                    valid-characters-only-->
+                <!--                />-->
 
-                <InputError class="mt-2" :message="form.errors.phone" />
+                <input-error class="mt-2" :message="form.errors.phone" />
             </div>
 
             <div class="flex items-center gap-4">
-                <PrimaryButton :disabled="form.processing">Save</PrimaryButton>
+                <primary-button :disabled="form.processing">Save</primary-button>
 
-                <Transition enter-from-class="opacity-0" leave-to-class="opacity-0" class="transition ease-in-out">
+                <transition enter-from-class="opacity-0" leave-to-class="opacity-0" class="transition ease-in-out">
                     <p v-if="form.recentlySuccessful" class="text-sm text-gray-600 dark:text-gray-400">Saved.</p>
-                </Transition>
+                </transition>
             </div>
         </form>
     </section>

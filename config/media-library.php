@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     /*
      * The disk on which to store added files and derived images by default. Choose
      * one or more of the disks you've configured in config/filesystems.php.
@@ -26,7 +27,7 @@ return [
     'queue_name' => '',
 
     /*
-     * By default all conversions will be performed on a queue.
+     * By default, all conversions will be performed on a queue.
      */
     'queue_conversions_by_default' => env('QUEUE_CONVERSIONS_BY_DEFAULT', true),
 
@@ -36,6 +37,14 @@ return [
     'media_model' => Spatie\MediaLibrary\MediaCollections\Models\Media::class,
 
     /*
+     * When enabled, media collections will be serialized using the default
+     * laravel model serialization behavior.
+     *
+     * Keep this option disabled if using Media Library Pro components (https://medialibrary.pro)
+     */
+    'use_default_collection_serialization' => false,
+
+    /*
      * The fully qualified class name of the model used for temporary uploads.
      *
      * This model is only used in Media Library Pro (https://medialibrary.pro)
@@ -43,9 +52,9 @@ return [
     'temporary_upload_model' => Spatie\MediaLibraryPro\Models\TemporaryUpload::class,
 
     /*
-     * When enabled, Media Library Pro will only process temporary uploads that were uploaded
+     * When enabled, Media Library Pro will only process temporary uploads uploaded
      * in the same session. You can opt to disable this for stateless usage of
-     * the pro components.
+     * the pro-components.
      */
     'enable_temporary_uploads_session_affinity' => true,
 
@@ -65,10 +74,17 @@ return [
     'path_generator' => Spatie\MediaLibrary\Support\PathGenerator\DefaultPathGenerator::class,
 
     /*
+     * The class that contains the strategy for determining how to remove files.
+     */
+    'file_remover_class' => Spatie\MediaLibrary\Support\FileRemover\DefaultFileRemover::class,
+
+    /*
      * Here you can specify which path generator should be used for the given class.
      */
     'custom_path_generators' => [
         // Model::class => PathGenerator::class
+        // or
+        // 'model_morph_alias' => PathGenerator::class
     ],
 
     /*
@@ -78,7 +94,7 @@ return [
     'url_generator' => Spatie\MediaLibrary\Support\UrlGenerator\DefaultUrlGenerator::class,
 
     /*
-     * Moves media on updating to keep path consistent. Enable it only with a custom
+     * Moves media on updating to keep a path consistent. Enable it only with a custom
      * PathGenerator that uses, for example, the media UUID.
      */
     'moves_media_on_update' => false,
@@ -91,7 +107,7 @@ return [
 
     /*
      * The media library will try to optimize all converted images by removing
-     * metadata and applying a bit of compression. These are
+     * metadata and applying a little bit of compression. These are
      * the optimizers that will be used by default.
      */
     'image_optimizers' => [
@@ -99,7 +115,7 @@ return [
             '-m85', // set maximum quality to 85%
             '--force', // ensure that progressive generation is always done also if a little bigger
             '--strip-all', // this strips out all text information such as comments and EXIF data
-            '--all-progressive', // this will make sure the resulting image is a progressive one
+            '--all-progressive', // this will make sure the resulting image is progressive
         ],
         Spatie\ImageOptimizer\Optimizers\Pngquant::class => [
             '--force', // required parameter for this package
@@ -117,10 +133,20 @@ return [
             '-O3', // this produces the slowest but best results
         ],
         Spatie\ImageOptimizer\Optimizers\Cwebp::class => [
-            '-m 6', // for the slowest compression method in order to get the best compression.
+            '-m 6', // for the slowest compression method to get the best compression.
             '-pass 10', // for maximizing the amount of analysis pass.
             '-mt', // multithreading for some speed improvements.
             '-q 90', //quality factor that brings the least noticeable changes.
+        ],
+        Spatie\ImageOptimizer\Optimizers\Avifenc::class => [
+            '-a cq-level=23', // constant quality level, lower values mean better quality and greater file size (0-63).
+            '-j all', // number of jobs (worker threads, "all" uses all available cores).
+            '--min 0', // min quantizer for color (0-63).
+            '--max 63', // max quantizer for color (0-63).
+            '--minalpha 0', // min quantizer for alpha (0-63).
+            '--maxalpha 63', // max quantizer for alpha (0-63).
+            '-a end-usage=q', // rate control mode set to Constant Quality mode.
+            '-a tune=ssim', // SSIM as tune the encoder for distortion metric.
         ],
     ],
 
@@ -130,6 +156,7 @@ return [
     'image_generators' => [
         Spatie\MediaLibrary\Conversions\ImageGenerators\Image::class,
         Spatie\MediaLibrary\Conversions\ImageGenerators\Webp::class,
+        Spatie\MediaLibrary\Conversions\ImageGenerators\Avif::class,
         Spatie\MediaLibrary\Conversions\ImageGenerators\Pdf::class,
         Spatie\MediaLibrary\Conversions\ImageGenerators\Svg::class,
         Spatie\MediaLibrary\Conversions\ImageGenerators\Video::class,
@@ -165,7 +192,7 @@ return [
     ],
 
     /*
-     * When using the addMediaFromUrl method you may want to replace the default downloader.
+     * When using the addMediaFromUrl method, you may want to replace the default downloader.
      * This is particularly useful when the url of the image is behind a firewall and
      * need to add additional flags, possibly using curl.
      */
@@ -188,7 +215,7 @@ return [
     'responsive_images' => [
         /*
          * This class is responsible for calculating the target widths of the responsive
-         * images. By default, we optimize for filesize and create variations that each are 30%
+         * images. By default, we optimize for filesize and create variations that each is 30%
          * smaller than the previous one. More info in the documentation.
          *
          * https://docs.spatie.be/laravel-medialibrary/v9/advanced-usage/generating-responsive-images
@@ -196,8 +223,9 @@ return [
         'width_calculator' => Spatie\MediaLibrary\ResponsiveImages\WidthCalculator\FileSizeOptimizedWidthCalculator::class,
 
         /*
-         * By default rendering media to a responsive image will add some javascript and a tiny placeholder.
+         * By default, rendering media to a responsive image will add some javascript and a tiny placeholder.
          * This ensures that the browser can already determine the correct layout.
+         * When disabled, no tiny placeholder is generated.
          */
         'use_tiny_placeholders' => true,
 
@@ -216,7 +244,7 @@ return [
     'enable_vapor_uploads' => env('ENABLE_MEDIA_LIBRARY_VAPOR_UPLOADS', false),
 
     /*
-     * When converting Media instances to response the media library will add
+     * When converting Media instances to response, the media library will add
      * a `loading` attribute to the `img` tag. Here you can set the default
      * value of that attribute.
      *

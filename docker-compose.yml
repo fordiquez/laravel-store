@@ -71,3 +71,4 @@ services:
 networks:
     laravel:
         name: laravel
+        external: true

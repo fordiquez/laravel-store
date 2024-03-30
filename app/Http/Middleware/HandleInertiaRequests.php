@@ -8,7 +8,7 @@ use App\Models\Category;
 use App\Support\Cart;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
-use Tightenco\Ziggy\Ziggy;
+use Tighten\Ziggy\Ziggy;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -34,16 +34,16 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        return array_merge(parent::share($request), [
+        return [
+            ...parent::share($request),
             'user' => $request->user(),
-            'ziggy' => function () use ($request) {
-                return array_merge((new Ziggy)->toArray(), [
-                    'location' => $request->url(),
-                ]);
-            },
+            'ziggy' => fn () => [
+                ...(new Ziggy)->toArray(),
+                'location' => $request->url(),
+            ],
             'categories' => $request->routeIs('livewire.message') ?: CategoryResource::collection(Category::whereParentId(null)->get()),
             'cart' => new CartResource(Cart::getGoodsAndCartItems()),
             'notification' => $request->session()->get('notification'),
-        ]);
+        ];
     }
 }

@@ -2,7 +2,6 @@
 
 namespace App\Filament\Resources\UserResource\RelationManagers;
 
-use App\Models\Country;
 use App\Models\OrderRecipient;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -32,9 +31,6 @@ class OrderRecipientsRelationManager extends RelationManager
                         ->required()
                         ->rules(['min:9', 'max:13', 'regex:/^([0-9\s\-\+\(\)]*)$/'])
                         ->focusNumberFormat(PhoneInputNumberType::E164)
-                        ->initialCountry(Country::DEFAULT_COUNTRY)
-                        ->preferredCountries([Country::DEFAULT_COUNTRY])
-                        ->onlyCountries(Country::$validCountries)
                         ->formatOnDisplay(false),
                     Forms\Components\TextInput::make('description')->nullable()->maxLength(255),
                     Forms\Components\Toggle::make('is_default')->default(false)->inline(),
@@ -49,7 +45,7 @@ class OrderRecipientsRelationManager extends RelationManager
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id')->sortable(),
+                Tables\Columns\TextColumn::make('id')->label('ID')->sortable(),
                 Tables\Columns\TextColumn::make('title')->sortable()->searchable(),
                 Tables\Columns\TextColumn::make('first_name')->sortable()->searchable(),
                 Tables\Columns\TextColumn::make('last_name')->sortable()->searchable(),
@@ -59,14 +55,13 @@ class OrderRecipientsRelationManager extends RelationManager
                     ->boolean()
                     ->toggleable()
                     ->tooltip('Toggle value')
-                    ->action(function ($record, $column) {
-                        $name = $column->getName();
-                        OrderRecipient::where('id', '!=', $record->id)->whereUserId($record->user_id)->whereIsDefault(true)->update([
-                            'is_default' => false,
-                        ]);
-                        $record->update([
-                            $name => !$record->$name,
-                        ]);
+                    ->action(function (OrderRecipient $record, Tables\Columns\Column $column) {
+                        OrderRecipient::where('id', '!=', $record->id)
+                            ->whereUserId($record->user_id)
+                            ->whereIsDefault(true)
+                            ->update(['is_default' => false]);
+
+                        $record->update([$column->getName() => !$record->is_default]);
                     }),
             ])
             ->filters([
@@ -75,9 +70,7 @@ class OrderRecipientsRelationManager extends RelationManager
             ->headerActions([
                 Tables\Actions\CreateAction::make()->using(function (RelationManager $livewire, array $data): Model {
                     if ($data['is_default']) {
-                        OrderRecipient::whereUserId($livewire->ownerRecord->id)->whereIsDefault(true)->update([
-                            'is_default' => false,
-                        ]);
+                        OrderRecipient::whereUserId($livewire->ownerRecord->id)->whereIsDefault(true)->update(['is_default' => false]);
                     }
 
                     return $livewire->getRelationship()->create($data);
@@ -88,9 +81,10 @@ class OrderRecipientsRelationManager extends RelationManager
                     dd($data);
                 })->using(function (Model $record, array $data): Model {
                     if ($data['is_default']) {
-                        OrderRecipient::where('id', '!=', $record->id)->whereUserId($record->user_id)->whereIsDefault(true)->update([
-                            'is_default' => false,
-                        ]);
+                        OrderRecipient::where('id', '!=', $record->id)
+                            ->whereUserId($record->user_id)
+                            ->whereIsDefault(true)
+                            ->update(['is_default' => false]);
                     }
                     $record->update($data);
 

@@ -2,19 +2,14 @@
 
 namespace Database\Factories;
 
+use App\Models\PromoCode;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
-/**
- * @extends Factory
- */
 class PromoCodeFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
+    protected $model = PromoCode::class;
+
     public function definition(): array
     {
         $type = fake()->boolean ? 'fixed' : 'percentage';

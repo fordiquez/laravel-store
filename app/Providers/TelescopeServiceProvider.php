@@ -2,7 +2,6 @@
 
 namespace App\Providers;
 
-use App\Models\User;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Telescope\IncomingEntry;
 use Laravel\Telescope\Telescope;
@@ -15,7 +14,7 @@ class TelescopeServiceProvider extends TelescopeApplicationServiceProvider
      */
     public function register(): void
     {
-        Telescope::night();
+        // Telescope::night();
 
         $this->hideSensitiveRequestDetails();
 
@@ -25,10 +24,10 @@ class TelescopeServiceProvider extends TelescopeApplicationServiceProvider
             }
 
             return $entry->isReportableException() ||
-                $entry->isFailedRequest() ||
-                $entry->isFailedJob() ||
-                $entry->isScheduledTask() ||
-                $entry->hasMonitoredTag();
+                   $entry->isFailedRequest() ||
+                   $entry->isFailedJob() ||
+                   $entry->isScheduledTask() ||
+                   $entry->hasMonitoredTag();
         });
     }
 
@@ -43,7 +42,11 @@ class TelescopeServiceProvider extends TelescopeApplicationServiceProvider
 
         Telescope::hideRequestParameters(['_token']);
 
-        Telescope::hideRequestHeaders(['cookie', 'x-csrf-token', 'x-xsrf-token']);
+        Telescope::hideRequestHeaders([
+            'cookie',
+            'x-csrf-token',
+            'x-xsrf-token',
+        ]);
     }
 
     /**
@@ -54,7 +57,9 @@ class TelescopeServiceProvider extends TelescopeApplicationServiceProvider
     protected function gate(): void
     {
         Gate::define('viewTelescope', function ($user) {
-            return $user->email == User::ADMIN_EMAIL;
+            return in_array($user->email, [
+                //
+            ]);
         });
     }
 }

@@ -33,7 +33,7 @@ class SocialsRelationManager extends RelationManager
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id')->sortable(),
+                Tables\Columns\TextColumn::make('id')->label('ID')->sortable(),
                 Tables\Columns\TextColumn::make('provider')->sortable()->searchable(),
                 Tables\Columns\TextColumn::make('provider_id')->searchable(),
                 Tables\Columns\TextColumn::make('provider_token')->searchable()->toggleable()->limit(50),

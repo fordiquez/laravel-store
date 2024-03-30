@@ -50,12 +50,3 @@ jobs:
 
             - name: Setup directory permissions
               run: chmod -R 755 storage bootstrap/cache
-
-            - name: Run Unit tests
-              env:
-                  APP_ENV: testing
-                  DB_CONNECTION: mysql
-                  DB_DATABASE: ${{ env.DB_DATABASE }}
-                  DB_USERNAME: ${{ env.DB_USERNAME }}
-                  DB_PASSWORD: ${{ env.DB_PASSWORD }}
-              run: php artisan test

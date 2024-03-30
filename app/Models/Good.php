@@ -147,7 +147,7 @@ class Good extends Model implements HasMedia
 
     protected function preview(): Attribute
     {
-        return Attribute::get(fn () => $this->hasMedia('goods') ? $this->getFirstMediaUrl('goods') : url('static/not-found.svg'));
+        return Attribute::get(fn () => $this->hasMedia('thumbnails') ? $this->getFirstMediaUrl('thumbnails') : url('static/not-found.svg'));
     }
 
     public function getRouteKeyName(): string

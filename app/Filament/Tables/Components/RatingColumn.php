@@ -24,7 +24,7 @@ class RatingColumn extends Column
 
     protected int|Closure $max = 5;
 
-    protected int|Closure $width = 6;
+    protected string|Closure|int|null $width = 6;
 
     protected int|Closure $height = 6;
 
@@ -113,7 +113,7 @@ class RatingColumn extends Column
         return $this->tooltips[$index - 1] ?? '';
     }
 
-    public function width(int|Closure $width): self
+    public function width(Closure|string|int|null $width): static
     {
         $this->width = $width;
 
@@ -184,7 +184,7 @@ class RatingColumn extends Column
         return $this->evaluate($this->max);
     }
 
-    public function getWidth(): int
+    public function getWidth(): ?string
     {
         return $this->evaluate($this->width);
     }

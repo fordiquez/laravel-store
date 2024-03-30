@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { useForm } from '@inertiajs/vue3'
 import { nextTick, ref } from 'vue'
 import DangerButton from '@/Components/DangerButton.vue'
@@ -9,7 +9,7 @@ import SecondaryButton from '@/Components/SecondaryButton.vue'
 import TextInput from '@/Components/TextInput.vue'
 
 const confirmingUserDeletion = ref(false)
-const passwordInput = ref(null)
+const passwordInput = ref<HTMLInputElement | null>(null)
 
 const form = useForm({
     password: ''
@@ -18,14 +18,14 @@ const form = useForm({
 const confirmUserDeletion = () => {
     confirmingUserDeletion.value = true
 
-    nextTick(() => passwordInput.value.focus())
+    nextTick(() => passwordInput.value?.focus())
 }
 
 const deleteUser = () => {
     form.delete(route('profile.personal-information.destroy'), {
         preserveScroll: true,
         onSuccess: () => closeModal(),
-        onError: () => passwordInput.value.focus(),
+        onError: () => passwordInput.value?.focus(),
         onFinish: () => form.reset()
     })
 }
@@ -48,9 +48,9 @@ const closeModal = () => {
             </p>
         </header>
 
-        <DangerButton @click="confirmUserDeletion">Delete Account</DangerButton>
+        <danger-button @click="confirmUserDeletion">Delete Account</danger-button>
 
-        <Modal :show="confirmingUserDeletion" @close="closeModal">
+        <modal :show="confirmingUserDeletion" @close="closeModal">
             <div class="p-6">
                 <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">Are you sure you want to delete your account?</h2>
 
@@ -60,9 +60,9 @@ const closeModal = () => {
                 </p>
 
                 <div class="mt-6">
-                    <InputLabel for="password" value="Password" class="sr-only" />
+                    <input-label for="password" value="Password" class="sr-only" />
 
-                    <TextInput
+                    <text-input
                         id="password"
                         ref="passwordInput"
                         v-model="form.password"
@@ -72,23 +72,17 @@ const closeModal = () => {
                         @keyup.enter="deleteUser"
                     />
 
-                    <InputError :message="form.errors.password" class="mt-2" />
+                    <input-error :message="form.errors.password" class="mt-2" />
                 </div>
 
                 <div class="mt-6 flex justify-end">
-                    <SecondaryButton @click="closeModal"> Cancel </SecondaryButton>
+                    <secondary-button @click="closeModal"> Cancel </secondary-button>
 
-                    <DangerButton
-                        type="submit"
-                        class="ml-3"
-                        :class="{ 'opacity-25': form.processing }"
-                        :disabled="form.processing"
-                        @click="deleteUser"
-                    >
+                    <danger-button class="ms-3" :class="{ 'opacity-25': form.processing }" :disabled="form.processing" @click="deleteUser">
                         Delete Account
-                    </DangerButton>
+                    </danger-button>
                 </div>
             </div>
-        </Modal>
+        </modal>
     </section>
 </template>

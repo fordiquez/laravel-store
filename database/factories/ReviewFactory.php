@@ -3,19 +3,14 @@
 namespace Database\Factories;
 
 use App\Models\Good;
+use App\Models\Review;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends Factory
- */
 class ReviewFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
+    protected $model = Review::class;
+
     public function definition(): array
     {
         return [

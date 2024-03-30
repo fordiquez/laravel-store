@@ -3,15 +3,10 @@
 namespace App\Filament\Pages;
 
 use App\Enums\UserGender;
-use App\Models\Country;
 use App\Models\User;
+use BezhanSalleh\FilamentShield\Traits\HasPageShield;
 use Filament\Actions\Action;
-use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\Section;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
@@ -28,11 +23,10 @@ use Ysfkaya\FilamentPhoneInput\PhoneInputNumberType;
 
 class Profile extends Page implements HasForms
 {
+    use HasPageShield;
     use InteractsWithForms;
 
     protected static ?string $navigationIcon = 'heroicon-o-user';
-
-    protected static ?string $navigationGroup = 'Account';
 
     protected static ?int $navigationSort = 0;
 
@@ -125,24 +119,21 @@ class Profile extends Page implements HasForms
     public function form(Form $form): Form
     {
         return $form->schema([
-            Section::make('General')->columns()
+            Components\Section::make('General')->columns()
                 ->schema([
-                    TextInput::make('first_name')->required()->maxLength(50),
-                    TextInput::make('last_name')->required()->maxLength(50),
-                    TextInput::make('email')->email()->required()->unique(User::class, ignorable: auth()->user()),
+                    Components\TextInput::make('first_name')->required()->maxLength(50),
+                    Components\TextInput::make('last_name')->required()->maxLength(50),
+                    Components\TextInput::make('email')->email()->required()->unique(User::class, ignorable: auth()->user()),
                     PhoneInput::make('phone')
                         ->rules(['min:9', 'max:13', 'regex:/^([0-9\s\-\+\(\)]*)$/'])
                         ->focusNumberFormat(PhoneInputNumberType::E164)
-                        ->initialCountry(Country::DEFAULT_COUNTRY)
-                        ->preferredCountries([Country::DEFAULT_COUNTRY])
-                        ->onlyCountries(Country::$validCountries)
                         ->formatOnDisplay(false),
                 ]),
-            Section::make('Details')->columns()
+            Components\Section::make('Details')->columns()
                 ->schema([
-                    DatePicker::make('birth_date')->native(false)->maxDate(now()),
-                    Select::make('gender')->options(UserGender::asSelectArray()),
-                    FileUpload::make('avatar')
+                    Components\DatePicker::make('birth_date')->native(false)->maxDate(now()),
+                    Components\Select::make('gender')->options(UserGender::asSelectArray()),
+                    Components\FileUpload::make('avatar')
                         ->visibility(config('filesystems.disks.public.visibility'))
                         ->disk(config('filament.default_filesystem_disk'))
                         ->storeFiles(false)
@@ -159,7 +150,7 @@ class Profile extends Page implements HasForms
                             '1:1',
                         ])->columnSpanFull(),
                 ]),
-            Section::make('Update Password')->columns()
+            Components\Section::make('Update Password')->columns()
                 ->schema([
                     Password::make('current_password')
                         ->password()
@@ -169,7 +160,7 @@ class Profile extends Page implements HasForms
                         ->columnSpan(1)
                         ->revealable()
                         ->copyable(!app()->isLocal()),
-                    Grid::make()->schema([
+                    Components\Grid::make()->schema([
                         Password::make('new_password')
                             ->password()
                             ->confirmed()

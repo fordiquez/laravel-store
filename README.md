@@ -17,17 +17,17 @@
 
 ### 1. Clone this repository to your local folder
 
-```
+```bash
 git clone git@github.com:fordiquez/laravel-store.git
 ```
 
-```
+```bash
 cd laravel-store
 ```
 
 ### 2. Create .env
 
-```
+```bash
 cp .env.example .env
 ```
 
@@ -35,24 +35,33 @@ cp .env.example .env
 
 #### 3.1 Set up base url for your application
 
-```
+```dotenv
 APP_URL=
 ```
 
 #### 3.2 Set up your database credentials
 
+```dotenv
+DB_CONNECTION=sqlite
+#DB_HOST=mysql
+#DB_PORT=3306
+#DB_DATABASE=brandford
+#DB_USERNAME=root
+#DB_PASSWORD=root
 ```
-DB_CONNECTION=mysql
-DB_HOST=mysql
-DB_PORT=3306
-DB_DATABASE=
-DB_USERNAME=
-DB_PASSWORD=
+
+#### 3.3 Set up your cache & session driver, filesystem disk & queue connection
+
+```dotenv
+CACHE_DRIVER=database
+FILESYSTEM_DISK=public
+QUEUE_CONNECTION=database
+SESSION_DRIVER=database
 ```
 
 #### 3.3 Set up mail SMTP options
 
-```
+```dotenv
 MAIL_MAILER=
 MAIL_HOST=
 MAIL_PORT=
@@ -65,19 +74,19 @@ MAIL_FROM_NAME=
 
 #### 3.4 Set up `multiavatar` API key
 
-```
+```dotenv
 MULTIAVATAR_API_KEY=
 ```
 
 #### 3.5 Set up `Countries States Cities` API key
 
-```
+```dotenv
 CSC_API_KEY=
 ```
 
 #### 3.7 Setup `Stripe` keys
 
-```
+```dotenv
 STRIPE_KEY=
 STRIPE_SECRET=
 STRIPE_WEBHOOK_SECRET=
@@ -126,6 +135,10 @@ php artisan shield:install --fresh
 ```
 
 ```bash
+php artisan db:seed --class=RoleSeeder
+```
+
+```bash
 php artisan optimize:clear
 ```
 
@@ -142,17 +155,18 @@ stripe login
 ```
 
 ```bash
-stripe listen --forward-to laravel.store/stripe/webhook
+stripe listen --forward-to laravel-store.test/stripe/webhook
 ```
 
-### 9. Edit hosts file (Windows 10)
+### 9. Edit hosts file
 
+**Path for Windows:**
 ```
 C:\Windows\System32\drivers\etc
 ```
 
 **Add your application domain:**
 
-```
-127.0.0.1       laravel.store
+```ini
+127.0.0.1       laravel-store.test
 ```

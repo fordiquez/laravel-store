@@ -14,12 +14,8 @@ return new class extends Migration
     {
         Schema::create('states', function (Blueprint $table) {
             $table->id();
-            $table->uuid()->unique()->index();
-            $table->string('name', 50);
-            $table->string('old_name', 50)->nullable();
             $table->foreignIdFor(Country::class)->constrained()->cascadeOnUpdate()->cascadeOnDelete();
-            $table->foreignId('parent_id')->nullable()->constrained('states')->cascadeOnUpdate()->cascadeOnDelete();
-            $table->string('type', 50)->nullable()->default('state');
+            $table->string('name');
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });

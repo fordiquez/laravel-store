@@ -13,16 +13,16 @@ const { formatMoney } = useFormat()
 </script>
 
 <template>
-    <AuthenticatedLayout>
+    <authenticated-layout title="Orders">
         <div class="flex flex-col justify-between space-x-0 px-4 py-12 sm:px-6 md:flex-row md:space-x-10 lg:px-8">
-            <Sidebar />
+            <sidebar />
             <div class="w-full space-y-4">
                 <h2 class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200 md:leading-[64px]">Orders</h2>
                 <div v-if="orders.length" class="bg-white p-4 shadow dark:bg-gray-800 sm:rounded-lg sm:p-8">
                     <template v-for="order in orders" :key="order.id">
                         <Disclosure as="div" class="border-b border-gray-200 py-6 dark:border-gray-600" v-slot="{ open }">
                             <h3 class="-my-3 flow-root">
-                                <DisclosureButton
+                                <disclosure-button
                                     class="group mb-2 flex w-full items-center justify-between px-2 py-2 text-gray-900 focus:rounded focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-4 dark:text-gray-300 dark:focus:ring-offset-gray-800"
                                 >
                                     <div class="text-left font-medium group-hover:text-purple-600 dark:group-hover:text-gray-50">
@@ -34,7 +34,7 @@ const { formatMoney } = useFormat()
                                     <div class="ml-6 flex items-center group-hover:text-purple-600 dark:group-hover:text-gray-50">
                                         <font-awesome-icon :icon="['fa-solid', !open ? 'fa-plus' : 'fa-minus']" size="lg" />
                                     </div>
-                                </DisclosureButton>
+                                </disclosure-button>
                             </h3>
                             <transition
                                 enter-active-class="transition duration-100 ease-out"
@@ -44,7 +44,7 @@ const { formatMoney } = useFormat()
                                 leave-from-class="transform scale-100 opacity-100"
                                 leave-to-class="transform scale-95 opacity-0"
                             >
-                                <DisclosurePanel class="mt-6 p-1">
+                                <disclosure-panel class="mt-6 p-1">
                                     <div class="relative mt-4 overflow-x-auto">
                                         <table class="w-full text-left text-sm text-gray-500 dark:text-gray-400">
                                             <thead class="text-xs uppercase text-gray-900 dark:text-gray-400">
@@ -119,12 +119,12 @@ const { formatMoney } = useFormat()
                                             </tfoot>
                                         </table>
                                     </div>
-                                </DisclosurePanel>
+                                </disclosure-panel>
                             </transition>
                         </Disclosure>
                     </template>
                 </div>
             </div>
         </div>
-    </AuthenticatedLayout>
+    </authenticated-layout>
 </template>

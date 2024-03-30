@@ -1,8 +1,9 @@
-<script setup>
+<script setup lang="ts">
 import { computed, onMounted, onUpdated, reactive, ref } from 'vue'
-import { Link, useForm, usePage } from '@inertiajs/vue3'
+import { Head, Link, useForm, usePage } from '@inertiajs/vue3'
 import { useDark, useToggle } from '@vueuse/core'
 import { initTooltips } from 'flowbite'
+import { Notifications, notify } from '@kyvg/vue3-notification'
 import ApplicationLogo from '@/Components/ApplicationLogo.vue'
 import Categories from '@/Components/Categories.vue'
 import Cart from '@/Components/Cart.vue'
@@ -11,18 +12,16 @@ import DropdownLink from '@/Components/DropdownLink.vue'
 import ResponsiveCategories from '@/Components/ResponsiveCategories.vue'
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue'
 import SecondaryButton from '@/Components/SecondaryButton.vue'
-import { notify } from '@kyvg/vue3-notification'
+import { PageProps } from '@/types'
 
-defineProps({
-    title: String
-})
+defineProps<{ title: string }>()
 
-const { user, categories, breadcrumbs, notification } = reactive(usePage().props)
+const pageProps = reactive<PageProps>(usePage().props)
 
 const isDark = useDark()
 const toggleDark = useToggle(isDark)
 
-const notificationsHistory = reactive([])
+const notificationsHistory = reactive<any[]>([])
 
 const showingNavigationDropdown = ref(false)
 const showingResponsiveCategories = ref(false)
@@ -31,22 +30,21 @@ const cartModal = ref(false)
 const form = useForm({
     search: ''
 })
-const search = ref(null)
 
 onMounted(() => {
     initTooltips()
-    makeNotification(notification)
+    makeNotification(pageProps.notification)
 })
 
-onUpdated(() => makeNotification(notification))
+onUpdated(() => makeNotification(pageProps.notification))
 
-const cart = computed(() => usePage().props.cart)
-const fullName = computed(() => (user ? `${user.first_name} ${user.last_name}` : null))
-const breadcrumbsRoutes = computed(
+const cart = computed(() => pageProps.cart)
+const user = computed(() => pageProps.user ?? null)
+const breadcrumbRoutes = computed(
     () => route().current('goods.good.general') || route().current('goods.good.properties') || route().current('goods.good.reviews')
 )
 
-const makeNotification = (notification) => {
+const makeNotification = (notification: any) => {
     if (notification && !notificationsHistory.find((item) => item.id === notification.id)) {
         console.log(notification)
         notify({
@@ -54,8 +52,7 @@ const makeNotification = (notification) => {
             type: notification.type,
             title: notification.title,
             text: notification.text,
-            duration: 10000,
-            pauseOnHover: true
+            duration: 10000
         })
         notificationsHistory.push(notification)
     }
@@ -69,6 +66,8 @@ const searchGoods = () => form.get(route('goods.search'))
 <template>
     <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
         <notifications position="top right" />
+
+        <Head :title="title" />
 
         <header class="border-b border-gray-100 bg-white dark:border-gray-700 dark:bg-gray-800">
             <!-- Primary Navigation Menu -->
@@ -84,7 +83,7 @@ const searchGoods = () => form.get(route('goods.search'))
 
                         <!-- Navigation Links -->
                         <div class="hidden space-x-8 sm:flex">
-                            <categories :categories="categories" />
+                            <categories v-if="pageProps.categories" :categories="pageProps.categories" />
                             <button
                                 @click="showingResponsiveCategories = true"
                                 :class="[
@@ -160,7 +159,7 @@ const searchGoods = () => form.get(route('goods.search'))
                             <span
                                 class="absolute -right-2 -top-1 inline-flex h-6 w-6 items-center justify-center rounded-full bg-purple-500 text-xs font-bold text-white"
                             >
-                                {{ cart.count }}
+                                {{ pageProps.cart?.count }}
                             </span>
                         </button>
 
@@ -168,20 +167,25 @@ const searchGoods = () => form.get(route('goods.search'))
                         <Dropdown v-if="user" class="ml-4 hidden sm:flex">
                             <template #trigger>
                                 <button class="inline-flex focus:outline-none" title="Profile">
-                                    <img :src="user.avatar" :alt="fullName" :title="fullName" class="h-10 w-10 rounded-full object-cover" />
+                                    <img
+                                        :src="user.avatar"
+                                        :alt="`${user.first_name} ${user.last_name}`"
+                                        :title="`${user.first_name} ${user.last_name}`"
+                                        class="h-10 w-10 rounded-full object-cover"
+                                    />
                                 </button>
                             </template>
 
                             <template #content>
                                 <div class="px-4 py-2 text-xs">
                                     <p class="truncate font-semibold text-gray-700 dark:text-gray-300">
-                                        {{ user.full_name }}
+                                        {{ `${user.first_name} ${user.last_name}` }}
                                     </p>
                                     <p class="truncate text-gray-600 dark:text-gray-400">{{ user.email }}</p>
                                 </div>
-                                <DropdownLink :href="route('profile.personal-information.edit')"> Profile </DropdownLink>
+                                <DropdownLink :href="route('profile.personal-information.edit')">Profile</DropdownLink>
                                 <div class="border-t border-gray-200 dark:border-gray-600" />
-                                <DropdownLink :href="route('logout')" method="post" as="button"> Log Out </DropdownLink>
+                                <DropdownLink :href="route('logout')" method="post" as="button">Log Out</DropdownLink>
                             </template>
                         </Dropdown>
 
@@ -236,11 +240,16 @@ const searchGoods = () => form.get(route('goods.search'))
                 <div v-if="user" class="border-t border-gray-200 pb-1 pt-4 dark:border-gray-600">
                     <div class="flex items-center">
                         <div v-if="user?.avatar" class="ml-2 h-9 w-9">
-                            <img :src="user.avatar" :alt="fullName" :title="fullName" class="rounded-full" />
+                            <img
+                                :src="user.avatar"
+                                :alt="`${user.first_name} ${user.last_name}`"
+                                :title="`${user.first_name} ${user.last_name}`"
+                                class="rounded-full"
+                            />
                         </div>
                         <div class="px-4">
                             <div class="text-base font-medium text-gray-800 dark:text-gray-200">
-                                {{ fullName }}
+                                {{ `${user.first_name} ${user.last_name}` }}
                             </div>
                             <div class="text-sm font-medium text-gray-500">{{ user.email }}</div>
                         </div>
@@ -259,7 +268,7 @@ const searchGoods = () => form.get(route('goods.search'))
             </div>
         </header>
 
-        <nav aria-label="Breadcrumbs" v-if="breadcrumbs">
+        <nav aria-label="Breadcrumbs" v-if="pageProps.breadcrumbs">
             <ol role="list" class="mx-auto mt-6 flex max-w-2xl items-center space-x-2 px-4 sm:px-6 lg:max-w-9xl lg:px-8">
                 <li class="flex items-center">
                     <Link
@@ -270,16 +279,16 @@ const searchGoods = () => form.get(route('goods.search'))
                     </Link>
                 </li>
                 <li
-                    v-for="(breadcrumb, i) in breadcrumbs"
+                    v-for="(breadcrumb, i) in pageProps.breadcrumbs"
                     :key="breadcrumb.id"
-                    :class="{ 'hidden sm:block': i !== breadcrumbs.length - 2 }"
+                    :class="{ 'hidden sm:block': i !== pageProps.breadcrumbs.length - 2 }"
                 >
                     <div class="flex items-center">
                         <svg width="16" height="20" viewBox="0 0 16 20" fill="currentColor" class="mr-2 text-gray-400 dark:text-gray-300">
                             <path d="M5.697 4.34L8.98 16.532h1.327L7.025 4.341H5.697z" />
                         </svg>
                         <Link
-                            v-if="i !== breadcrumbs.length - 1 || breadcrumbsRoutes"
+                            v-if="i !== pageProps.breadcrumbs.length - 1 || breadcrumbRoutes"
                             :href="route('index.category', breadcrumb.slug)"
                             class="text-sm font-medium text-gray-700 hover:text-purple-600 dark:text-gray-400 dark:hover:text-white"
                         >
@@ -304,6 +313,7 @@ const searchGoods = () => form.get(route('goods.search'))
         </main>
 
         <cart
+            v-if="cart"
             :show="cartModal"
             :count="cart.count"
             :total="cart.total"
@@ -315,7 +325,7 @@ const searchGoods = () => form.get(route('goods.search'))
         <responsive-categories
             v-if="showingResponsiveCategories"
             :showing="showingResponsiveCategories"
-            :categories="categories"
+            :categories="pageProps.categories"
             @close="closeResponsiveCategories"
         />
     </div>

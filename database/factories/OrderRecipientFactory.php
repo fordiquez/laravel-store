@@ -2,14 +2,14 @@
 
 namespace Database\Factories;
 
+use App\Models\OrderRecipient;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends Factory
- */
 class OrderRecipientFactory extends Factory
 {
+    protected $model = OrderRecipient::class;
+
     public array $networkCodes = [63, 73, 93, 67, 68, 96, 97, 98, 50, 66, 95, 99];
 
     /**

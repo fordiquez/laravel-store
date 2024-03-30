@@ -4,6 +4,7 @@ namespace App\Filament\Resources\UserResource\RelationManagers;
 
 use App\Filament\Forms\Components\Rating;
 use App\Filament\Tables\Components\RatingColumn;
+use App\Models\Review;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
@@ -44,7 +45,7 @@ class ReviewsRelationManager extends RelationManager
                         ->required()
                         ->maxLength(255)
                         ->columnSpanFull(),
-                    Forms\Components\TextInput::make('video_src')->maxLength(255)->url(),
+                    Forms\Components\TextInput::make('video_src')->maxLength(255)->url()->columnSpanFull(),
                     Forms\Components\TextInput::make('ip_address')->maxLength(45)->ipv4(),
                 ])->columns(),
             ]);
@@ -57,19 +58,29 @@ class ReviewsRelationManager extends RelationManager
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id')->sortable(),
-                Tables\Columns\TextColumn::make('user.email')->sortable()->searchable(),
-                Tables\Columns\TextColumn::make('good.title')->sortable()->searchable(),
+                Tables\Columns\TextColumn::make('id')->label('ID')->sortable(),
+                Tables\Columns\TextColumn::make('user.email')
+                    ->url(fn (Review $record) => route('filament.admin.resources.users.edit', $record->user_id), true)
+                    ->limit(25)
+                    ->badge()
+                    ->sortable()
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('good.title')
+                    ->url(fn (Review $record) => route('filament.admin.resources.goods.edit', $record->good_id), true)
+                    ->limit(25)
+                    ->badge()
+                    ->sortable()
+                    ->searchable(),
                 Tables\Columns\IconColumn::make('is_buyer')->boolean()->toggleable(),
                 RatingColumn::make('rating')->color('primary')->sortable(),
                 Tables\Columns\TextColumn::make('video_src')
                     ->searchable()
-                    ->toggleable()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->copyable(!app()->isLocal())
                     ->tooltip(!app()->isLocal() ? 'Copy to clipboard' : null),
                 IPToCountryFlagColumn::make('ip_address')->flagPosition()->sortable()->toggleable(),
-                Tables\Columns\TextColumn::make('created_at')->dateTime()->sortable()->toggleable(),
-                Tables\Columns\TextColumn::make('updated_at')->dateTime()->sortable()->toggleable(),
+                Tables\Columns\TextColumn::make('created_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('updated_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('user')

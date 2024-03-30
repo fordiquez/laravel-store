@@ -1,16 +1,16 @@
-<script setup>
+<script setup lang="ts">
 import { reactive, ref } from 'vue'
 
-const props = defineProps({
-    grade: {
-        type: Number,
-        default: 0
-    },
-    maxStars: {
-        type: Number,
-        default: 5
+const props = withDefaults(
+    defineProps<{
+        grade: number
+        maxStars: number
+    }>(),
+    {
+        grade: 0,
+        maxStars: 5
     }
-})
+)
 
 const emit = defineEmits(['rating'])
 
@@ -18,8 +18,8 @@ const stars = ref(props.grade)
 
 const rateText = reactive(['bad', 'unsatisfactory', 'normal', 'nice', 'excellent'])
 
-const rate = (star) => {
-    if (typeof star === 'number' && star <= props.maxStars && star >= 0) {
+const rate = (star: number) => {
+    if (star <= props.maxStars && star >= 0) {
         stars.value = stars.value === star ? star - 1 : star
         emit('rating', stars.value)
     }

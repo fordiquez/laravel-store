@@ -8,6 +8,7 @@ use App\Filament\Resources\GoodResource\RelationManagers\PropertiesRelationManag
 use App\Filament\Resources\GoodResource\RelationManagers\ReviewsRelationManager;
 use App\Models\Good;
 use App\Models\Setting;
+use Closure;
 use Filament\Forms;
 use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Form;
@@ -43,29 +44,38 @@ class GoodResource extends Resource
                         ->relationship('brand', 'name')
                         ->required()
                         ->searchable(),
+                    Forms\Components\TextInput::make('title')
+                        ->required()
+                        ->maxLength(100)
+                        ->debounce()
+                        ->afterStateUpdated(function (Forms\Get $get, Forms\Set $set, ?string $state, ?Good $record) {
+                            if (!$get('is_slug_changed_manually') && filled($state) && blank($record)) {
+                                $set('slug', Str::slug($state));
+                            }
+                        }),
+
+                    Forms\Components\Hidden::make('is_slug_changed_manually')->default(false)->dehydrated(false),
+
+                    Forms\Components\TextInput::make('slug')
+                        ->unique('goods', 'slug', ignoreRecord: true)
+                        ->required()
+                        ->maxLength(100)
+                        ->afterStateUpdated(fn (Forms\Set $set) => $set('is_slug_changed_manually', true))
+                        ->rules([
+                            'alpha_dash:ascii',
+                            function ($state) {
+                                return function (string $attribute, $value, Closure $fail) use ($state) {
+                                    if ($state !== '/' && (Str::startsWith($value, '/') || Str::endsWith($value, '/'))) {
+                                        $fail('Slug cannot starts or ends with slash.');
+                                    }
+                                };
+                            },
+                        ]),
                     Forms\Components\TextInput::make('vendor_code')
                         ->required()
                         ->numeric()
                         ->default(rand(1000000000, 2147483647))
                         ->unique(Good::class, 'vendor_code', ignoreRecord: true),
-                    Forms\Components\TextInput::make('title')
-                        ->required()
-                        ->maxLength(100)
-                        ->autofocus()
-                        ->live(debounce: 500)
-                        ->afterStateUpdated(function (Forms\Get $get, Forms\Set $set, ?string $state) {
-                            if (!$get('is_slug_changed_manually')) {
-                                $set('slug', Str::slug($state));
-                            }
-                        }),
-                    Forms\Components\TextInput::make('slug')
-                        ->rule('alpha_dash:ascii')
-                        ->unique('goods', 'slug', ignoreRecord: true)
-                        ->afterStateUpdated(function (Forms\Set $set) {
-                            $set('is_slug_changed_manually', true);
-                        })
-                        ->required()
-                        ->maxLength(100),
                     Forms\Components\SpatieMediaLibraryFileUpload::make('preview')
                         ->collection('goods')
                         ->multiple()
@@ -113,7 +123,7 @@ class GoodResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id')->sortable(),
+                Tables\Columns\TextColumn::make('id')->label('ID')->sortable(),
                 Tables\Columns\TextColumn::make('vendor_code')
                     ->sortable()
                     ->searchable()
@@ -123,9 +133,26 @@ class GoodResource extends Resource
                 Tables\Columns\SpatieMediaLibraryImageColumn::make('preview')
                     ->collection('goods')
                     ->toggleable(),
-                Tables\Columns\TextColumn::make('category.title')->limit(25)->sortable()->toggleable(),
-                Tables\Columns\TextColumn::make('brand.name')->limit(25)->sortable()->toggleable(),
-                Tables\Columns\TextColumn::make('title')->limit(25)->sortable()->searchable()->toggleable(),
+                Tables\Columns\TextColumn::make('category.title')
+                    ->url(fn (Good $record) => route('filament.admin.resources.categories.edit', $record->category_id), true)
+                    ->limit(25)
+                    ->tooltip(fn (Tables\Columns\TextColumn $column) => strlen($column->getState()) <= $column->getCharacterLimit() ? null : $column->getState())
+                    ->badge()
+                    ->sortable()
+                    ->toggleable(),
+                Tables\Columns\TextColumn::make('brand.name')
+                    ->url(fn (Good $record) => route('filament.admin.resources.brands.edit', $record->brand_id), true)
+                    ->limit(25)
+                    ->tooltip(fn (Tables\Columns\TextColumn $column) => strlen($column->getState()) <= $column->getCharacterLimit() ? null : $column->getState())
+                    ->badge()
+                    ->sortable()
+                    ->toggleable(),
+                Tables\Columns\TextColumn::make('title')
+                    ->limit(25)
+                    ->tooltip(fn (Tables\Columns\TextColumn $column) => strlen($column->getState()) <= $column->getCharacterLimit() ? null : $column->getState())
+                    ->sortable()
+                    ->searchable()
+                    ->toggleable(),
                 Tables\Columns\TextColumn::make('old_price')->money()->sortable()->toggleable(),
                 Tables\Columns\TextColumn::make('price')->money()->sortable()->toggleable(),
                 Tables\Columns\TextColumn::make('quantity')->sortable()->toggleable(),

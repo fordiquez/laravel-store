@@ -3,12 +3,11 @@
 namespace App\Filament\Resources\CountryResource\RelationManagers;
 
 use App\Models\State;
-use Filament\Forms;
-use Filament\Forms\Form;
+use Filament\Infolists\Components;
+use Filament\Infolists\Infolist;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
 
 class StatesRelationManager extends RelationManager
 {
@@ -16,19 +15,19 @@ class StatesRelationManager extends RelationManager
 
     protected static ?string $recordTitleAttribute = 'name';
 
-    public function form(Form $form): Form
+    public function infolist(Infolist $infolist): Infolist
     {
-        return $form
+        return $infolist
             ->schema([
-                Forms\Components\TextInput::make('name')->required()->maxLength(50),
-                Forms\Components\TextInput::make('old_name')->maxLength(50),
-                Forms\Components\TextInput::make('uuid')->required()->uuid()->default(fake()->uuid),
-                Forms\Components\Select::make('parent_id')
-                    ->options(fn (RelationManager $livewire): array => $livewire->ownerRecord->states()->pluck('name', 'id')->toArray())
-                    ->searchable(),
-                Forms\Components\TextInput::make('type')->nullable()->default('state')->maxLength(25),
-                Forms\Components\Toggle::make('is_active')->required()->default(true),
-            ]);
+                Components\TextEntry::make('id')->label('ID'),
+                Components\TextEntry::make('name')
+                    ->url(fn (State $record) => route('filament.admin.resources.states.view', $record->id), true)
+                    ->badge(),
+                Components\IconEntry::make('is_active')->boolean(),
+                Components\TextEntry::make('cities_count')->default($this->ownerRecord->cities()->count())->label('Cities')->badge(),
+                Components\TextEntry::make('created_at')->label('Created Date')->dateTime(),
+                Components\TextEntry::make('updated_at')->label('Last Modified Date')->dateTime(),
+            ])->columns();
     }
 
     /**
@@ -38,38 +37,26 @@ class StatesRelationManager extends RelationManager
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id')->sortable(),
-                Tables\Columns\TextColumn::make('uuid')->searchable()->toggleable(),
-                Tables\Columns\TextColumn::make('name')->sortable()->searchable()->limit(50)->wrap(),
-                Tables\Columns\TextColumn::make('old_name')->sortable()->searchable()->toggleable(),
-                Tables\Columns\TextColumn::make('parent.name')->sortable()->searchable()->toggleable(),
-                Tables\Columns\TextColumn::make('type')->sortable(),
+                Tables\Columns\TextColumn::make('id')->label('ID')->sortable(),
+                Tables\Columns\TextColumn::make('name')
+                    ->url(fn (State $record) => route('filament.admin.resources.states.view', $record->id), true)
+                    ->limit(50)
+                    ->tooltip(fn (Tables\Columns\TextColumn $column) => strlen($column->getState()) <= $column->getCharacterLimit() ? null : $column->getState())
+                    ->badge()
+                    ->sortable()
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('cities_count')->counts('cities')->label('Cities')->badge()->sortable(),
                 Tables\Columns\IconColumn::make('is_active')->boolean()->toggleable()
                     ->tooltip('Toggle value')
-                    ->action(function ($record, $column) {
-                        $name = $column->getName();
-
-                        $record->update([
-                            $name => !$record->$name,
-                        ]);
-                    }),
+                    ->action(fn (State $record, Tables\Columns\Column $column) => $record->update([$column->getName() => !$record->is_active])),
+                Tables\Columns\TextColumn::make('created_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('updated_at')->dateTime()->sortable()->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('parent_id')
-                    ->options(fn (RelationManager $livewire): array => State::whereCountryId($livewire->ownerRecord->id)->pluck('name', 'id')->toArray()),
-                Tables\Filters\Filter::make('inactive')
-                    ->query(fn (Builder $query): Builder => $query->where('is_active', false))
-                    ->label('Only inactive'),
-            ])
-            ->headerActions([
-                Tables\Actions\CreateAction::make(),
+                Tables\Filters\TernaryFilter::make('is_active'),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-            ])
-            ->bulkActions([
-                Tables\Actions\DeleteBulkAction::make(),
+                Tables\Actions\ViewAction::make(),
             ]);
     }
 }

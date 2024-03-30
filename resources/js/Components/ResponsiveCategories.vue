@@ -1,24 +1,25 @@
-<script setup>
+<script setup lang="ts">
 import { computed, onMounted, onUnmounted, reactive, ref } from 'vue'
 import { TransitionRoot, TransitionChild, Dialog, DialogPanel, DialogTitle } from '@headlessui/vue'
 
-const props = defineProps({
-    showing: Boolean,
-    categories: Array
-})
+const props = defineProps<{
+    showing: boolean
+    categories: any[]
+}>()
+
 const emit = defineEmits(['close'])
 
 const showingSubcategories = ref(false)
-const selectedCategory = reactive({})
+const selectedCategory = reactive<any>({})
 
-onMounted(() => document.querySelector('body').classList.add('overflow-hidden'))
-onUnmounted(() => document.querySelector('body').classList.remove('overflow-hidden'))
+onMounted(() => document.querySelector('body')?.classList.add('overflow-hidden'))
+onUnmounted(() => document.querySelector('body')?.classList.remove('overflow-hidden'))
 
 const selectedCategoryTitle = computed(() => selectedCategory?.title ?? 'Categories of goods')
 
 const closeModal = () => emit('close')
 
-const renderSubcategories = (categoryId) => {
+const renderSubcategories = (categoryId: number) => {
     Object.assign(
         selectedCategory,
         props.categories.find((category) => category.id === categoryId)
